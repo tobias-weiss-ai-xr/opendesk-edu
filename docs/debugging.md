@@ -17,14 +17,16 @@ SPDX-License-Identifier: Apache-2.0
     * [MariaDB](#mariadb)
     * [Nextcloud](#nextcloud)
       * [Running occ commands](#running-occ-commands)
-    * [Open-Xchange](#open-xchange)
     * [OpenProject](#openproject)
     * [Postfix](#postfix)
     * [PostgreSQL](#postgresql)
     * [Redis](#redis)
     * [Cassandra](#cassandra)
-    * [Open-Xchange](#open-xchange-1)
+    * [Open-Xchange](#open-xchange)
       * [OX App Suite](#ox-app-suite)
+        * [Get details about installed components from UI](#get-details-about-installed-components-from-ui)
+        * [The SOAP API and the command line tools](#the-soap-api-and-the-command-line-tools)
+        * [The OX REST API](#the-ox-rest-api)
         * [Applying global config changes for debugging](#applying-global-config-changes-for-debugging)
         * [Using config cascade](#using-config-cascade)
       * [OX Dovecot](#ox-dovecot)
@@ -193,10 +195,6 @@ While you will find all the details for the CLI tool in the [MariaDB documentati
 
 You can run occ commands in the `opendesk-nextcloud-aio` pod like this: `php occ config:list`
 
-### Open-Xchange
-
-To retrieve more details about the OX App Suite components in use just through the user accessible UI, open the `(?)` drop down menu in the top navigation bar and hold the *Ctrl* key when clicking the "About" menu entry.
-
 ### OpenProject
 
 OpenProject is a Ruby on Rails application. Therefore, you can make use of the Rails console from the Pod's command line `bundle exec rails console`
@@ -301,6 +299,98 @@ SELECT COUNT(*) FROM <table>;             -- count rows (can be slow on large ta
 ### Open-Xchange
 
 #### OX App Suite
+
+##### Get details about installed components from UI
+
+To retrieve more details about the OX App Suite components in use just through the user accessible UI, open the `(?)` drop down menu in the top navigation bar and hold the *Ctrl* key when clicking the "About" menu entry.
+
+##### The SOAP API and the command line tools
+
+The OX SOAP API used by the OX Connector for provisioning of the OX App Suite and the commandline tools the
+`core-mw` container(s) ship are front-ends over the same OX App Suite internal provisioning layer.
+
+The SOAP API is either publicly exposed (default) or just accessible internally when
+`technical.oxAppSuite.provisioning.dedicatedCoreMwPod: true` is set, e.g.:
+
+- publicly: `https://webmail.domain.tld/webservices?wsdl`
+- internal: `http://open-xchange-core-mw-admin/webservices?wsdl`
+
+The following section focuses on the CLI tools, as they are much easier to deal with, ignoring the SOAP protocol
+overhead.
+
+The whole set of tools can be found in the `core-mw` container's `/opt/open-xchange/sbin` directory which
+is in the `$PATH`, so the commands can be run from anywhere in the container.
+
+They cover the administrative surface, from context and user provisioning over database schema handling up to
+runtime diagnostics. Get an overview of what is available in your deployment with:
+
+```shell
+ls /opt/open-xchange/sbin
+```
+
+All of these tools authenticate with `-A` (admin user) and `-P` (admin password). There is no need to look the
+credentials up: the core-mw container provides the master admin as the environment variables `MASTER_ADMIN_USER`
+and `MASTER_ADMIN_PW`, so they can simply be referenced.
+
+> [!note]
+> The upstream documentation names `-A`/`-P` as the *context* admin for the context-level tools (everything taking a
+> `-c`). They accept the master admin in openDesk because `MASTER_ACCOUNT_OVERRIDE` is enabled in
+> `AdminDaemon.properties`, so the same two variables work for every tool.
+
+Listing all users of context `1`:
+
+```shell
+listuser -c 1 -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+```
+
+A few more examples that are frequently useful when debugging:
+
+```shell
+# List all contexts of the deployment
+listcontext -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+
+# Search for users, `-s` takes a search pattern matched against the login name
+# (the `univentionObjectIdentifier` since openDesk 1.18.0)
+listuser -c <contextId> -s <searchPattern> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+
+# Show where the configuration effective for a user comes from (config cascade debugging)
+getuserconfigurationsource -c <contextId> -i <userId> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+
+# List all shared accounts of a context
+listsharedaccount -c <contextId> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+
+# List the per-user permissions of one shared account, `-S` takes the id from listsharedaccount
+listsharedaccountpermissionsbysharedaccount -c <contextId> -S <sharedAccountId> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+```
+
+> [!note]
+> Every tool supports `-h` / `--help` to print its full parameter list, e.g. `listuser --help`.
+
+> [!warning]
+> These tools operate against the live deployment. Everything named `create*`, `change*` or `delete*` performs a write
+> operation, so restrict yourself to the read-only tools (`list*`, `get*`, `exists*`) when you are only debugging.
+
+To change a setting for a single user - e.g. to switch on IMAP debug logging - see
+[Using config cascade](#using-config-cascade) below, which also covers the prerequisite for it and how to
+remove the setting again.
+
+The complete reference for all tools, including all parameters and exit codes, is available in the
+[upstream documentation](https://documentation.open-xchange.com/8/middleware/command_line_tools.html), grouped by
+category (Context, User, Configuration, Database, Logging & Monitoring, Shared Accounts, Miscellaneous, ...).
+
+##### The OX REST API
+
+More recent use cases are implemented through the OX REST API. It is served by the `http-api` role and
+authenticated with the `rest-api` account, whose password is `secrets.oxAppSuite.restApiPassword`. The URL below is
+cluster-internal, so run the request from a Pod in the deployment.
+
+Here is an example of checking a user's permissions for a defined Shared Account - the same request Dovecot makes on
+every login to a Shared Account:
+
+```shell
+curl -v -u 'rest-api:<REST_API_PASSWORD>' \
+  'http://open-xchange-core-mw-http-api/preliminary/sharedaccounts/v1/account?userMailLogin=<univention-object-identifier-of-user>&accountMailLogin=<univention-object-identifier-of-shared-mailbox>'
+```
 
 ##### Applying global config changes for debugging
 

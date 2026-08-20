@@ -12,28 +12,39 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
 
 <!-- TOC -->
 * [Updates and features](#updates-and-features)
-  * [1.17.0](#1170)
+  * [1.18.0](#1180)
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
+      * [Options to configure the list views of the admin portal](#options-to-configure-the-list-views-of-the-admin-portal)
+      * [Identity a user schedules under in a Shared Account's calendar](#identity-a-user-schedules-under-in-a-shared-accounts-calendar)
+    * [`migrations.yaml.gotmpl`](#migrationsyamlgotmpl)
+      * [Timeout and log retention of the migration jobs](#timeout-and-log-retention-of-the-migration-jobs)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+      * [Allow overriding HTTP request rate limiting for the core-mw component of the OX App Suite](#allow-overriding-http-request-rate-limiting-for-the-core-mw-component-of-the-ox-app-suite)
+    * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
+      * [Dedicated mobile logo and touch icon for OpenProject](#dedicated-mobile-logo-and-touch-icon-for-openproject)
+      * [Custom fonts for OpenProject's PDF export](#custom-fonts-for-openprojects-pdf-export)
+  * [1.17.0](#1170)
+    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl-1)
       * [Enable the "Send later" (scheduled mail) feature for OX App Suite](#enable-the-send-later-scheduled-mail-feature-for-ox-app-suite)
       * [Configurable "Remember Me" SSO session timeouts](#configurable-remember-me-sso-session-timeouts)
     * [`helmfile-defaults.yaml.gotmpl`](#helmfile-defaultsyamlgotmpl)
       * [Allow override of single application helmfiles](#allow-override-of-single-application-helmfiles)
-    * [`migrations.yaml.gotmpl`](#migrationsyamlgotmpl)
+    * [`migrations.yaml.gotmpl`](#migrationsyamlgotmpl-1)
       * [Skip single actions of the automated migrations](#skip-single-actions-of-the-automated-migrations)
     * [`secrets.yaml.gotmpl`, `objectstores.yaml.gotmpl`, `database.yaml.gotmpl`](#secretsyamlgotmpl-objectstoresyamlgotmpl-databaseyamlgotmpl)
       * [Provide selected secrets as pre-created Kubernetes Secrets](#provide-selected-secrets-as-pre-created-kubernetes-secrets)
     * [`smtp.yaml.gotmpl`](#smtpyamlgotmpl)
       * [Postfix HELO names](#postfix-helo-names)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-1)
       * [OX App Suite LDAP caching for contact picker](#ox-app-suite-ldap-caching-for-contact-picker)
       * [Postfix](#postfix)
         * [SPF validation for incoming mail](#spf-validation-for-incoming-mail)
         * [User namespaces for the Postfix pod](#user-namespaces-for-the-postfix-pod)
         * [Client, HELO, sender restrictions and rate limits](#client-helo-sender-restrictions-and-rate-limits)
   * [1.16.0](#1160)
-    * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
+    * [`theme.yaml.gotmpl`](#themeyamlgotmpl-1)
       * [OpenProject PDF export theming](#openproject-pdf-export-theming)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-1)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-2)
       * [Nextcloud worker and memory tuning](#nextcloud-worker-and-memory-tuning)
     * [`service.yaml.gotmpl`](#serviceyamlgotmpl)
       * [Option to set a `loadBalancerIp` for Dovecot and Postfix](#option-to-set-a-loadbalancerip-for-dovecot-and-postfix)
@@ -42,13 +53,147 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
     * [`cache.yaml.gotmpl`](#cacheyamlgotmpl)
       * [Options to enable SSL/TLS Redis connection for the Intercom Service, Notes, and OX App Suite](#options-to-enable-ssltls-redis-connection-for-the-intercom-service-notes-and-ox-app-suite)
   * [1.15.0](#1150)
-    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl-1)
+    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl-2)
       * [Per user-quota for external sharing](#per-user-quota-for-external-sharing)
       * [Virtual alias limits](#virtual-alias-limits)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-2)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-3)
       * [Proxy protocol support for Postfix](#proxy-protocol-support-for-postfix)
       * [Set limitation on maximum number of objects (for tasks, contacts, attachments)](#set-limitation-on-maximum-number-of-objects-for-tasks-contacts-attachments)
 <!-- TOC -->
+
+## 1.18.0
+
+### `functional.yaml.gotmpl`
+
+#### Options to configure the list views of the admin portal
+
+Two options are provided to configure the list views (e.g. showing users) of the IAM admin portal:
+
+- Define if the list views should trigger their search automatically when opening the page (`autosearch`)
+- Set the maximum number of entries to load for a result set (`sizelimit`)
+
+When the limit is hit, the result set has to be narrowed down using the search function.
+
+```yaml
+functional:
+  admin:
+    portal:
+      listViews:
+        sizelimit: 500
+        autosearch: true
+```
+
+#### Identity a user schedules under in a Shared Account's calendar
+
+A Shared Account brings a calendar with it, and an appointment a user creates or answers there can name either
+the user acting on behalf of the Shared Account, or the Shared Account alone. Which of the two applies can now be
+configured:
+
+```yaml
+functional:
+  groupware:
+    sharedAccounts:
+      calendar:
+        # `sendOnBehalf` or `sendAs`
+        sentByPreference: "sendOnBehalf"
+```
+
+`sendOnBehalf`, the default, keeps both visible to the recipients: The appointment is the Shared Account's, sent
+by that user. `sendAs` shows only the Shared Account and does not reveal who acted.
+
+The setting applies to users whose permission grants both "send as" and "send on behalf of" which is what openDesk default permission profiles do.
+
+### `migrations.yaml.gotmpl`
+
+#### Timeout and log retention of the migration jobs
+
+The two migration jobs now have their own timeout and log retention, instead of following the `debug.cleanup.*`
+settings that govern the jobs of all other components:
+
+```yaml
+migrations:
+  job:
+    # Seconds the deployment waits for a migration job to complete.
+    timeoutSeconds: 3600
+    # Seconds a completed migration job and its Pod are kept, so its log stays readable. `0` keeps
+    # it without a time limit.
+    keepOutputSeconds: 604800
+```
+
+Both defaults changed with this: A migration job used to be given 900 seconds and its Pod removed 60 seconds
+after it completed. A migration is not a component that can simply be redeployed - it is a one-time change to
+your data, and its log is the only record of what it did, per object and including the values it replaced.
+
+Raise `timeoutSeconds` for a large IAM. A migration that is still working when it elapses keeps running, but the
+deployment has already been reported as failed and no longer waits for its outcome.
+
+> [!note]
+> `keepOutputSeconds` is an upper bound, not a guarantee: the jobs are deployed as hooks that are replaced on the
+> next deployment, so a job's log survives at most until you deploy again. Collect anything you need beyond that
+> from the Pod, e.g. with your log aggregation.
+
+### `technical.yaml.gotmpl`
+
+#### Allow overriding HTTP request rate limiting for the core-mw component of the OX App Suite
+
+The OX App Suite core-mw component enforces a rate limit on certain API components. It is now possible to override the
+default values for the core-mw component:
+
+```yaml
+technical:
+  oxAppSuite:
+    rateLimit:
+      coreMW:
+        maxRateTimeWindow: "60000"
+        maxRate: "3000"
+```
+
+This is usually not required but can be helpful to customize for example for load tests.
+### `theme.yaml.gotmpl`
+
+> [!note]
+> The theming attributes `theme.imagery.logoHeaderSvgB64` and `theme.imagery.logoHeaderInvertedSvgB64`
+> have been renamed with this release. See
+> [`migrations-manual.md`](./migrations-manual.md#changed-helmfile-structure-streamlined-naming-of-the-theming-attributes)
+> for the required action.
+
+#### Dedicated mobile logo and touch icon for OpenProject
+
+OpenProject's mobile logo and its touch icon can now be themed independently:
+
+```yaml
+theme:
+  imagery:
+    projects:
+      logoMobileSvg: {{ readFile "./../../files/theme/_common/logoHeader.svg" | b64enc | quote }}
+      touchiconSvg: {{ readFile "./../../files/theme/projects/favicon.svg" | b64enc | quote }}
+```
+
+Previously both were hardcoded to the favicon served for OpenProject, so the only way to change them
+was to change `theme.imagery.projects.faviconSvg` - which changed the browser tab icon as well. The
+defaults keep the visual result close to the previous one: The mobile logo now uses the common header
+logo, the touch icon still uses the OpenProject favicon.
+
+Both attributes take the Base64-encoded content of an SVG file. They are served through the
+opendesk-static-files module and are therefore part of a ConfigMap, so keep them small.
+
+#### Custom fonts for OpenProject's PDF export
+
+The fonts used for OpenProject's PDF exports can now be set:
+
+```yaml
+theme:
+  imagery:
+    projects:
+      pdfExportFontRegularUrl: ~
+      pdfExportFontBoldUrl: ~
+      pdfExportFontItalicUrl: ~
+      pdfExportFontBoldItalicUrl: ~
+```
+
+> [!warning]
+> As with the other OpenProject theming export settings, the fonts are written to OpenProject on every deployment.
+> Changes made in OpenProject's admin UI are lost and must be set using the above options instead.
 
 ## 1.17.0
 
@@ -121,11 +266,9 @@ The new file `migrations.yaml.gotmpl` allows to opt out of single actions of the
 environment.
 
 `actionsSkip` mirrors the `actions` structure of the migration definition: An entry names the stage
-(the list it is in), the `id` and the `tag` of the action it skips - the same footprint, just
-without its `config`. It has to match the declared action exactly, including its `tag` (or the
-absence of one), so that an opt-out can never silently suppress a later, different piece of work
-that reuses the same action under another tag. An entry that matches no declared action is logged
-as a warning.
+(the list it is in), the `id` and the `tag` of the action it skips. Both have to match the declared
+action exactly, including the absence of a tag, so that an opt-out can never silently suppress a
+later, different piece of work that reuses the same action under another tag.
 
 A skipped action is logged as a warning and is not recorded as executed, so an action that is
 declared to run once stays eligible should you un-skip it later.
