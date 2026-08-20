@@ -1,0 +1,123 @@
+# The domain name of the server, with optional protocols.
+# This is used by other servers to look up the server address (see
+# `server_name`).
+#
+# The `ServerName` determines the "realm" of this server. This can
+# optionally be suffixed with a protocol and/or port. If not specified,
+# the server will be reachable at the "default" port based on the
+# protocol (port 8448 for https, 8008 for http).
+#
+# Example:
+#
+#   server_name: "matrix.example.com"
+#   server_name: "matrix.example.com:8448"
+#   server_name: "https://matrix.example.com"
+#   server_name: "https://matrix.example.com:8448"
+#
+server_name: "matrix.localhost"
+
+# When running as a daemon, the file to store the pid in
+pid_file: /data/homeserver.pid
+
+# Where the *Synapse* worker (and not the HTTP listener) writes
+# its logs (since `MatrixHomeserver` already writes the HTTP listener's logs).
+#
+# If not set, defaults to `synapse.log`.
+# log_file: /data/homeserver.log
+
+# The absolute URL to the root of the client API ("/_matrix/client").
+#
+# This is generally where Synapse is reachable.
+#
+# Typically this is "https://<host>:<port>" (or "http://<host>:<port>" if
+# not using TLS).
+#
+public_baseurl: "http://localhost:8008"
+
+# Report statistics to matrix.org
+report_stats: false
+
+# When running `synctl start` or `synctl stop`, the pid file will be
+# written to the file specified in `pid_file`, and the command sent to
+# the process via the pid file. This setting can also be used to control the
+# location of the log files (if not overridden by `log_file` above),
+# and the location of the working directory.
+#
+# defaults to the directory where the configuration file is located.
+#
+# The full file path is: pid_file/homeserver.pid
+#
+# log_file/homeserver.log
+#
+# log_config/homeserver.config.yaml (if logConfig is below)
+
+# Configuration for the database
+#
+database:
+  # The database engine name
+  name: psycopg2
+
+  # Argument to pass to the engine
+  args:
+    # Path to the database
+    user: synapse_user
+    password: changeme
+    database: synapse_db
+    host: postgres
+    port: 5432
+    cp_min: 5
+    cp_max: 10
+
+# List of listeners that will be exposed.
+#
+# This setting can be used to expose the API on different ports.
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: false
+
+# Enable the Admin API
+admin_api:
+  enabled: true
+
+# Enable password reset link
+password_config:
+  enabled: true
+
+# Enable email validation (requires email config)
+email:
+  enable_notifs: false
+  email_validation:
+    enable: false
+
+# Disable user registration
+enable_registration: false
+
+# Enable registration without 3PID validation
+enable_registration_captcha: false
+
+# Enable the lip sync feature for 端到端 encryption
+encryption_enabled_by_default_for_room_type: "invite"
+
+# Enable OIDC provider for OpenID Connect authentication
+# This is used to integrate with Keycloak
+oidc_providers:
+  - idp_id: "keycloak"
+    idp_name: "Keycloak"
+    issuer: "http://localhost:8080/realms/opendesk"
+    client_id: "synapse"
+    client_secret: "changeme"
+    scopes: ["openid", "profile"]
+    authorize_endpoint: "http://localhost:8080/realms/opendesk/protocol/openid-connect/auth"
+    token_endpoint: "http://localhost:8080/realms/opendesk/protocol/openid-connect/token"
+    userinfo_endpoint: "http://localhost:8080/realms/opendesk/protocol/openid-connect/userinfo"
+    jwks_uri: "http://localhost:8080/realms/opendesk/protocol/openid-connect/certs"
+    user_mapping_provider:
+      module: "synapse.handlers.oidc_handler.OidcAuthenticator"
+      config:
+        localpart_template: "{{ user.preferred_username }}"
+        display_name_template: "{{ user.name }}"

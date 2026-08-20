@@ -1,0 +1,49 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":enablePreCommit",
+    ":semanticCommits"
+  ],
+  "labels": ["dependencies"],
+  "helm-values": {
+    "fileMatch": ["helmfile/apps/.+/values.*\\.yaml\\.gotmpl$"]
+  },
+  "regexManagers": [
+    {
+      "description": "Update Helm chart versions in helmfile child yamls",
+      "fileMatch": ["helmfile/apps/.+/helmfile-child\\.yaml\\.gotmpl$"],
+      "matchStrings": [
+        "version: (?<currentValue>[^\\s]+)\\n\\s+repository: (?<registryUrl>[^\\s]+)"
+      ],
+      "datasourceTemplate": "helm"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group k8up dependencies",
+      "matchPackagePrefixes": ["k8up"],
+      "groupName": "k8up"
+    },
+    {
+      "description": "Group Nubus/UMS dependencies",
+      "matchPackagePrefixes": ["nubus", "ums"],
+      "groupName": "Nubus/UMS"
+    },
+    {
+      "description": "Group monitoring stack dependencies",
+      "matchPackagePrefixes": ["prometheus", "loki", "grafana"],
+      "groupName": "Monitoring Stack"
+    },
+    {
+      "description": "Group edu service dependencies",
+      "matchPackagePrefixes": ["ilias", "sogo", "opencloud", "etherpad"],
+      "groupName": "Edu Services"
+    }
+  ],
+  "schedule": ["before 9am on Monday"],
+  "timezone": "Europe/Berlin",
+  "vulnerabilityAlerts": {
+    "enabled": true
+  }
+}

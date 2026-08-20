@@ -1,0 +1,362 @@
+{
+  "timestamp": "2026-01-01T00:00:00Z",
+  "repository": "/home/weissto_local/git/opendesk_git",
+  "total": 46,
+  "passed": 32,
+  "failed": 14,
+  "compliance": 69.56521739130434,
+  "by_category": {
+    "Build System": {
+      "total": 7,
+      "passed": 0
+    },
+    "Image": {
+      "total": 9,
+      "passed": 5
+    },
+    "Security": {
+      "total": 4,
+      "passed": 4
+    },
+    "Kubernetes": {
+      "total": 10,
+      "passed": 7
+    },
+    "Deployment": {
+      "total": 6,
+      "passed": 6
+    },
+    "CI/CD": {
+      "total": 6,
+      "passed": 6
+    },
+    "Development": {
+      "total": 4,
+      "passed": 4
+    }
+  },
+  "results": [
+    {
+      "code": "FR-BUILD-001",
+      "passed": false,
+      "message": "Error: 'ComplianceVerifier' object has no attribute 'verify_FR-BUILD-001'",
+      "category": "Build System",
+      "description": "The system SHALL build Docker images for all 50+ openDesk services"
+    },
+    {
+      "code": "FR-BUILD-002",
+      "passed": false,
+      "message": "Error: 'ComplianceVerifier' object has no attribute 'verify_FR-BUILD-002'",
+      "category": "Build System",
+      "description": "The system SHALL use Nix flakes for reproducible builds"
+    },
+    {
+      "code": "FR-BUILD-003",
+      "passed": false,
+      "message": "Error: 'ComplianceVerifier' object has no attribute 'verify_FR-BUILD-003'",
+      "category": "Build System",
+      "description": "The system SHALL support multi-architecture builds (amd64, arm64)"
+    },
+    {
+      "code": "FR-BUILD-004",
+      "passed": false,
+      "message": "Error: 'ComplianceVerifier' object has no attribute 'verify_FR-BUILD-004'",
+      "category": "Build System",
+      "description": "The system SHALL generate OCI-compliant images"
+    },
+    {
+      "code": "FR-BUILD-005",
+      "passed": false,
+      "message": "Error: 'ComplianceVerifier' object has no attribute 'verify_FR-BUILD-005'",
+      "category": "Build System",
+      "description": "The system SHALL support incremental builds with caching"
+    },
+    {
+      "code": "FR-BUILD-006",
+      "passed": false,
+      "message": "Error: 'ComplianceVerifier' object has no attribute 'verify_FR-BUILD-006'",
+      "category": "Build System",
+      "description": "The system SHALL allow per-service customization"
+    },
+    {
+      "code": "FR-BUILD-007",
+      "passed": false,
+      "message": "Error: 'ComplianceVerifier' object has no attribute 'verify_FR-BUILD-007'",
+      "category": "Build System",
+      "description": "The system SHALL maintain backward compatibility with existing Dockerfiles"
+    },
+    {
+      "code": "FR-IMAGE-001",
+      "passed": false,
+      "message": "Security profiles not found",
+      "category": "Image",
+      "description": "All images SHALL run as non-root users (UID != 0)"
+    },
+    {
+      "code": "FR-IMAGE-002",
+      "passed": true,
+      "message": "Drop ALL capabilities implemented",
+      "category": "Image",
+      "description": "All images SHALL drop ALL Linux capabilities by default"
+    },
+    {
+      "code": "FR-IMAGE-003",
+      "passed": true,
+      "message": "Explicit capabilities supported",
+      "category": "Image",
+      "description": "All images SHALL only add explicitly required capabilities"
+    },
+    {
+      "code": "FR-IMAGE-004",
+      "passed": false,
+      "message": "Image hardening not found",
+      "category": "Image",
+      "description": "All images SHALL have read-only root filesystems when possible"
+    },
+    {
+      "code": "FR-IMAGE-005",
+      "passed": true,
+      "message": "Privilege escalation disabled",
+      "category": "Image",
+      "description": "All images SHALL disable privilege escalation"
+    },
+    {
+      "code": "FR-IMAGE-006",
+      "passed": false,
+      "message": "Default base image is not minimal",
+      "category": "Image",
+      "description": "All images SHALL use minimal base images (Alpine, Distroless)"
+    },
+    {
+      "code": "FR-IMAGE-007",
+      "passed": false,
+      "message": "OCI labels function not found",
+      "category": "Image",
+      "description": "All images SHALL include proper OCI labels"
+    },
+    {
+      "code": "FR-IMAGE-008",
+      "passed": true,
+      "message": "Health checks defined in Dockerfiles",
+      "category": "Image",
+      "description": "All images SHALL have health checks defined"
+    },
+    {
+      "code": "FR-IMAGE-009",
+      "passed": true,
+      "message": "Resource limits supported",
+      "category": "Image",
+      "description": "All images SHALL set appropriate resource limits"
+    },
+    {
+      "code": "FR-SEC-001",
+      "passed": true,
+      "message": "Vulnerability scanning implemented (Grype, Trivy, Snyk)",
+      "category": "Security",
+      "description": "The system SHALL scan all images for vulnerabilities"
+    },
+    {
+      "code": "FR-SEC-002",
+      "passed": true,
+      "message": "SBOM generation implemented (SPDX + CycloneDX)",
+      "category": "Security",
+      "description": "The system SHALL generate SBOMs for all images (CycloneDX + SPDX)"
+    },
+    {
+      "code": "FR-SEC-003",
+      "passed": true,
+      "message": "Image signing with Cosign implemented",
+      "category": "Security",
+      "description": "The system SHALL sign all images with Cosign"
+    },
+    {
+      "code": "FR-SEC-004",
+      "passed": true,
+      "message": "Image verification with Cosign implemented",
+      "category": "Security",
+      "description": "The system SHALL support image verification"
+    },
+    {
+      "code": "FR-K8S-001",
+      "passed": true,
+      "message": "Deployment resource support implemented",
+      "category": "Kubernetes",
+      "description": "The system SHALL support Deployment resources"
+    },
+    {
+      "code": "FR-K8S-002",
+      "passed": true,
+      "message": "Ingress resource support implemented",
+      "category": "Kubernetes",
+      "description": "The system SHALL support Ingress resources"
+    },
+    {
+      "code": "FR-K8S-003",
+      "passed": true,
+      "message": "Configmap resource support implemented",
+      "category": "Kubernetes",
+      "description": "The system SHALL support ConfigMap and Secret resources"
+    },
+    {
+      "code": "FR-K8S-005",
+      "passed": true,
+      "message": "Service resource support implemented",
+      "category": "Kubernetes",
+      "description": "The system SHALL support Service and Network resources"
+    },
+    {
+      "code": "FR-K8S-006",
+      "passed": false,
+      "message": "resourceQuota function not found",
+      "category": "Kubernetes",
+      "description": "The system SHALL support ResourceQuota and LimitRange"
+    },
+    {
+      "code": "FR-K8S-007",
+      "passed": false,
+      "message": "podDisruptionBudget function not found",
+      "category": "Kubernetes",
+      "description": "The system SHALL support PodDisruptionBudget"
+    },
+    {
+      "code": "FR-K8S-008",
+      "passed": true,
+      "message": "Networkpolicy resource support implemented",
+      "category": "Kubernetes",
+      "description": "The system SHALL support NetworkPolicies"
+    },
+    {
+      "code": "FR-K8S-009",
+      "passed": true,
+      "message": "Persistentvolumeclaim resource support implemented",
+      "category": "Kubernetes",
+      "description": "The system SHALL support PersistentVolumeClaims"
+    },
+    {
+      "code": "FR-K8S-010",
+      "passed": true,
+      "message": "Certificate resource support implemented",
+      "category": "Kubernetes",
+      "description": "The system SHALL support cert-manager Certificate resources"
+    },
+    {
+      "code": "FR-K8S-004",
+      "passed": false,
+      "message": "Ingress with TLS not found",
+      "category": "Kubernetes",
+      "description": "The system SHALL support Ingress with TLS"
+    },
+    {
+      "code": "FR-DEPLOY-001",
+      "passed": true,
+      "message": "All environment configs exist",
+      "category": "Deployment",
+      "description": "The system SHALL support multiple environments (hrz, demo, local)"
+    },
+    {
+      "code": "FR-DEPLOY-002",
+      "passed": true,
+      "message": "Override directory exists",
+      "category": "Deployment",
+      "description": "The system SHALL support environment-specific overrides"
+    },
+    {
+      "code": "FR-DEPLOY-003",
+      "passed": true,
+      "message": "Multi-registry push implemented",
+      "category": "Deployment",
+      "description": "The system SHALL support multi-registry pushing"
+    },
+    {
+      "code": "FR-DEPLOY-004",
+      "passed": true,
+      "message": "Helmfile compatibility maintained",
+      "category": "Deployment",
+      "description": "The system SHALL maintain backward compatibility with Helmfile"
+    },
+    {
+      "code": "FR-DEPLOY-005",
+      "passed": true,
+      "message": "Migration tools available in build library",
+      "category": "Deployment",
+      "description": "The system SHALL provide migration tools from Helmfile"
+    },
+    {
+      "code": "FR-DEPLOY-006",
+      "passed": true,
+      "message": "Hybrid deployments supported through optional fallback",
+      "category": "Deployment",
+      "description": "The system SHALL support gradual migration (hybrid deployments)"
+    },
+    {
+      "code": "FR-CICD-001",
+      "passed": true,
+      "message": "GitHub Actions integration implemented",
+      "category": "CI/CD",
+      "description": "The system SHALL integrate with GitHub Actions"
+    },
+    {
+      "code": "FR-CICD-002",
+      "passed": true,
+      "message": "GitLab CI integration implemented",
+      "category": "CI/CD",
+      "description": "The system SHALL integrate with GitLab CI"
+    },
+    {
+      "code": "FR-CICD-003",
+      "passed": true,
+      "message": "Build triggers implemented",
+      "category": "CI/CD",
+      "description": "The system SHALL trigger builds on code changes"
+    },
+    {
+      "code": "FR-CICD-004",
+      "passed": true,
+      "message": "Scan triggers integrated in CI/CD workflows",
+      "category": "CI/CD",
+      "description": "The system SHALL trigger vulnerability scans on every build"
+    },
+    {
+      "code": "FR-CICD-005",
+      "passed": true,
+      "message": "Registry push on release implemented",
+      "category": "CI/CD",
+      "description": "The system SHALL push images to registries on release"
+    },
+    {
+      "code": "FR-CICD-006",
+      "passed": true,
+      "message": "Manual build triggers supported",
+      "category": "CI/CD",
+      "description": "The system SHALL support manual build triggers"
+    },
+    {
+      "code": "FR-DEV-001",
+      "passed": true,
+      "message": "Development shells implemented",
+      "category": "Development",
+      "description": "The system SHALL provide development shells with all necessary tools"
+    },
+    {
+      "code": "FR-DEV-002",
+      "passed": true,
+      "message": "IDE integration implemented",
+      "category": "Development",
+      "description": "The system SHALL support IDE integration"
+    },
+    {
+      "code": "FR-DEV-003",
+      "passed": true,
+      "message": "Service documentation exists",
+      "category": "Development",
+      "description": "The system SHALL provide documentation for all services"
+    },
+    {
+      "code": "FR-DEV-004",
+      "passed": true,
+      "message": "Local development without Nix implemented",
+      "category": "Development",
+      "description": "The system SHALL support local development without full Nix installation"
+    }
+  ]
+}
