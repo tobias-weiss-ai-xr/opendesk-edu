@@ -1,0 +1,135 @@
+# Kustomization for Zot Registry
+# SPDX-License-Identifier: Apache-2.0
+# Purpose: Deploy Zot Registry with Kustomize
+# Usage: kubectl apply -k opendesk-nix/k8s/zot-registry
+#
+# This kustomization manages all resources needed for a production
+# Zot Registry deployment with pull-through caching.
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Metadata for all resources
+commonLabels:
+  app: zot-registry
+  component: registry
+  managed-by: opendesk-edu
+  opendesk.org/component: registry
+  opendesk.org.purpose: caching
+  opendesk.org/environment: production
+
+# Namespace to create/use
+namespace: zot-registry
+
+# Resources to include in this deployment
+resources:
+  # Namespace
+  - namespace.yaml
+  
+  # RBAC
+  - rbac.yaml
+  
+  # Persistent Volumes
+  - pvc.yaml
+  
+  # Configuration
+  - configmap.yaml
+  
+  # Secrets (template - must be completed in production)
+  - secret.yaml
+  
+  # Deployment
+  - deployment.yaml
+  
+  # Service
+  - service.yaml
+
+# Name prefix (optional)
+# namePrefix: zot-
+
+# Name suffix (optional)
+# nameSuffix: -prod
+
+# Field replacements (overrides)
+configMapGenerator:
+  # Override config in ConfigMap (optional)
+  - name: zot-config
+    behavior: merge
+    files:
+      - config.yml
+    options:
+      labels:
+        opendesk.org/config-version: "2.0.0"
+      annotations:
+        opendesk.org/config-mtime: "true"
+
+#secretGenerator:
+#  # Generate secrets from files (uncomment and configure in production)
+#  - name: zot-secrets
+#    behavior: replace
+#    files:
+#      - GHCR_PASSWORD=secrets/ghcr-password.txt
+#      - GITLAB_PASSWORD=secrets/gitlab-password.txt
+#    options:
+#      type: Opaque
+#      labels:
+#        opendesk.org/secret-type: credentials
+
+# Patches (optional overrides)
+patches:
+  # Patch to enable NodePort service
+  - target:
+      kind: Service
+      name: zot-registry-nodeport
+    patch: |-
+      - op: replace
+        path: /metadata/annotations/opendesk.org~1enabled
+        value: "false"
+  
+  # Patch to enable cluster-wide read permissions
+  - target:
+      kind: ClusterRoleBinding
+      name: zot-registry-reader-binding
+    patch: |-
+      - op: replace
+        path: /metadata/annotations/opendesk.org~1enabled
+        value: "false"
+
+# Transformer configurations (optional)
+# transformations:
+#   - conduit.yaml
+
+# Variables (for environment-specific overrides)
+# vars:
+#   - name: REGISTRY_IMAGE
+#     objref:
+#       kind: Deployment
+#       group: apps
+#       version: v1
+#       name: zot-registry
+#     fieldref:
+#       fieldpath: spec.template.spec.containers[0].image
+#   - name: REGISTRY_PORT
+#     objref:
+#       kind: Service
+#       version: v1
+#       name: zot-registry
+#     fieldref:
+#       fieldpath: spec.ports[0].port
+
+# Component overrides (for adding optional components)
+# components:
+#   - ../zot-registry-monitoring
+#   - ../zot-registry-backup-job
+
+# Generator options
+generatorOptions:
+  disableNameSuffixHash: true
+  labels:
+    opendesk.org/generated-by: kustomize
+    opendesk.org/generator: kustomization.yaml
+
+# Health check annotations (for ArgoCD)
+commonAnnotations:
+  opendesk.org/argocd-sync-options: Prune=true
+  opendesk.org/argocd-sync-wave: "10"

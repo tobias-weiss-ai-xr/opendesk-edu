@@ -1,0 +1,249 @@
+# YAML Lint Configuration for openDesk Nix
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# This configuration defines the YAML linting rules for Kubernetes manifests
+# and other YAML files in the openDesk Nix project.
+#
+# Usage:
+#   yamllint <file.yaml>
+#   yamllint -c .yamllint.yaml <file.yaml>
+#   make validate-yaml
+#
+# ==============================================================================
+
+# Extend the default YAML lint configuration
+# Based on: https://yamllint.readthedocs.io/en/stable/rules.html
+
+extends:
+  - default
+
+# ==============================================================================
+# GLOBAL RULES
+# ==============================================================================
+
+# Ignore specific files/patterns
+ignore:
+  - '*.md'
+  - '.github/**'
+  - '.gitlab/**'
+  - 'node_modules/**'
+  - 'vendor/**'
+  - 'artifacts/**'
+  - 'cache/**'
+  - '**/templates/**'  # Helm templates often have intentional formatting
+  - '**/charts/**'      # Helm charts
+
+# ==============================================================================
+# RULE CONFIGURATION
+# ==============================================================================
+
+rules:
+  # -----------------------------------------------------------------------------
+  # Document Start
+  # Require or forbid a document start marker (---)
+  # -----------------------------------------------------------------------------
+  document-start:
+    present: true
+    level: warning
+
+  # -----------------------------------------------------------------------------
+  # Trailing Spaces
+  # Forbid trailing spaces
+  # -----------------------------------------------------------------------------
+  trailing-spaces:
+    level: error
+    allow-non-breakable: false
+
+  # -----------------------------------------------------------------------------
+  # Indentation
+  # Check indentation
+  # -----------------------------------------------------------------------------
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
+    level: error
+
+  # -----------------------------------------------------------------------------
+  # Line Length
+  # Limit line length
+  # -----------------------------------------------------------------------------
+  line-length:
+    max: 120
+    level: warning
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: true
+
+  # -----------------------------------------------------------------------------
+  # Empty Lines
+  # -----------------------------------------------------------------------------
+  empty-lines:
+    max: 2
+    max-start: 0
+    max-end: 1
+    level: warning
+
+  # -----------------------------------------------------------------------------
+  # Empty Document
+  # Forbid empty documents
+  # -----------------------------------------------------------------------------
+  empty-document:
+    level: warning
+
+  # -----------------------------------------------------------------------------
+  # Truthy
+  # Check for truthy values (yes, no, on, off)
+  # -----------------------------------------------------------------------------
+  truthy:
+    level: warning
+    allowed-values: [true, false, yes, no, on, off, null, None]
+
+  # -----------------------------------------------------------------------------
+  # Dashes
+  # Check for proper dash usage in sequences
+  # -----------------------------------------------------------------------------
+  commas:
+    max-spaces-before: 0
+    min-spaces-after: 1
+    max-spaces-after: 1
+    level: warning
+
+  # -----------------------------------------------------------------------------
+  # Quoted Strings
+  # Require quotes for strings that need them
+  # -----------------------------------------------------------------------------
+  quotes:
+    required: true
+    extra-allowed: [':', ',', '[', ']', '{', '}', '\\', '"', "'", '|', '>' ]
+    extra-required: []
+    level: warning
+
+  # -----------------------------------------------------------------------------
+  # Key Ordering
+  # Disallow reordering of keys in the same document
+  # -----------------------------------------------------------------------------
+  key-ordering:
+    level: warning
+
+  # -----------------------------------------------------------------------------
+  # Custom Rules for Kubernetes
+  # -----------------------------------------------------------------------------
+
+  # Kubernetes-specific patterns that often need exceptions
+  kubernetes-specific:
+    # Allow multi-line strings in Kubernetes manifests
+    allow-multiline-strings: true
+    
+    # Allow comments inline with values (common in Kubernetes)
+    allow-inline-comments: true
+
+  # -----------------------------------------------------------------------------
+  # Custom Rules for Helm
+  # -----------------------------------------------------------------------------
+
+  # Helm-specific patterns
+  helm-specific:
+    # Allow Helm template syntax
+    allow-templates: true
+    
+    # Allow common Helm functions
+    allowed-functions:
+      - include
+      - required
+      - toYaml
+      - fromYaml
+      - template
+      - tpl
+      - nindent
+      - indent
+      - trim
+      - regexReplaceAll
+
+# ==============================================================================
+# FILE-SPECIFIC OVERRIDES
+# ==============================================================================
+
+# Kubernetes Deployment files
+'k8s/**/deployment.yaml':
+  rules:
+    line-length:
+      max: 140
+      level: warning
+
+# Kubernetes Service files
+'k8s/**/service.yaml':
+  rules:
+    line-length:
+      max: 140
+      level: warning
+
+# Helm Chart files
+'helm/**/*.yaml':
+  rules:
+    line-length:
+      max: 160
+      level: warning
+    quotes:
+      required: false
+      level: warning
+
+# Helm templates
+'templates/**/*.yaml':
+  ignore: true
+
+# Makefile-like YAML (GitLab CI)
+'.gitlab-ci.yml':
+  rules:
+    line-length:
+      max: 160
+      level: warning
+    indentation:
+      spaces: 2
+      indent-sequences: whatever
+    quotes:
+      required: false
+
+# GitHub Actions YAML
+'.github/workflows/*.yml':
+  rules:
+    line-length:
+      max: 160
+      level: warning
+    indentation:
+      spaces: 2
+      indent-sequences: whatever
+    quotes:
+      required: false
+
+# SBOM-related YAML
+'sbom/**/*.yaml':
+  rules:
+    line-length:
+      max: 200
+      level: warning
+
+# Configuration files
+'*.yaml':
+  rules:
+    document-start:
+      level: warning
+
+# ==============================================================================
+# EXCLUSIONS
+# ==============================================================================
+
+# Skip validation for generated files
+skip_generated:
+  patterns:
+    - '**/generated/**'
+    - '**/zz_generated*'
+    - '**/chart-*'
+    - '**/index.yaml'
+
+# Skip validation for common auto-generated patterns
+skip_patterns:
+  - '^#.*'
+  - '^---$'
+  - '^\.\.\.'
+  - '^{{.*}}$'
+  - '^{{.*}}'

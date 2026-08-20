@@ -1,0 +1,132 @@
+# openDesk Dev Agent Operator Services
+# SPDX-License-Identifier: Apache-2.0
+#
+# Metrics Service - Exposes operator metrics for Prometheus
+# Health Service - Exposes health endpoints for monitoring
+#
+---
+# Metrics Service (ClusterIP) - For Prometheus scraping
+apiVersion: v1
+kind: Service
+metadata:
+  name: opendesk-dev-agent-metrics
+  namespace: opendesk-dev-agent
+  labels:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    # Monitoring labels
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/metrics"
+    prometheus.io/scheme: "http"
+    
+    # openDesk specific
+    opendesk.org/component: operator
+    opendesk.org/service-type: metrics
+    
+    # ZKI IT-Grundschutz
+    de.zki.it-grundschutz.module: SY.3.4Kub
+    
+    # container.gov.de
+    de.container.gov.component: opendesk-dev-agent-operator
+    de.container.gov.service: metrics
+
+spec:
+  selector:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/component: operator
+  
+  ports:
+    - name: metrics
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  
+  type: ClusterIP
+  sessionAffinity: None
+
+---
+# Health Service (ClusterIP) - For health checks
+apiVersion: v1
+kind: Service
+metadata:
+  name: opendesk-dev-agent-health
+  namespace: opendesk-dev-agent
+  labels:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    # openDesk specific
+    opendesk.org/component: operator
+    opendesk.org/service-type: health
+    
+    # ZKI IT-Grundschutz
+    de.zki.it-grundschutz.module: SY.3.4Kub
+    
+    # container.gov.de
+    de.container.gov.component: opendesk-dev-agent-operator
+    de.container.gov.service: health
+
+spec:
+  selector:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/component: operator
+  
+  ports:
+    - name: health
+      port: 8081
+      targetPort: 8081
+      protocol: TCP
+  
+  type: ClusterIP
+  sessionAffinity: None
+
+---
+# Headless Service - For direct pod access (DNS-based)
+apiVersion: v1
+kind: Service
+metadata:
+  name: opendesk-dev-agent-headless
+  namespace: opendesk-dev-agent
+  labels:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    # openDesk specific
+    opendesk.org/component: operator
+    opendesk.org/service-type: headless
+    
+    # container.gov.de
+    de.container.gov.component: opendesk-dev-agent-operator
+
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/component: operator
+  
+  ports:
+    - name: metrics
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+    - name: health
+      port: 8081
+      targetPort: 8081
+      protocol: TCP

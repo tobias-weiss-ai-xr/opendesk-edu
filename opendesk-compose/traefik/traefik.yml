@@ -1,0 +1,39 @@
+# Traefik Configuration
+#
+# This configuration provides reverse proxy with Let'\''s Encrypt SSL
+# Auto-discovers services via Docker labels
+#
+# Key Features:
+#   - HTTP to HTTPS redirection
+#   - Automatic SSL certificate management (Let'\''s Encrypt)
+#   - Service auto-discovery via Docker labels
+#
+
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        permanent: true
+        scheme: https
+
+  websecure:
+    address: :443
+    http:
+      tls: true
+
+  traefik:
+    address: :8080
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: ${ACME_EMAIL:-admin@${DOMAIN:-example.com}}
+      storage: /acme.json
+      httpChallenge:
+        entryPoint: web
+
+providers:
+  docker:
+    endpoint: unix:///var/run/docker.sock
+    exposedByDefault: false
