@@ -29,6 +29,21 @@ spec:
               name: "*ldap-server-primary*"
             spec:
               replicas: 2
+          # Exception: Jitsi's jicofo, prosody and jigasi are singletons by design. The
+          # upstream jitsi-meet chart hardcodes `replicas: 1` in their templates and never
+          # reads `replicaCount`, so the value cannot be templated.
+          - metadata:
+              name: "*jicofo*"
+            spec:
+              replicas: 1
+          - metadata:
+              name: "*prosody*"
+            spec:
+              replicas: 1
+          - metadata:
+              name: "*jigasi*"
+            spec:
+              replicas: 1
           - spec:
               replicas: 42
 

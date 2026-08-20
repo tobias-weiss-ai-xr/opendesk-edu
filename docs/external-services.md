@@ -97,6 +97,13 @@ service.
 |                    |                    | Port      | `databases.oxAppSuite.port`                   | `3306`                       |
 |                    |                    | Username  | `databases.oxAppSuite.username`               | `root`                       |
 |                    |                    | Password  | `databases.oxAppSuite.password`               |                              |
+|                    | OX Connector       |           |                                               |                              |
+|                    |                    | Type      | `databases.oxConnector.type`                  | `postgresql`                 |
+|                    |                    | Name      | `databases.oxConnector.name`                  | `oxconnector`                |
+|                    |                    | Host      | `databases.oxConnector.host`                  | `postgresql`                 |
+|                    |                    | Port      | `databases.oxConnector.port`                  | `5432`                       |
+|                    |                    | Username  | `databases.oxConnector.username`              | `oxconnector_user`           |
+|                    |                    | Password  | `databases.oxConnector.password`              |                              |
 | OX Dovecot Pro[^3] | ACLs               |           |                                               |                              |
 |                    |                    | Type      | `databases.dovecotACL.type`                   | `cassandra`                  |
 |                    |                    | Name      | `databases.dovecotACL.name`                   | `dovecot_acl`                |

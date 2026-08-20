@@ -1,0 +1,122 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: enter-your-opendesk-namespace-here-please
+  name: ums-udm-rest-api-update-univentionobjectidentifier-fix
+spec:
+  parallelism: 1
+  completions: 1
+  backoffLimit: 6
+  manualSelector: false
+  template:
+    metadata:
+      name: udm-rest-api
+      labels:
+        app.kubernetes.io/instance: ums
+        app.kubernetes.io/name: udm-rest-api
+    spec:
+      volumes:
+        - name: secret-ldap
+          secret:
+            secretName: ums-ldap-server-admin
+            defaultMode: 256
+      initContainers:
+        - name: wait-for-ldap
+          image: >-
+            registry.opencode.de/bmi/opendesk/components/supplier/univention/images-mirror/wait-for-dependency:0.36.1@sha256:53a0b3c3a47823aca0a1f99d0d43846316cfef2bf5e35437ee63c8a9468c0296
+          command:
+            - wait-for-ldap.sh
+          env:
+            - name: LDAP_URI
+              value: ldap://ums-ldap-server-primary
+            - name: LDAP_ADMIN_USER
+              value: cn=admin,dc=swp-ldap,dc=internal
+            - name: LDAP_ADMIN_PASSWORD_FILE
+              value: /var/secrets/ldap_password
+          resources:
+            limits:
+              cpu: '99'
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          volumeMounts:
+            - name: secret-ldap
+              mountPath: /var/secrets/ldap_password
+              subPath: password
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+      containers:
+        - name: main
+          image: >-
+            registry.opencode.de/bmi/opendesk/components/supplier/univention/images-mirror/ldap-update-univention-object-identifier:0.41.12@sha256:0dfbbf518c53899aae16eba23a0cfe9a9b67786997f052af63c62511559c926f
+          envFrom:
+            - configMapRef:
+                name: ums-udm-rest-api
+          env:
+            - name: LDAP_URI
+              value: ldap://ums-ldap-server-primary
+            - name: LDAP_ADMIN_USER
+              value: cn=admin,dc=swp-ldap,dc=internal
+            - name: LDAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ums-ldap-server-admin
+                  key: password
+            - name: LDAP_BASE_DN
+              value: dc=swp-ldap,dc=internal
+            - name: PYTHON_LOG_LEVEL
+              value: INFO
+          resources:
+            limits:
+              cpu: '99'
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: ums-udm-rest-api
+      serviceAccount: ums-udm-rest-api
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+      imagePullSecrets:
+        - name: enterprise-registry
+      schedulerName: default-scheduler
+  completionMode: NonIndexed
+  suspend: false
+  podReplacementPolicy: TerminatingOrFailed
+...
