@@ -1,0 +1,120 @@
+# openDesk Dev Agent Operator Kustomization
+# SPDX-License-Identifier: Apache-2.0
+#
+# This Kustomization provide a complete deployment of the Dev Agent Operator
+# with all required components: Namespace, RBAC, ConfigMap, Deployment, Service
+#
+# Usage:
+#   kubectl apply -k opendesk-nix/k8s/dev-agent
+#   
+# For production:
+#   kubectl apply -k opendesk-nix/k8s/dev-agent/overlays/production
+#
+# Namespace: opendesk-dev-agent
+#
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Metadata labels applied to all resources
+labels:
+  - includeSelectors: false
+    pairs:
+      app.kubernetes.io/name: opendesk-dev-agent
+      app.kubernetes.io/version: "2.1.0"
+      app.kubernetes.io/component: operator
+      app.kubernetes.io/part-of: opendesk
+      app.kubernetes.io/managed-by: kustomize
+      
+      opendesk.org/component: operator
+      opendesk.org/purpose: self-healing
+      
+      de.zki.it-grundschutz.module: SY.3.4Kub
+      de.container.gov.component: opendesk-dev-agent-operator
+
+# Common annotations
+commonAnnotations:
+  opendesk.org/description: "openDesk Dev Agent Operator for self-healing deployments"
+  opendesk.org/build-date: "2026-08-03T12:00:00Z"
+  opendesk.org/registry: "registry.gitlab.opencode.de/umr"
+
+# Resource list
+resources:
+  # Namespace
+  - namespace.yaml
+  
+  # Service Account and Pull Secrets
+  - service-account.yaml
+  
+  # RBAC Configuration
+  - rbac.yaml
+  
+  # Configuration
+  - configmap.yaml
+  
+  # Deployment
+  - deployment.yaml
+  
+  # Services
+  - service.yaml
+  
+  # Pod Disruption Budget
+  - pdb.yaml
+  
+  # Monitoring (optional, requires prometheus-operator)
+  # Uncomment to enable monitoring
+  # - monitoring.yaml
+
+# Image substitutions
+images:
+  - name: registry.gitlab.opencode.de/umr/opendesk-dev-agent
+    newName: registry.gitlab.opencode.de/umr/opendesk-dev-agent
+    newTag: 2.1.0
+
+# ConfigMap generator (optional - example for custom config)
+# configMapGenerator:
+#   - name: opendesk-dev-agent-custom-config
+#     behavior: merge
+#     files:
+#       - operator-custom.yaml
+
+# Patched resources (example)
+patches:
+  # Patch Deployment to use a different image tag
+  # - target:
+  #     kind: Deployment
+  #     name: opendesk-dev-agent-operator
+  #   patch: |-
+  #     - op: replace
+  #       path: /spec/template/spec/containers/0/image
+  #       value: registry.gitlab.opencode.de/umr/opendesk-dev-agent:latest
+  
+  # Patch to change replica count (not recommended for operator with leader election)
+  # - target:
+  #     kind: Deployment
+  #     name: opendesk-dev-agent-operator
+  #   patch: |-
+  #     - op: replace
+  #       path: /spec/replicas
+  #       value: 2
+
+# Variables for templating
+# vars:
+#   - name: OPERATOR_IMAGE_TAG
+#     objref:
+#       kind: ConfigMap
+#       name: opendesk-dev-agent-config
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.operator-version
+
+# Disable monitoring by default (requires prometheus-operator)
+# In production, create overlays/production with monitoring enabled
+configurations:
+  - kustomizeconfig.yaml
+
+# Health check configuration
+# The operator includes built-in health endpoints:
+# - /healthz - Simple liveness check (200 if operator is running)
+# - /ready - Readiness check (200 if operator can process repairs)
+# - /startup - Startup probe (102 if starting, 200 if ready)
+# - /metrics - Prometheus metrics endpoint

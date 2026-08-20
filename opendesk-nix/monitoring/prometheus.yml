@@ -1,0 +1,283 @@
+# Prometheus Configuration for openDesk Nix
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# ==============================================================================
+# Main Prometheus configuration file for monitoring openDesk containers.
+#
+# Usage:
+#   docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d prometheus
+#
+#   Access Prometheus at: http://localhost:9090
+#   Access Grafana at: http://localhost:3000
+#
+# ==============================================================================
+
+global:
+  # Scrape interval (how frequently to scrape targets)
+  scrape_interval: 15s
+  
+  # Evaluation interval (how frequently to evaluate rules)
+  evaluation_interval: 15s
+  
+  # Scrape timeout
+  scrape_timeout: 10s
+  
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager)
+  external_labels:
+    cluster: 'opendesk-nix'
+    environment: 'development'
+    maintainer: 'team@opendesk-edu.org'
+
+# ==============================================================================
+# Alertmanager configuration
+# ==============================================================================
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            # Uncomment and configure Alertmanager if available
+            # - alertmanager:9093
+
+# ==============================================================================
+# Rule files
+# ==============================================================================
+
+rule_files:
+  - 'alert.rules.yml'
+  - 'recording.rules.yml'
+
+# ==============================================================================
+# Scrape configurations
+# ==============================================================================
+
+scrape_configs:
+  # ---------------------------------------------------------------------------
+  # Prometheus itself
+  # ---------------------------------------------------------------------------
+  - job_name: 'prometheus'
+    
+    # Override the global default and scrape targets from this job every 5s.
+    scrape_interval: 5s
+    
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # ---------------------------------------------------------------------------
+  # Dev Agent Operator
+  # ---------------------------------------------------------------------------
+  - job_name: 'dev-agent'
+    
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    
+    metrics_path: '/metrics'
+    
+    static_configs:
+      - targets: ['dev-agent:8080']
+        labels:
+          component: 'dev-agent'
+          version: '2.1.0'
+          service: 'opendesk-dev-agent'
+    
+    # Kubernetes SD configuration (uncomment if running in Kubernetes)
+    # kubernetes_sd_configs:
+    #   - role: pod
+    #     selectors:
+    #       - field: metadata.labels.app=dev-agent-operator
+    
+    # Relabeling for Kubernetes
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_container_port_name]
+        regex: metrics
+        action: keep
+
+  # ---------------------------------------------------------------------------
+  # Zot Registry
+  # ---------------------------------------------------------------------------
+  - job_name: 'zot-registry'
+    
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    
+    metrics_path: '/metrics'
+    
+    static_configs:
+      - targets: ['zot-registry:9900']
+        labels:
+          component: 'zot-registry'
+          version: '2.0.0-rc5'
+          service: 'opendesk-zot-registry'
+    
+    # Kubernetes SD configuration
+    # kubernetes_sd_configs:
+    #   - role: pod
+    #     selectors:
+    #       - field: metadata.labels.app=zot-registry
+    
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_container_port_name]
+        regex: metrics|pprof
+        action: keep
+
+  # ---------------------------------------------------------------------------
+  # SOGo 5
+  # ---------------------------------------------------------------------------
+  - job_name: 'sogo5'
+    
+    scrape_interval: 15s
+    scrape_timeout: 5s
+    
+    metrics_path: '/metrics'
+    
+    static_configs:
+      - targets: ['sogo5:20000']
+        labels:
+          component: 'sogo5'
+          version: '5.8.0'
+          service: 'opendesk-sogo5'
+    
+    # SOGo doesn't have built-in metrics, but we can use the health endpoint
+    # or implement custom metrics collection
+    # For now, we're just checking if the service is reachable
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_container_port_number]
+        regex: 20000
+        action: keep
+
+  # ---------------------------------------------------------------------------
+  # SOGo 6
+  # ---------------------------------------------------------------------------
+  - job_name: 'sogo6'
+    
+    scrape_interval: 15s
+    scrape_timeout: 5s
+    
+    metrics_path: '/metrics'
+    
+    static_configs:
+      - targets: ['sogo6:20000']
+        labels:
+          component: 'sogo6'
+          version: '6.0.0'
+          service: 'opendesk-sogo6'
+    
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_container_port_number]
+        regex: 20000
+        action: keep
+
+  # ---------------------------------------------------------------------------
+  # Node Exporter (for host metrics)
+  # ---------------------------------------------------------------------------
+  - job_name: 'node-exporter'
+    
+    scrape_interval: 15s
+    scrape_timeout: 5s
+    
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          component: 'node-exporter'
+          service: 'opendesk-node-exporter'
+
+  # ---------------------------------------------------------------------------
+  # cAdvisor (for container metrics)
+  # ---------------------------------------------------------------------------
+  - job_name: 'cadvisor'
+    
+    scrape_interval: 15s
+    scrape_timeout: 5s
+    
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          component: 'cadvisor'
+          service: 'opendesk-cadvisor'
+
+  # ---------------------------------------------------------------------------
+  # MariaDB Exporter
+  # ---------------------------------------------------------------------------
+  - job_name: 'mariadb-exporter'
+    
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    
+    static_configs:
+      - targets: ['mariadb-exporter:9104']
+        labels:
+          component: 'mariadb-exporter'
+          service: 'opendesk-mariadb-exporter'
+          database: 'mariadb5'
+
+  # ---------------------------------------------------------------------------
+  # Memcached Exporter
+  # ---------------------------------------------------------------------------
+  - job_name: 'memcached-exporter'
+    
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    
+    static_configs:
+      - targets: ['memcached-exporter:9150']
+        labels:
+          component: 'memcached-exporter'
+          service: 'opendesk-memcached-exporter'
+
+  # ---------------------------------------------------------------------------
+  # Blackbox Exporter (for external endpoints)
+  # ---------------------------------------------------------------------------
+  - job_name: 'blackbox'
+    
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    
+    metrics_path: /probe
+    
+    params:
+      module: [http_2xx]
+    
+    static_configs:
+      - targets:
+          # Check SOGo 5 web interface
+          - http://sogo5:20000/SOGo/
+          # Check SOGo 6 web interface
+          - http://sogo6:20000/SOGo/
+          # Check Dev Agent health
+          - http://dev-agent:8081/healthz
+          # Check Zot Registry health
+          - http://zot-registry:8080/healthz
+    
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+# ==============================================================================
+# Remote write configuration (optional - for external Prometheus)
+# ==============================================================================
+
+# remote_write:
+#   - url: 'https://remote-prometheus.example.com/api/v1/write'
+#     basic_auth:
+#       username: 'username'
+#       password: 'password'
+#     write_relabel_configs:
+#       - source_labels: [cluster]
+#         regex: 'opendesk-nix'
+#         action: keep
+
+# ==============================================================================
+# Storage configuration (optional - for long-term storage)
+# ==============================================================================
+
+# storage:
+#   tsdb:
+#     retention:
+#       time: 30d
+#       size: 50GB

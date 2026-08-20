@@ -1,0 +1,189 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dev-agent-operator
+  namespace: opendesk-operator
+  labels:
+    app.kubernetes.io/name: dev-agent-operator
+    app.kubernetes.io/instance: dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/service-account: "dev-agent-operator"
+    de.zki.it-grundschutz.module: "BA.3.4Kubernetes"
+    de.zki.it-grundschutz.layer: "Platform"
+    de.container.gov.component: "dev-agent-operator"
+    de.container.gov.component-type: "operator"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dev-agent-operator
+  namespace: opendesk-operator
+  labels:
+    app.kubernetes.io/name: dev-agent-operator
+    app.kubernetes.io/instance: dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/role: "dev-agent-operator"
+    de.zki.it-grundschutz.module: "BA.3.4Kubernetes"
+    de.container.gov.role: "operator"
+rules:
+# Core resources for operator itself
+- apiGroups: [""]
+  resources: ["pods", "services", "endpoints", "persistentvolumeclaims", "events", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+- apiGroups: ["apps"]
+  resources: ["deployments", "daemonsets", "statefulsets", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Custom resources for HealthPolicy and RepairStrategy
+- apiGroups: ["opendesk-dev-agent.tobias-weiss-ai-xr.github.com"]
+  resources: ["healthpolicies", "repairstrategies", "healthpolicies/finalizers", "repairstrategies/finalizers"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Permissions for monitoring targets
+- apiGroups: [""]
+  resources: ["services", "endpoints", "pods"]
+  verbs: ["get", "list", "watch"]
+
+# Permissions for configmap updates (operator configuration)
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch", "update"]
+
+# Permissions for leader election
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["dev-agent-operator-leader-election"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dev-agent-operator
+  labels:
+    app.kubernetes.io/name: dev-agent-operator
+    app.kubernetes.io/instance: dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/clusterrole: "dev-agent-operator"
+    de.zki.it-grundschutz.module: "BA.3.4Kubernetes"
+    de.container.gov.clusterrole: "operator"
+    de.container.gov.scope: "cluster"
+rules:
+# Cluster-scoped resources needed for multi-namespace monitoring
+- apiGroups: [""]
+  resources: ["namespaces", "nodes"]
+  verbs: ["get", "list", "watch"]
+
+# CRDs that might be installed in other namespaces
+- apiGroups: ["opendesk-dev-agent.tobias-weiss-ai-xr.github.com"]
+  resources: ["healthpolicies", "repairstrategies"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Cluster-scoped resources for advanced features
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses", "volumeattachments"]
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses", "networkpolicies"]
+  verbs: ["get", "list", "watch"]
+
+# Pod security standards (if api available)
+- apiGroups: ["pod-security.admission.k8s.io"]
+  resources: ["podsecurityadmissions"]
+  verbs: ["use"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev-agent-operator
+  namespace: opendesk-operator
+  labels:
+    app.kubernetes.io/name: dev-agent-operator
+    app.kubernetes.io/instance: dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/rolebinding: "dev-agent-operator"
+    de.zki.it-grundschutz.module: "BA.3.4Kubernetes"
+    de.container.gov.rolebinding: "operator"
+subjects:
+- kind: ServiceAccount
+  name: dev-agent-operator
+  namespace: opendesk-operator
+roleRef:
+  kind: Role
+  name: dev-agent-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dev-agent-operator
+  labels:
+    app.kubernetes.io/name: dev-agent-operator
+    app.kubernetes.io/instance: dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/clusterrolebinding: "dev-agent-operator"
+    de.zki.it-grundschutz.module: "BA.3.4Kubernetes"
+    de.container.gov.clusterrolebinding: "operator"
+    de.container.gov.scope: "cluster"
+subjects:
+- kind: ServiceAccount
+  name: dev-agent-operator
+  namespace: opendesk-operator
+roleRef:
+  kind: ClusterRole
+  name: dev-agent-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dev-agent-operator-metrics-reader
+  namespace: opendesk-operator
+  labels:
+    app.kubernetes.io/name: dev-agent-operator
+    app.kubernetes.io/instance: dev-agent-operator-metrics-reader
+    app.kubernetes.io/component: metrics
+    opendesk.org/role: "metrics-reader"
+    de.container.gov.purpose: "monitoring"
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "endpoints"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev-agent-operator-metrics-reader
+  namespace: opendesk-operator
+  labels:
+    app.kubernetes.io/name: dev-agent-operator
+    app.kubernetes.io/instance: dev-agent-operator-metrics-reader
+    app.kubernetes.io/component: metrics
+    opendesk.org/rolebinding: "metrics-reader"
+subjects:
+- kind: ServiceAccount
+  name: dev-agent-operator
+  namespace: opendesk-operator
+roleRef:
+  kind: Role
+  name: dev-agent-operator-metrics-reader
+  apiGroup: rbac.authorization.k8s.io

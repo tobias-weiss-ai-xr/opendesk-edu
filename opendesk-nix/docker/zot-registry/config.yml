@@ -1,0 +1,493 @@
+# Hardened Zot Registry Configuration for openDesk Kubernetes Caching
+# Security Level: PRODUCTION
+# SPDX-License-Identifier: Apache-2.0
+# File: config.yml
+# Purpose: Pull-through caching registry for openDesk Edu containers
+# Version: 2.0.0
+# Environment: K3s cluster on Debian 12
+#
+# Usage:
+#   docker run -v $(pwd)/config.yml:/etc/zot/config.yml zot serve /etc/zot/config.yml
+#   OR mount as ConfigMap in Kubernetes deployment
+#
+# Security Notes:
+#   - Anonymous reads enabled for caching (bi-directional pull-through)
+#   - Write operations require authentication
+#   - TLS should be terminated at ingress level
+#   - All sensitive credentials via environment variables
+
+version: 2.0.0
+
+# =============================================================================
+# SERVER CONFIGURATION
+# =============================================================================
+server:
+  # Bind to all interfaces (Kubernetes Service handles network filtering)
+  addr: ":8080"
+  
+  # HTTP Server Configuration
+  http:
+    # Disable debug endpoints in production
+    enablePprof: false
+    enableMetrics: true
+    # Enforce connection timeouts
+    idleTimeout: 5m
+    readTimeout: 30s
+    writeTimeout: 30s
+
+  # TLS Configuration (terminated at ingress for production)
+  tls:
+    enabled: false
+    # For direct TLS (without ingress):
+    # cert: /etc/zot/certs/tls.crt
+    # key: /etc/zot/certs/tls.key
+    # minTLSVersion: "1.3"  # ONLY modern TLS
+    # cipherSuites: ["TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"]
+
+  # Rate Limiting (prevent abuse)
+  rateLimits:
+    upload: 100      # MB/s per client
+    download: 200    # MB/s per client (higher for caching)
+    requestsPerSecond: 200
+
+# =============================================================================
+# STORAGE CONFIGURATION
+# =============================================================================
+storage:
+  # Root directory for all stored images
+  rootDirectory: /var/lib/zot/storage
+  
+  # Filesystem storage driver (most secure for local caching)
+  filesystem:
+    # Thread pool configuration
+    maxThreads: 10
+    # Store blobs separately for better cache efficiency
+    dedicatedBlobDir: true
+    # Inline blob sizes (small blobs stored with manifest)
+    inlineBlobSize: 1024
+    
+    # Cache configuration
+    cache:
+      enabled: true
+      directory: /var/lib/zot/cache
+      # Cache size limit
+      maxSize: "10Gi"
+      # Number of cache entries limit
+      maxEntries: 10000
+      # Cache TTL (time to live)
+      ttl: 24h
+      
+    # Filesystem-specific optimizations
+    chunkSize: 5Mi
+    maxUploadSize: "10Gi"
+
+  # Garbage Collection
+  gc:
+    enabled: true
+    # Run GC every 24 hours
+    interval: 24h
+    # Delete untagged manifests older than 30 days
+    deleteUntagged: true
+    keepUntaggedManifests: 5
+    # Dry run mode (log what would be deleted)
+    dryRun: false
+
+  # Disable cloud storage (using local filesystem)
+  s3: null
+  gcs: null
+  azure: null
+
+# =============================================================================
+# AUTHENTICATION & AUTHORIZATION
+# =============================================================================
+auth:
+  # HTPasswd file for basic authentication
+  # Generate with: htpasswd -Bc /etc/zot/passwd username password
+  htpasswd:
+    path: /etc/zot/passwd
+    realm: "Zot Registry - openDesk Cache"
+    # Algorithm: bcrypt (bcrypt), crypt (crypt), apr1 (apr1)
+    algorithm: bcrypt
+
+  # Anonymous Access Configuration
+  # IMPORTANT: Anonymous read is REQUIRED for pull-through caching
+  # Components need to pull FROM upstream registries through THIS cache
+  allowAnonymousReads: true
+  
+  # Disable anonymous writes (must be explicit)
+  allowAnonymousWrites: false
+
+  # Token Authentication (for CI/CD)
+  # Generate with: openssl rand -hex 32
+  token:
+    enabled: false
+    # issuer: "zot-cache-token"
+    # expiration: 24h
+    # key: /etc/zot/tokens/key.pem
+
+# =============================================================================
+# ACCESS CONTROL (RBAC)
+# =============================================================================
+accessControl:
+  # Define roles with specific permissions
+  roles:
+    # Read-only access (for pulling cached images)
+    - name: "reader"
+      permissions:
+        read:
+          - "*"
+    
+    # Read + Write access (for pushing to cache)
+    - name: "pusher"
+      permissions:
+        read:
+          - "*"
+        write:
+          - "registry.gitlab.opencode.de/umr/*"
+          - "ghcr.io/opendesk-edu/*"
+        delete:
+          - "registry.gitlab.opencode.de/umr/*"
+          - "ghcr.io/opendesk-edu/*"
+    
+    # Full access (for administrators)
+    - name: "admin"
+      permissions:
+        read:
+          - "*"
+        write:
+          - "*"
+        delete:
+          - "*"
+
+  # Assign roles to users (users defined in htpasswd file)
+  users:
+    # User for cache operations (Kubernetes Secret)
+    - name: "cache-user"
+      password: "${ZOT_CACHE_PASSWORD:changeme}"
+      roles: ["reader", "pusher"]
+    
+    # Admin user (Kubernetes Secret)
+    - name: "admin"
+      password: "${ZOT_ADMIN_PASSWORD:changeme}"
+      roles: ["admin"]
+    
+    # CI/CD robot account
+    - name: "ci-bot"
+      password: "${ZOT_CI_PASSWORD:changeme}"
+      roles: ["pusher"]
+
+# =============================================================================
+# UPSTREAM REGISTRIES (Pull-Through Caching)
+# =============================================================================
+# Configuration for pulling images FROM upstream registries
+# and caching them locally for faster subsequent pulls
+upstream:
+  
+  # --- GitHub Container Registry (ghcr.io) ---
+  - name: ghcr
+    url: https://ghcr.io
+    
+    # TLS verification (ALWAYS enable in production)
+    tlsVerify: true
+    
+    # Timeout for upstream requests
+    timeout: 30s
+    maxRetries: 3
+    
+    # Upstream authentication
+    # Credentials provided via Kubernetes Secrets
+    auth:
+      username: "${GHCR_USERNAME:-}"
+      password: "${GHCR_PASSWORD:-}"
+    
+    # Pull-through caching configuration
+    pullThrough:
+      enabled: true
+      # Only cache these repositories
+      destinations:
+        - "ghcr.io/opendesk-edu/*"
+        - "ghcr.io/tobias-weiss-ai-xr/*"
+      # ???Should we cache all ghcr.io images?
+      # For security, we only cache openDesk related images
+      
+    # Proxy caching (cache responses from upstream)
+    proxy:
+      enabled: true
+      # Cache TTL for proxy responses
+      ttl: 1h
+
+  # --- GitLab Container Registry (registry.gitlab.opencode.de) ---
+  - name: gitlab-opencode
+    url: https://registry.gitlab.opencode.de
+    
+    tlsVerify: true
+    timeout: 30s
+    maxRetries: 3
+    
+    auth:
+      username: "${GITLAB_USERNAME:-}"
+      password: "${GITLAB_PASSWORD:-}"
+    
+    pullThrough:
+      enabled: true
+      # Cache all UMR namespace images
+      destinations:
+        - "registry.gitlab.opencode.de/umr/*"
+    
+    proxy:
+      enabled: true
+      ttl: 1h
+
+  # --- Docker Hub (registry-1.docker.io) ---
+  # Disabled by default for security reasons
+  # Enable only if specific images are needed
+  - name: dockerhub
+    url: https://registry-1.docker.io
+    
+    tlsVerify: true
+    timeout: 30s
+    maxRetries: 3
+    
+    pullThrough:
+      enabled: false
+      # Example: Only cache official images that openDesk uses
+      # destinations:
+      #   - "library/*"
+      #   - "bitnami/*"
+    
+    # Rate limiting for Docker Hub (they have strict limits)
+    rateLimits:
+      requestsPerSecond: 10
+
+# =============================================================================
+# CACHE CONFIGURATION
+# =============================================================================
+cache:
+  # Embedded cache (in-memory + filesystem)
+  embedded:
+    enabled: true
+    # Maximum size of the embedded cache
+    maxSize: "10Gi"
+    # Number of entries to keep in cache
+    maxEntries: 10000
+    # Cache garbage collection interval
+    gcInterval: 1h
+    
+    # Cache eviction policy
+    evictionPolicy: "LRU"  # Least Recently Used
+  
+  # Redis cache (optional, for distributed caching)
+  redis:
+    enabled: false
+    # addr: "redis.opendesk.svc.cluster.local:6379"
+    # password: "${REDIS_PASSWORD:}"
+    # db: 0
+
+# =============================================================================
+# NOTIFICATIONS & AUDITING
+# =============================================================================
+notification:
+  # Audit logging for security compliance
+  audit:
+    enabled: true
+    # Audit log file location
+    file: /var/log/zot/audit.log
+    # Maximum size of audit log file
+    maxSize: 100    # MB
+    # Number of backup files to keep
+    maxBackups: 5
+    
+    # Log rotation configuration
+    rotate:
+      enabled: true
+      maxAge: 30    # days
+      compress: true
+
+  # Events to log in audit
+  events:
+    - Push
+    - Pull
+    - Delete
+    - AuthenticationFailure
+    - AuthorizationFailure
+    - CacheHit
+    - CacheMiss
+    - UpstreamPull
+
+  # Email notifications (disabled by default)
+  email:
+    enabled: false
+    # smtpHost: "smtp.example.com"
+    # smtpPort: 587
+    # smtpUsername: "${SMTP_USERNAME}"
+    # smtpPassword: "${SMTP_PASSWORD}"
+    # from: "zot@opendesk-edu.org"
+    # to: ["admin@opendesk-edu.org"]
+
+# =============================================================================
+# SECURITY CONFIGURATION
+# =============================================================================
+security:
+  # Vulnerability scanning (Trivy)
+  scan:
+    enabled: false  # Disabled to reduce resource usage
+    # Uncomment to enable Trivy scanning:
+    # trivy:
+    #   enabled: true
+    #   image: "ghcr.io/aquasecurity/trivy:0.50.0"
+    #   Severity: "CRITICAL,HIGH"
+    #   SkipFiles: "/var/lib/zot/storage/**"
+
+  # Rate limiting per IP address
+  rateLimit:
+    ip:
+      enabled: true
+      requestsPerSecond: 100
+      burst: 200
+      # Whitelist known IP ranges
+      whitelist:
+        - "10.0.0.0/8"
+        - "172.16.0.0/12"
+        - "192.168.0.0/16"
+
+  # CORS Configuration (disabled by default)
+  cors:
+    enabled: false
+    # origins: ["https://*.opendesk-edu.org"]
+    # methods: ["GET", "HEAD", "OPTIONS"]
+    # headers: ["Authorization"]
+    # exposeHeaders: ["WWW-Authenticate"]
+    # maxAge: 86400
+
+  # Content Trust (cosign verification)
+  cosign:
+    enabled: false
+    # publicKey: "/etc/zot/cosign/cosign.pub"
+    # keyring: "/etc/zot/cosign/keyring"
+
+# =============================================================================
+# NETWORK CONFIGURATION
+# =============================================================================
+network:
+  # HTTP Proxy Configuration (for corporate environments)
+  # Note: Proxy for the registry itself, not for clients
+  http:
+    proxy:
+      enabled: false
+      # url: "http://www-proxy2.uni-marburg.de:3128"
+      # noProxy: ["localhost", "127.0.0.1", ".cluster.local", ".opendesk.svc"]
+
+  # Global timeout configuration
+  timeout: 30s
+  
+  # Keep-alive configuration
+  keepAlive:
+    enabled: true
+    interval: 15s
+    timeout: 30s
+
+# =============================================================================
+# GARBAGE COLLECTION & MAINTENANCE
+# =============================================================================
+gc:
+  # Scheduled garbage collection
+  schedule:
+    # Run daily at midnight
+    - at: "00:00"
+      keepSigned: true
+      keepUntagged: false
+      dryRun: false
+      
+    # Run weekly on Sundays at 2 AM
+    - at: "0 2 * * 0"
+      keepSigned: true
+      keepUntagged: false
+      deleteUntaggedOlderThan: 30d
+      dryRun: false
+
+  # Storage quotas
+  quotas:
+    - name: "cache-quota"
+      maxStorage: "50Gi"
+      maxArtifacts: 5000
+      
+    - name: "backup-quota"
+      maxStorage: "100Gi"
+      maxArtifacts: 1000
+
+# =============================================================================
+# BACKUP CONFIGURATION
+# =============================================================================
+backup:
+  # Enable automated backups
+  enabled: true
+  
+  # Backup directory
+  directory: /var/lib/zot/backups
+  
+  # Backup schedule
+  schedule:
+    # Daily full backup at 1 AM
+    - at: "01:00"
+      type: full
+      keep: 7
+      
+    # Weekly backup on Sundays at 3 AM
+    - at: "0 3 * * 0"
+      type: full
+      keep: 4
+      
+    # Monthly backup on 1st at 4 AM
+    - at: "0 4 1 * *"
+      type: full
+      keep: 12
+  
+  # Backup compression
+  compress: true
+  compressionLevel: 6  # 0-9, 6=default
+
+# =============================================================================
+# LOGGING CONFIGURATION
+# =============================================================================
+logging:
+  # Log level (debug, info, warn, error, fatal, panic)
+  level: info
+  
+  # Log output
+  output: "/var/log/zot/zot.log"
+  
+  # Log format (text or json)
+  format: json
+  
+  # Log rotation
+  rotation:
+    enabled: true
+    maxSize: 100    # MB
+    maxBackups: 5
+    maxAge: 30     # days
+    compress: true
+
+# =============================================================================
+# API CONFIGURATION
+# =============================================================================
+api:
+  # Enable OCI API extensions
+  enableOCI: true
+  
+  # Enable Docker Registry v2 API
+  enableDockerV2: true
+  
+  # Pagination settings
+  pagination:
+    maxResults: 100
+    defaultResults: 25
+  
+  # Etag support for caching
+  etag:
+    enabled: true
+
+# =============================================================================
+# =============================================================================
+# END OF CONFIGURATION
+# =============================================================================
+# =============================================================================

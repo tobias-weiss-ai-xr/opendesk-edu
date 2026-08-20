@@ -1,0 +1,871 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "database-dashboard",
+    "title": "Database & Cache Dashboard",
+    "tags": ["opendesk", "mariadb", "memcached", "database"],
+    "timezone": "browser",
+    "schemaVersion": 30,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "type": "text",
+        "title": "Database & Cache Monitoring",
+        "gridPos": { "h": 4, "w": 24, "x": 0, "y": 0 },
+        "options": {
+          "content": "<div style='background: linear-gradient(90deg, #0a0014 0%, #571EFA 50%, #927AFA 100%); padding: 20px; border-radius: 5px;'>\n  <h2 style='color: white; margin: 0; text-align: center;'>\n    <i class='fas fa-database' style='color: #DDD6FE; font-size: 40px; vertical-align: middle;'></i>\n    &nbsp; Database & Cache Services
+  </h2>\n  <p style='color: #DDD6FE; margin: 10px 0 0 0; text-align: center; font-size: 14px;'>\n    MariaDB, Memcached, and Redis monitoring\n  </p>\n</div>",
+          "mode": "html"
+        }
+      },
+      {
+        "type": "stat",
+        "title": "MariaDB Status",
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": { "text": "Down", "color": "red" },
+                  "1": { "text": "Up", "color": "green" }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "red", "value": null },
+                { "color": "green", "value": 1 }
+              ]
+            },
+            "color": { "mode": "thresholds" }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "up{job=\"mariadb-exporter\"}",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Active Connections",
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 50 },
+                { "color": "red", "value": 80 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "mysql_global_status_threads_connected",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Total Queries (5m)",
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "decimals": 0,
+            "color": { "mode": "thresholds" }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "rate(mysql_global_status_queries[5m])",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Connection Utilization",
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 70 },
+                { "color": "red", "value": 90 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "mariadb:connections:usage_percent",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Memcached Status",
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 12 },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": { "text": "Down", "color": "red" },
+                  "1": { "text": "Up", "color": "green" }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "red", "value": null },
+                { "color": "green", "value": 1 }
+              ]
+            },
+            "color": { "mode": "thresholds" }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "up{job=\"memcached-exporter\"}",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Cache Memory Usage",
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 12 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 80 },
+                { "color": "red", "value": 95 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "memcached:memory:usage_percent",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Cache Hit Ratio",
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 12 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "red", "value": null },
+                { "color": "orange", "value": 70 },
+                { "color": "green", "value": 90 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "memcached:operations:hit_ratio * 100",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Evictions (5m)",
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 12 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "decimals": 0,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 1 },
+                { "color": "red", "value": 10 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "rate(memcached_stats_evictions[5m])",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "MariaDB Connections",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Current"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Max"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [10, 10],
+                    "width": 2
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "mysql_global_status_threads_connected",
+            "legendFormat": "Current"
+          },
+          {
+            "expr": "mysql_global_variables_max_connections",
+            "legendFormat": "Max"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "MariaDB Query Rate",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Slow"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "rate(mysql_global_status_queries[1m])",
+            "legendFormat": "Total"
+          },
+          {
+            "expr": "rate(mysql_global_status_slow_queries[1m])",
+            "legendFormat": "Slow"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "MariaDB Row Operations",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 28 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Insert"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Update"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#119600",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Delete"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#E5AC0E",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "rate(mysql_global_status_innodb_rows_read[1m])",
+            "legendFormat": "Read"
+          },
+          {
+            "expr": "rate(mysql_global_status_innodb_rows_inserted[1m])",
+            "legendFormat": "Insert"
+          },
+          {
+            "expr": "rate(mysql_global_status_innodb_rows_updated[1m])",
+            "legendFormat": "Update"
+          },
+          {
+            "expr": "rate(mysql_global_status_innodb_rows_deleted[1m])",
+            "legendFormat": "Delete"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Memcached Operations",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 28 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Get"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Set"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hits"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#119600",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Misses"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "rate(memcached_stats_cmd_get[1m])",
+            "legendFormat": "Get"
+          },
+          {
+            "expr": "rate(memcached_stats_cmd_set[1m])",
+            "legendFormat": "Set"
+          },
+          {
+            "expr": "rate(memcached_stats_get_hits[1m])",
+            "legendFormat": "Hits"
+          },
+          {
+            "expr": "rate(memcached_stats_get_misses[1m])",
+            "legendFormat": "Misses"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Memcached Memory Usage",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 36 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Used"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Limit"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [10, 10],
+                    "width": 2
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "memcached_stats_bytes_used",
+            "legendFormat": "Used"
+          },
+          {
+            "expr": "memcached_stats_limit_maxbytes",
+            "legendFormat": "Limit"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Memcached Connection Statistics",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 36 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Current"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "memcached_stats_curr_connections",
+            "legendFormat": "Current Connections"
+          },
+          {
+            "expr": "memcached_stats_total_connections",
+            "legendFormat": "Total Connections"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "MariaDB Buffer Pool Usage",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 44 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "mysql_global_status_innodb_buffer_pool_pages_total * mysql_global_variables_innodb_page_size",
+            "legendFormat": "Total Pool Size"
+          },
+          {
+            "expr": "mysql_global_status_innodb_buffer_pool_pages_free * mysql_global_variables_innodb_page_size",
+            "legendFormat": "Free"
+          },
+          {
+            "expr": "mysql_global_status_innodb_buffer_pool_pages_data * mysql_global_variables_innodb_page_size",
+            "legendFormat": "Data"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "MariaDB Temporary Tables",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 44 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "rate(mysql_global_status_created_tmp_tables[1m])",
+            "legendFormat": "Created tmp tables"
+          },
+          {
+            "expr": "rate(mysql_global_status_created_tmp_disk_tables[1m])",
+            "legendFormat": "Created tmp disk tables"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "MariaDB Threads",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 52 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Running"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Connected"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Cached"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#119600",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "mysql_global_status_threads_running",
+            "legendFormat": "Running"
+          },
+          {
+            "expr": "mysql_global_status_threads_connected",
+            "legendFormat": "Connected"
+          },
+          {
+            "expr": "mysql_global_status_threads_cached",
+            "legendFormat": "Cached"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Memcached Evictions & Reclaimed",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 52 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "rate(memcached_stats_evictions[1m])",
+            "legendFormat": "Evictions"
+          },
+          {
+            "expr": "rate(memcached_stats_reclaimed[1m])",
+            "legendFormat": "Reclaimed"
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "",
+            "value": ""
+          },
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        }
+      ]
+    },
+    "schemaVersion": 30,
+    "style": "dark",
+    "tags": ["opendesk", "mariadb", "memcached", "database"],
+    "time": { "from": "now-1h", "to": "now" },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h"],
+      "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
+    },
+    "timezone": "",
+    "title": "Database & Cache Dashboard",
+    "version": 1
+  },
+  "folderId": 0,
+  "overwrite": true
+}
