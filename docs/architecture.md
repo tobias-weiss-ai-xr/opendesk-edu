@@ -242,7 +242,7 @@ The [OX SOAP API](https://oxpedia.org/wiki/index.php?title=Open-Xchange_Provisio
 * (Managed) Resources
 * Users
 
-To find out more, see [Roles & Permissions](./docs/permissions.md).
+To find out more, see [Roles & Permissions](./permissions.md).
 
 ### SCIM
 
@@ -474,7 +474,7 @@ The end user focussed components are called applications and provide the functio
 
 Other components are of type "Service", these are used for development and evaluation purposes only, they need to be replaced in production deployments.
 
-For the APIs / Protocols supported by the applications, please read the [apis.md](./docs/architecture/apis.md).
+For the APIs / Protocols supported by the applications, please read the [apis.md](./architecture/apis.md).
 
 ### Collabora (weboffice)
 
@@ -537,6 +537,7 @@ While the IAM manages users centrally, some applications come with local account
 |              | `meeting-bot`                                 | Used by the Nordeck Meeting-Bot to manage meeting rooms in Synapse.                                                     | `secrets.matrixNeoDateFixBot.password`           |
 | Nextcloud    | `nextcloud`                                   | Bootstrap the Nextcloud fileshare for OpenProject with `opendesk-openproject-bootstrap` job[^1].                        | `secrets.nextcloud.adminPassword`                |
 | OX App Suite | `admin`                                       | OX Connector to provision context, users, groups etc.                                                                   | `secrets.oxAppsuite.adminPassword`               |
+|              | `rest-api`                                    | Dovecot to resolve a user's permission on a Shared Account, and OX Guard, both via the OX REST API.                      | `secrets.oxAppSuite.restApiPassword`             |
 | OpenProject  | set in `secrets.openproject.apiAdminUsername` | Bootstrap the Nextcloud fileshare for OpenProject with `opendesk-openproject-bootstrap` job[^1].                        | `secrets.openproject.apiAdminPassword`           |
 | XWiki        | `superadmin`                                  | Only available with `debug.enabled: true`, can be used for interactive login using `/bin/view/Main/?oidc.skipped=true`. | `secrets.xwiki.superadminpassword`               |
 

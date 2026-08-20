@@ -31,7 +31,7 @@ All charts except the ones mentioned below are verified by Helmfile.
 
 This list gives you an overview of default security settings and whether they comply with security standards:
 
-⟶ Visit our generated detailed [Security Context](./docs/security-context.md) overview.
+⟶ Visit our generated detailed [Security Context](./security-context.md) overview.
 
 ## Network policies
 
