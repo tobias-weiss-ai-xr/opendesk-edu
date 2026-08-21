@@ -9,6 +9,7 @@ kind: Kustomization
 resources:
   - namespaces.yaml
   - storage-classes.yaml
+  - allow-tenant-ingress.yaml
 
 commonLabels:
   app.kubernetes.io/part-of: opendesk-edu
