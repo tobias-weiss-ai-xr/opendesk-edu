@@ -33,7 +33,7 @@ in
   (lib.ingressWithCert {
     name = name;
     namespace = namespace;
-    host = "kibana.opendesk.hrz.uni-marburg.de";
+    host = "kibana.desk-test.uni-marburg.de";
     port = port;
     serviceName = name;
   })

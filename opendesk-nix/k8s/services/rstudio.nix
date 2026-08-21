@@ -53,4 +53,4 @@ let
 in
  [ (lib.deployment { inherit name image tag; port = 80; })
      (lib.service { inherit name; port = 80; })
-   ] ++ (lib.ingressWithCert { inherit name; host = "rstudio.opendesk.hrz.uni-marburg.de"; port = 80; })
+   ] ++ (lib.ingressWithCert { inherit name; host = "rstudio.desk-test.uni-marburg.de"; port = 80; })

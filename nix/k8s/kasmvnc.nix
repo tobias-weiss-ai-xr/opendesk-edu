@@ -4,5 +4,5 @@ let name = "kasmvnc"; image = "registry.kasmweb.com/kasmweb/core"; tag = "latest
 in
 [ (lib.deployment { inherit name image tag port; })
   (lib.service { inherit name port; })
-  (lib.ingressWithCert { inherit name; host = "kasmvnc.opendesk.hrz.uni-marburg.de"; inherit port; })
+  (lib.ingressWithCert { inherit name; host = "kasmvnc.desk-test.uni-marburg.de"; inherit port; })
 ]
