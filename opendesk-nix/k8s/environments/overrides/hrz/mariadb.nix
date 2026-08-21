@@ -18,8 +18,8 @@ baseConfig // {
   
   # Use Ceph-CSI storage classes (K3s with external Ceph cluster)
   storage = {
-    rwo = "ceph-rbd-ssd";
-    rwx = "ceph-cephfs-hdd-ec";
+    rwo = "ceph-rbd";
+    rwx = "ceph-cephfs";
   };
   
   replicas = {

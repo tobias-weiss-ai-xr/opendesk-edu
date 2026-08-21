@@ -26,8 +26,8 @@ Each environment has a `default.nix` file with default values:
 {
   namespace = "opendesk";
   storage = {
-    rwx = "ceph-cephfs-hdd-ec";
-    rwo = "ceph-rbd-ssd";
+    rwx = "ceph-cephfs";
+    rwo = "ceph-rbd";
   };
   # ...
 }

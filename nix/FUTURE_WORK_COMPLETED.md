@@ -8,11 +8,11 @@ This document confirms that ALL future work items identified from the Nix migrat
 - Added `volumeClaims` parameter to `podSpec` in `lib/k8s.nix`
 - Updated `statefulset` function to generate `volumeClaimTemplates`
 - Added PVCs to 5 StatefulSet services:
-  - mariadb: 10Gi, ceph-rbd-ssd
-  - postgresql: 10Gi, ceph-rbd-ssd
-  - redis: 10Gi, ceph-rbd-ssd
-  - timescale: 10Gi, ceph-rbd-ssd
-  - seaweedfs: 10Gi (master) + 20Gi (volume), ceph-rbd-ssd
+  - mariadb: 10Gi, ceph-rbd
+  - postgresql: 10Gi, ceph-rbd
+  - redis: 10Gi, ceph-rbd
+  - timescale: 10Gi, ceph-rbd
+  - seaweedfs: 10Gi (master) + 20Gi (volume), ceph-rbd
 
 ### 2. Naming Convention Compatibility
 - Added `instance` parameter (defaults to `name`) to `podSpec` and `service`

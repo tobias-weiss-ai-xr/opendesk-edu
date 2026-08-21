@@ -814,7 +814,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
 ```
 
 ---
