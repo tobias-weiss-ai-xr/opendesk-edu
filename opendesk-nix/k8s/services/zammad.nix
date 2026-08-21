@@ -55,5 +55,5 @@ in
 
 [ (lib.deployment { inherit name image tag port; })
   (lib.service { inherit name port; })
-  (lib.ingressWithCert { inherit name; host = "zammad.opendesk.hrz.uni-marburg.de"; inherit port; })
+  (lib.ingressWithCert { inherit name; host = "zammad.desk-test.uni-marburg.de"; inherit port; })
 ]

@@ -4,4 +4,4 @@ let name = "open-webui"; image = "ghcr.io/open-webui/open-webui"; tag = "latest"
 in
 [ (lib.deployment { inherit name image tag port; })
   (lib.service { inherit name port; })
-] ++ (lib.ingressWithCert { inherit name; host = "open-webui.opendesk.hrz.uni-marburg.de"; inherit port; })
+] ++ (lib.ingressWithCert { inherit name; host = "open-webui.desk-test.uni-marburg.de"; inherit port; })

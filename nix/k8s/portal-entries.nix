@@ -4,5 +4,5 @@ let name = "portal-entries"; image = "ghcr.io/opendesk-edu/portal-entries"; tag 
 in
 [ (lib.deployment { inherit name image tag port; })
   (lib.service { inherit name port; })
-  (lib.ingressWithCert { inherit name; host = "portal-entries.opendesk.hrz.uni-marburg.de"; inherit port; })
+  (lib.ingressWithCert { inherit name; host = "portal-entries.desk-test.uni-marburg.de"; inherit port; })
 ]

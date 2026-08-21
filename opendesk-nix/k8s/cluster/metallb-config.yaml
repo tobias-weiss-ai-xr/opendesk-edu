@@ -1,0 +1,29 @@
+---
+# MetalLB Configuration for SCS-K3s
+# LoadBalancer IP pool for openDesk Edu services
+#
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: opendesk-ippool
+  namespace: metallb-system
+spec:
+  addresses:
+    # HRZ LoadBalancer IP range (VLAN 424)
+    - 137.248.21.100-137.248.21.120
+  autoAssign: true
+
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: opendesk-l2
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - opendesk-ippool
+  interfaces:
+    - bond0

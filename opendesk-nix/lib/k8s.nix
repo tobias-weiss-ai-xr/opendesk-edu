@@ -227,9 +227,8 @@ let
     backendPort ? 8080,
     tls ? map (host: { hosts = [ host ]; secretName = "tls-${name}"; }) hosts,
     annotations ? { 
-      "kubernetes.io/ingress.class" = "haproxy";
-      "haproxy.org/ssl-passthrough" = "true";
-      "haproxy.org/backend-config-snippet" = "server-ssl verify none";
+      "kubernetes.io/ingress.class" = "traefik";
+      "traefik.ingress.kubernetes.io/ssl-passthrough" = "true";
     },
     pathType ? "Prefix",
     paths ? [ "/" ],

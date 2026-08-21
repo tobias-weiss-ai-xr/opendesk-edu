@@ -10,26 +10,30 @@ This directory contains environment-specific configuration for openDesk deployme
 ### Production (HRZ)
 - **Directory:** `hrz/`
 - **Namespace:** `opendesk`
-- **Ingress:** HAProxy (hrz infrastructure)
-- **Domain:** `opendesk.hrz.uni-marburg.de`
-- **Storage:** Ceph-CSI (RBD SSD for RWO, CephFS HDD EC for RWX)
-- **Features:** Full production configuration with TLS, monitoring, security
+- **Cluster:** SCS-K3s (3 nodes, embedded etcd, HA mode)
+- **Ingress:** Traefik (K3s default ingress controller)
+- **Domain:** `desk-test.uni-marburg.de`
+- **Storage:** Ceph-CSI (RBD SSD for RWO, CephFS HDD EC for RWX, external Ceph cluster)
+- **LoadBalancer:** MetalLB
+- **Features:** Full production configuration with TLS, monitoring, security, multi-tenant
 
 ### Demo
 - **Directory:** `demo/`
 - **Namespace:** `opendesk-demo`
-- **Ingress:** NGINX
+- **Cluster:** SCS-K3s (single node)
+- **Ingress:** Traefik
 - **Domain:** `demo.opendesk-edu.org`
-- **Storage:** NFS or standard provisioner
+- **Storage:** local-path (K3s default provisioner)
 - **Features:** Public demo environment with TLS via Let's Encrypt
 
 ### Local Development
 - **Directory:** `local/`
 - **Namespace:** `opendesk-local`
-- **Ingress:** NGINX (optional)
+- **Cluster:** K3s (single node, local)
+- **Ingress:** Traefik (optional)
 - **Domain:** `localhost`
-- **Storage:** Local hostPath or emptyDir
-- **Features:** Minimal configuration for local testing (Minikube, KIND)
+- **Storage:** local-path (K3s default provisioner)
+- **Features:** Minimal configuration for local testing (K3s, Minikube, KIND)
 
 ## Usage
 

@@ -58,6 +58,6 @@ in
   (lib.service { inherit name; port = 8080; })
 ] ++ (lib.ingressWithCert { 
   inherit name; 
-  host = "mail.opendesk.hrz.uni-marburg.de"; 
+  host = "mail.desk-test.uni-marburg.de"; 
   port = 8080; 
 })

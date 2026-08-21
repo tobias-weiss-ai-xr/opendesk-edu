@@ -1,0 +1,96 @@
+---
+# Ceph-CSI Configuration for SCS-K3s
+# Connects K3s to the external Ceph cluster (no OSISM/OpenStack layer)
+#
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+# ── Ceph-CSI RBD (Block Storage, RWO) ──
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ceph-rbd-ssd
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: rbd.csi.ceph.com
+parameters:
+  clusterID: <ceph-cluster-id>
+  pool: ssd-rbd
+  imageFormat: "2"
+  imageFeatures: layering
+  csi.storage.k8s.io/provisioner-secret-name: ceph-rbd-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: kube-system
+  csi.storage.k8s.io/node-stage-secret-name: ceph-rbd-secret
+  csi.storage.k8s.io/node-stage-secret-namespace: kube-system
+  csi.storage.k8s.io/controller-expand-secret-name: ceph-rbd-secret
+  csi.storage.k8s.io/controller-expand-secret-namespace: kube-system
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - discard
+
+---
+# ── Ceph-CSI CephFS (File Storage, RWX) ──
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ceph-cephfs-hdd-ec
+provisioner: cephfs.csi.ceph.com
+parameters:
+  clusterID: <ceph-cluster-id>
+  fsName: cephfs-hdd-ec
+  pool: cephfs-data
+  csi.storage.k8s.io/provisioner-secret-name: ceph-cephfs-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: kube-system
+  csi.storage.k8s.io/node-stage-secret-name: ceph-cephfs-secret
+  csi.storage.k8s.io/node-stage-secret-namespace: kube-system
+  csi.storage.k8s.io/controller-expand-secret-name: ceph-cephfs-secret
+  csi.storage.k8s.io/controller-expand-secret-namespace: kube-system
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+
+---
+# ── Ceph-CSI RBD for Staff Tenant (isolated pool) ──
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ceph-rbd-staff
+provisioner: rbd.csi.ceph.com
+parameters:
+  clusterID: <ceph-cluster-id>
+  pool: staff-rbd
+  imageFormat: "2"
+  imageFeatures: layering
+  csi.storage.k8s.io/provisioner-secret-name: ceph-rbd-staff-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: kube-system
+  csi.storage.k8s.io/node-stage-secret-name: ceph-rbd-staff-secret
+  csi.storage.k8s.io/node-stage-secret-namespace: kube-system
+  csi.storage.k8s.io/controller-expand-secret-name: ceph-rbd-staff-secret
+  csi.storage.k8s.io/controller-expand-secret-namespace: kube-system
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - discard
+
+---
+# ── Ceph-CSI RBD for Students Tenant (isolated pool) ──
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ceph-rbd-students
+provisioner: rbd.csi.ceph.com
+parameters:
+  clusterID: <ceph-cluster-id>
+  pool: students-rbd
+  imageFormat: "2"
+  imageFeatures: layering
+  csi.storage.k8s.io/provisioner-secret-name: ceph-rbd-students-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: kube-system
+  csi.storage.k8s.io/node-stage-secret-name: ceph-rbd-students-secret
+  csi.storage.k8s.io/node-stage-secret-namespace: kube-system
+  csi.storage.k8s.io/controller-expand-secret-name: ceph-rbd-students-secret
+  csi.storage.k8s.io/controller-expand-secret-namespace: kube-system
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - discard
