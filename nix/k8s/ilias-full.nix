@@ -12,7 +12,7 @@ let
       { name = "ILIAS_DB_HOST"; value = "ilias-mariadb"; }
       { name = "ILIAS_DB_USER"; value = "ilias"; }
       { name = "ILIAS_DB_NAME"; value = "ilias"; }
-      { name = "ILIAS_HOST_NAME"; value = "lms.opendesk.hrz.uni-marburg.de"; }
+      { name = "ILIAS_HOST_NAME"; value = "lms.desk-test.uni-marburg.de"; }
     ];
     envFrom = [
       (lib.mkEnvFromSecret { name = "ilias-database-credentials"; })
@@ -24,4 +24,4 @@ let
   };
   svc = lib.service { inherit name; port = 80; };
 in
-  [ dep svc ] ++ (lib.ingressWithCert { inherit name; host = "lms.opendesk.hrz.uni-marburg.de"; port = 80; })
+  [ dep svc ] ++ (lib.ingressWithCert { inherit name; host = "lms.desk-test.uni-marburg.de"; port = 80; })

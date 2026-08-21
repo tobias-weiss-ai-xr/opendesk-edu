@@ -23,7 +23,7 @@ in
   (lib.ingressWithCert {
     name = name;
     namespace = namespace;
-    host = "monitoring.opendesk.hrz.uni-marburg.de";
+    host = "monitoring.desk-test.uni-marburg.de";
     port = port;
     serviceName = name;
   })

@@ -16,7 +16,7 @@ baseConfig // {
     memory = "4Gi";
   };
   
-  # Use the fastest storage class available in HRZ
+  # Use Ceph-CSI storage classes (K3s with external Ceph cluster)
   storage = {
     rwo = "ceph-rbd-ssd";
     rwx = "ceph-cephfs-hdd-ec";

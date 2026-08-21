@@ -4,4 +4,4 @@ let name = "overleaf"; image = "opendesk/sharelatex"; tag = "latest";
 in
 [ (lib.deployment { inherit name image tag port; })
   (lib.service { inherit name port; })
-] ++ (lib.ingressWithCert { inherit name; host = "overleaf.opendesk.hrz.uni-marburg.de"; inherit port; })
+] ++ (lib.ingressWithCert { inherit name; host = "overleaf.desk-test.uni-marburg.de"; inherit port; })
