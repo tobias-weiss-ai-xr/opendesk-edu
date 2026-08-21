@@ -21,7 +21,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
 
 ---
 # PVC for logs
@@ -42,7 +42,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
 
 ---
 # PVC for attachments
@@ -64,7 +64,7 @@ spec:
   resources:
     requests:
       storage: 200Gi
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
 
 ---
 # PVC for sessions
@@ -84,7 +84,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
 
 ---
 # PVC for temp
@@ -105,4 +105,4 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd

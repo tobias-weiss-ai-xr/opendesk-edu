@@ -1,0 +1,300 @@
+---
+# Tenant Namespaces for openDesk Edu Multi-Tenancy
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+#
+# Creates three namespaces:
+#   opendesk          — shared services (already exists, managed by ArgoCD)
+#   opendesk-staff    — staff tenant (mail + staff-wiki)
+#   opendesk-students — student tenant (mail only)
+#
+# Each tenant namespace gets:
+#   - Default-deny NetworkPolicy
+#   - Allow same-namespace traffic
+#   - Allow HAProxy ingress from kube-system
+#   - ResourceQuota
+#   - Allow egress to opendesk (shared services: Keycloak, Postgres, Redis)
+
+---
+# ── Namespace: opendesk-staff ──
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: opendesk-staff
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: staff
+    opendesk.ai/managed-by: kustomize
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+
+---
+# ── Namespace: opendesk-students ──
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: opendesk-students
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: students
+    opendesk.ai/managed-by: kustomize
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+
+---
+# ── ResourceQuota: opendesk-staff ──
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: staff-quota
+  namespace: opendesk-staff
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: staff
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: "8Gi"
+    limits.cpu: "8"
+    limits.memory: "16Gi"
+    persistentvolumeclaims: "20"
+    services: "10"
+    pods: "30"
+
+---
+# ── ResourceQuota: opendesk-students ──
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: students-quota
+  namespace: opendesk-students
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: students
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: "8Gi"
+    limits.cpu: "8"
+    limits.memory: "16Gi"
+    persistentvolumeclaims: "20"
+    services: "10"
+    pods: "30"
+
+---
+# ── NetworkPolicy: default-deny-ingress (opendesk-staff) ──
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: opendesk-staff
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: staff
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+
+---
+# ── NetworkPolicy: allow-same-namespace (opendesk-staff) ──
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+  namespace: opendesk-staff
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: staff
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+        - protocol: UDP
+
+---
+# ── NetworkPolicy: allow-haproxy-ingress (opendesk-staff) ──
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-haproxy-ingress
+  namespace: opendesk-staff
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: staff
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 8080
+        - protocol: TCP
+          port: 20000
+        - protocol: TCP
+          port: 8008
+
+---
+# ── NetworkPolicy: allow-egress-to-opendesk (opendesk-staff) ──
+# Allow staff namespace to reach shared services (Keycloak, Postgres, Redis)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-to-opendesk
+  namespace: opendesk-staff
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: staff
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: opendesk
+      ports:
+        - protocol: TCP
+          port: 8080    # Keycloak
+        - protocol: TCP
+          port: 5432    # PostgreSQL
+        - protocol: TCP
+          port: 6379    # Redis
+        - protocol: TCP
+          port: 3306    # MariaDB
+        - protocol: TCP
+          port: 389     # LDAP
+        - protocol: TCP
+          port: 636     # LDAPS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53      # DNS (CoreDNS)
+        - protocol: TCP
+          port: 53      # DNS (CoreDNS)
+
+---
+# ── NetworkPolicy: default-deny-ingress (opendesk-students) ──
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: opendesk-students
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: students
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+
+---
+# ── NetworkPolicy: allow-same-namespace (opendesk-students) ──
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+  namespace: opendesk-students
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: students
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+        - protocol: UDP
+
+---
+# ── NetworkPolicy: allow-haproxy-ingress (opendesk-students) ──
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-haproxy-ingress
+  namespace: opendesk-students
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: students
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 8080
+        - protocol: TCP
+          port: 20000
+        - protocol: TCP
+          port: 8008
+
+---
+# ── NetworkPolicy: allow-egress-to-opendesk (opendesk-students) ──
+# Allow students namespace to reach shared services (Keycloak, Postgres, Redis)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-to-opendesk
+  namespace: opendesk-students
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: students
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: opendesk
+      ports:
+        - protocol: TCP
+          port: 8080    # Keycloak
+        - protocol: TCP
+          port: 5432    # PostgreSQL
+        - protocol: TCP
+          port: 6379    # Redis
+        - protocol: TCP
+          port: 3306    # MariaDB
+        - protocol: TCP
+          port: 389     # LDAP
+        - protocol: TCP
+          port: 636     # LDAPS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53      # DNS (CoreDNS)
+        - protocol: TCP
+          port: 53      # DNS (CoreDNS)

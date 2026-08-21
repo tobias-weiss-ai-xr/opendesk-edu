@@ -16,19 +16,19 @@ running on a single-node K3s instance.
   # ── Cluster Configuration (K3s local) ──
   cluster = {
     type = "k3s";
-    version = "v1.31.2+k3s1";
+    version = "v1.36.3+k3s1";
     ha = false;
     embeddedEtcd = false;
     nodes = 1;
     cni = "flannel";
     cri = "containerd";
     loadBalancer = "servicelb";
-    ingressController = "traefik";
+    ingressController = "haproxy";
     storageDriver = "local-path";
   };
 
   ingress = {
-    className = "traefik";
+    className = "haproxy";
     domain = "localhost";
     annotations = { };
   };
