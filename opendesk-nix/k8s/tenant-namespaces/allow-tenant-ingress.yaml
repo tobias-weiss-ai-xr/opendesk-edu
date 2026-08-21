@@ -1,0 +1,44 @@
+---
+# NetworkPolicy: Allow tenant namespaces (opendesk-staff, opendesk-students)
+# to reach shared services in the opendesk namespace.
+#
+# This must be applied in the opendesk namespace to allow ingress from
+# tenant namespaces to shared services: Keycloak (8080), MariaDB (3306),
+# Redis (6379), LDAP (389/636), PostgreSQL (5432).
+#
+# The opendesk namespace has a default-deny-ingress policy, so without
+# this policy, tenant pods cannot reach shared services.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-tenant-ingress
+  namespace: opendesk
+  labels:
+    app.kubernetes.io/part-of: opendesk
+    opendesk.ai/component: shared-services
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: opendesk-staff
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: opendesk-students
+      ports:
+        - protocol: TCP
+          port: 8080    # Keycloak
+        - protocol: TCP
+          port: 3306    # MariaDB (Galera)
+        - protocol: TCP
+          port: 6379    # Redis
+        - protocol: TCP
+          port: 389     # LDAP
+        - protocol: TCP
+          port: 636     # LDAPS
+        - protocol: TCP
+          port: 5432    # PostgreSQL
+  podSelector: {}
+  policyTypes:
+    - Ingress
