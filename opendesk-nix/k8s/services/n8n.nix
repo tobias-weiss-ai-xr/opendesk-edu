@@ -55,4 +55,4 @@ in
 
 [ (lib.deployment { inherit name image tag port; })
   (lib.service { inherit name port; })
-] ++ (lib.ingressWithCert { inherit name; host = "n8n.opendesk.hrz.uni-marburg.de"; inherit port; })
+] ++ (lib.ingressWithCert { inherit name; host = "n8n.desk-test.uni-marburg.de"; inherit port; })

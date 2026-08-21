@@ -79,7 +79,7 @@ docks.mkImage {
     "org.opencontainers.image.description" = "bookstack latest for openDesk Edu with NixOS";
     "org.opencontainers.image.version" = "latest-nixos";
     "org.opencontainers.image.authors" = "openDesk Edu Team";
-    "org.opencontainers.image.url" = "https://opendesk.hrz.uni-marburg.de";
+    "org.opencontainers.image.url" = "https://desk-test.uni-marburg.de";
     "org.opencontainers.image.documentation" = "https://github.com/opendesk-edu/opendesk-nix";
     "org.opencontainers.image.source" = "https://github.com/opendesk-edu/opendesk-nix";
     "org.opencontainers.image.licenses" = "Apache-2.0";

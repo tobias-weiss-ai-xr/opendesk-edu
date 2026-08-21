@@ -18,7 +18,7 @@ let
       dataLicense = "CC0-1.0";
       SPDXID = "SPDXRef-DOCUMENT";
       name = name;
-      documentNamespace = "https://opendesk.hrz.uni-marburg.de/spdx/${name}/${version}";
+      documentNamespace = "https://desk-test.uni-marburg.de/spdx/${name}/${version}";
       creationInfo = {
         created = "2026-01-01T00:00:00Z";
         creators = [ "Tool: opendesk-nix" "Organization: openDesk Edu" ];

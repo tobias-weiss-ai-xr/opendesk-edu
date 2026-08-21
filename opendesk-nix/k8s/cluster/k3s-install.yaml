@@ -1,0 +1,76 @@
+---
+# K3s Server Installation — HA Mode (Embedded etcd)
+# SCS-K3s Cluster: 3× Huawei RH2288E V2
+#
+# This is a reference manifest. Actual K3s installation is done via
+# the k3s install script (see README.md). This file documents the
+# configuration and can be used with k3s's --config flag.
+#
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+cluster:
+  type: k3s
+  version: v1.31.2+k3s1
+  ha: true
+  embeddedEtcd: true
+  nodes: 3
+
+# K3s server configuration
+server:
+  # HA mode with embedded etcd
+  clusterInit: true
+  # Disable built-in Traefik (install custom Traefik with TLS config)
+  disable:
+    - traefik
+    - servicelb
+    - local-storage
+  # Flannel CNI (VXLAN backend for cross-node pod communication)
+  flannelBackend: vxlan
+  # Container runtime
+  containerRuntime: containerd
+  # API server
+  apiServer:
+    port: 6443
+    # TLS certificate
+    tlsSANs:
+      - desk-test.uni-marburg.de
+      - k3s-api.hrz.uni-marburg.de
+  # etcd (embedded, 3 nodes)
+  etcd:
+    snapshot: true
+    snapshotInterval: 12h
+    snapshotRetention: 5
+  # Audit log
+  auditLog:
+    enabled: true
+    maxAge: 30
+    maxBackup: 10
+    maxSize: 100
+  # Event rate limit
+  eventRateLimit:
+    enabled: true
+
+# Node labels for tenant isolation
+nodeLabels:
+  # Worker nodes (all 3 nodes are server+agent in hyperconverged setup)
+  node-role.kubernetes.io/worker: "true"
+  # Storage labels
+  storage: "ceph"
+  # Tenant affinity (optional: pin tenant workloads to specific nodes)
+  tenant-staff: "true"
+  tenant-students: "true"
+
+# Pod Security Admission
+podSecurity:
+  enabled: true
+  enforce: baseline
+  audit: restricted
+  warn: restricted
+
+# Network policies
+networkPolicies:
+  enabled: true
+  # Default deny ingress, allow egress
+  defaultDenyIngress: true
+  allowEgress: true

@@ -53,4 +53,4 @@ let
 in
  [ (lib.deployment { inherit name image tag; port = 1337; })
      (lib.service { inherit name; port = 1337; })
-   ] ++ (lib.ingressWithCert { inherit name; host = "planka.opendesk.hrz.uni-marburg.de"; port = 1337; })
+   ] ++ (lib.ingressWithCert { inherit name; host = "planka.desk-test.uni-marburg.de"; port = 1337; })

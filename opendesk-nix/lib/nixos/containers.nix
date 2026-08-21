@@ -36,7 +36,7 @@ let
     "org.opencontainers.image.description" = "openDesk service container built with NixOS";
     "org.opencontainers.image.version" = "latest";
     "org.opencontainers.image.authors" = "openDesk Edu Team";
-    "org.opencontainers.image.url" = "https://opendesk.hrz.uni-marburg.de";
+    "org.opencontainers.image.url" = "https://desk-test.uni-marburg.de";
     "org.opencontainers.image.documentation" = "https://github.com/opendesk-edu/opendesk-nix";
     "org.opencontainers.image.source" = "https://github.com/opendesk-edu/opendesk-nix";
     "org.opencontainers.image.licenses" = "Apache-2.0";
