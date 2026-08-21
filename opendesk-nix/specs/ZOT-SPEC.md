@@ -570,7 +570,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -586,7 +586,7 @@ spec:
   resources:
     requests:
       storage: 50Gi
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
 
 # zot-registry-service-account.yaml
 apiVersion: v1

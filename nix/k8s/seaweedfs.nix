@@ -8,7 +8,7 @@ let
     volumeClaims = [
       { name = "data"; spec = { 
         accessModes = [ "ReadWriteOnce" ];
-        storageClassName = "ceph-rbd-ssd";
+        storageClassName = "ceph-rbd";
         resources = { requests = { storage = "10Gi"; }; };
       }; }
     ];
@@ -22,7 +22,7 @@ let
     volumeClaims = [
       { name = "data"; spec = { 
         accessModes = [ "ReadWriteOnce" ];
-        storageClassName = "ceph-rbd-ssd";
+        storageClassName = "ceph-rbd";
         resources = { requests = { storage = "20Gi"; }; };
       }; }
     ];

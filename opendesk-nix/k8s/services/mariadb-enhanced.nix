@@ -33,7 +33,7 @@ let
   
   # Storage configuration
   storageSize = "10Gi";
-  storageClass = "ceph-rbd-ssd";
+  storageClass = "ceph-rbd";
   
   # Security configuration (database profile)
   containerSecurity = security.mkContainerSecurityContext {

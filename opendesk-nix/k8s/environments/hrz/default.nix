@@ -7,8 +7,9 @@ HRZ Production Environment Configuration
 This environment configuration is for the HRZ Marburg production cluster
 running on SCS-K3s (Sovereign Cloud Stack with K3s lightweight Kubernetes).
 
-Cluster: 3× Huawei RH2288E V2, K3s with embedded etcd (HA mode),
-Traefik ingress, Ceph-CSI storage (external Ceph cluster), MetalLB.
+Cluster: 3× Huawei RH2288E V2 (clrz14-06, clrz14-07, clrz14-08)
+K3s v1.36.3+k3s1, HAProxy ingress, Ceph-CSI storage, MetalLB.
+Domain: desk-test.uni-marburg.de (currently home.opendesk-edu.org)
 """
 
 { lib, ... }:
@@ -19,24 +20,28 @@ Traefik ingress, Ceph-CSI storage (external Ceph cluster), MetalLB.
   # ── Cluster Configuration (SCS-K3s) ──
   cluster = {
     type = "k3s";
-    version = "v1.31.2+k3s1";
+    version = "v1.36.3+k3s1";
     ha = true;
     embeddedEtcd = true;
     nodes = 3;
     cni = "flannel";
     cri = "containerd";
     loadBalancer = "metallb";
-    ingressController = "traefik";
+    ingressController = "haproxy";
     storageDriver = "ceph-csi";
+    # MetalLB IP pool
+    loadBalancerPool = "rz03-fip-pool";
+    loadBalancerRange = "172.25.3.181-172.25.3.196";
   };
 
   ingress = {
-    className = "traefik";
+    className = "haproxy";
     domain = "desk-test.uni-marburg.de";
+    # HAProxy annotations matching existing cluster setup
     annotations = {
-      "traefik.ingress.kubernetes.io/ssl-passthrough" = "true";
-      "traefik.ingress.kubernetes.io/router.entrypoints" = "websecure";
-      "traefik.ingress.kubernetes.io/router.tls" = "true";
+      "haproxy-ingress.github.io/ssl-redirect" = "true";
+      "haproxy-ingress.github.io/proxy-body-size" = "50M";
+      "haproxy-ingress.github.io/timeout-server" = "300s";
     };
   };
 
@@ -46,14 +51,12 @@ Traefik ingress, Ceph-CSI storage (external Ceph cluster), MetalLB.
     issuer = "opendesk-ca";
   };
 
-  # ── Storage (Ceph-CSI, external Ceph cluster) ──
-  # K3s uses Ceph-CSI driver to connect to existing Ceph cluster
-  # (no OSISM/OpenStack layer — direct Ceph access via CSI)
+  # ── Storage (Ceph-CSI, actual cluster storage classes) ──
   storage = {
-    rwx = "ceph-cephfs-hdd-ec";
-    rwo = "ceph-rbd-ssd";
-    defaultClass = "ceph-rbd-ssd";
-    # Tenant-isolierte Storage-Klassen (separate Ceph-Pools)
+    rwx = "ceph-cephfs";
+    rwo = "ceph-rbd";
+    defaultClass = "ceph-rbd";
+    # Tenant-isolierte Storage-Klassen (separate Ceph-Pools — to be created)
     staff = "ceph-rbd-staff";
     students = "ceph-rbd-students";
   };
@@ -97,7 +100,7 @@ Traefik ingress, Ceph-CSI storage (external Ceph cluster), MetalLB.
     shared = {
       namespace = "opendesk";
       mailDomain = "desk-test.uni-marburg.de";
-      storageClass = "ceph-rbd-ssd";
+      storageClass = "ceph-rbd";
       backupPipeline = "opendesk-backup";
     };
     staff = {

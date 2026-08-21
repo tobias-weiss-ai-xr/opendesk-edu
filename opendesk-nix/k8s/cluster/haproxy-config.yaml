@@ -1,0 +1,27 @@
+---
+# HAProxy Ingress Controller Configuration for SCS-K3s
+# The cluster already runs HAProxy ingress (v3.2.12, Helm-installed in kube-system)
+#
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+# HAProxy is already installed via Helm in kube-system.
+# This file documents the existing configuration.
+#
+# Existing HAProxy setup:
+#   - IngressClass: haproxy
+#   - LoadBalancer IP: 172.25.3.181 (MetalLB, rz03-fip-pool)
+#   - TLS: opendesk-certificates-tls (shared wildcard cert)
+#   - Ports: 80, 443, 1024 (data-plane), 6060 (stats)
+#
+# HAProxy annotations used by existing ingresses:
+#   haproxy-ingress.github.io/ssl-redirect: "true"
+#   haproxy-ingress.github.io/proxy-body-size: "50M" (or "100M" for openproject)
+#   haproxy-ingress.github.io/timeout-server: "300s"
+#
+# No changes needed — HAProxy is already operational.
+
+# Verify with:
+#   kubectl get ingressclass haproxy
+#   kubectl get svc -n kube-system haproxy-ingress-kubernetes-ingress
+#   kubectl get pods -n kube-system -l app.kubernetes.io/name=kubernetes-ingress

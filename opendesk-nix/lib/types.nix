@@ -629,7 +629,7 @@ let
       };
       storageClass = lib.mkOption {
         type = lib.types.str;
-        default = "ceph-cephfs-hdd-ec";
+        default = "ceph-cephfs";
         description = "Default storage class";
       };
       enabledServices = lib.mkOption {

@@ -1,65 +1,38 @@
 ---
-# K3s Server Installation — HA Mode (Embedded etcd)
-# SCS-K3s Cluster: 3× Huawei RH2288E V2
+# K3s Server Configuration — HA Mode (Embedded etcd)
+# SCS-K3s Cluster: 3× Huawei RH2288E V2 (clrz14-06, clrz14-07, clrz14-08)
 #
-# This is a reference manifest. Actual K3s installation is done via
-# the k3s install script (see README.md). This file documents the
-# configuration and can be used with k3s's --config flag.
+# This is a reference manifest. The cluster is already running K3s v1.36.3+k3s1.
+# This file documents the actual configuration.
 #
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
 cluster:
   type: k3s
-  version: v1.31.2+k3s1
+  version: v1.36.3+k3s1
   ha: true
   embeddedEtcd: true
   nodes: 3
+  nodeNames:
+    - clrz14-06  # control-plane
+    - clrz14-07  # worker
+    - clrz14-08  # worker
 
 # K3s server configuration
 server:
-  # HA mode with embedded etcd
   clusterInit: true
-  # Disable built-in Traefik (install custom Traefik with TLS config)
   disable:
-    - traefik
-    - servicelb
-    - local-storage
-  # Flannel CNI (VXLAN backend for cross-node pod communication)
+    - traefik      # HAProxy used instead
+    - servicelb    # MetalLB used instead
+    - local-storage  # Ceph-CSI used instead
   flannelBackend: vxlan
-  # Container runtime
   containerRuntime: containerd
-  # API server
-  apiServer:
-    port: 6443
-    # TLS certificate
-    tlsSANs:
-      - desk-test.uni-marburg.de
-      - k3s-api.hrz.uni-marburg.de
-  # etcd (embedded, 3 nodes)
-  etcd:
-    snapshot: true
-    snapshotInterval: 12h
-    snapshotRetention: 5
-  # Audit log
-  auditLog:
-    enabled: true
-    maxAge: 30
-    maxBackup: 10
-    maxSize: 100
-  # Event rate limit
-  eventRateLimit:
-    enabled: true
 
-# Node labels for tenant isolation
+# Node labels
 nodeLabels:
-  # Worker nodes (all 3 nodes are server+agent in hyperconverged setup)
-  node-role.kubernetes.io/worker: "true"
-  # Storage labels
-  storage: "ceph"
-  # Tenant affinity (optional: pin tenant workloads to specific nodes)
-  tenant-staff: "true"
-  tenant-students: "true"
+  node-role.kubernetes.io/control-plane: "true"  # clrz14-06
+  node-role.kubernetes.io/worker: "true"          # clrz14-07, clrz14-08
 
 # Pod Security Admission
 podSecurity:
@@ -71,6 +44,17 @@ podSecurity:
 # Network policies
 networkPolicies:
   enabled: true
-  # Default deny ingress, allow egress
   defaultDenyIngress: true
   allowEgress: true
+
+# Existing infrastructure (already deployed)
+existingComponents:
+  ingress: haproxy          # v3.2.12, Helm, kube-system
+  loadBalancer: metallb      # rz03-fip-pool, 172.25.3.181-196
+  storage:
+    - ceph-rbd              # RWO, rbd.csi.ceph.com
+    - ceph-cephfs           # RWX, cephfs.csi.ceph.com
+    - local-path            # default, rancher.io/local-path
+  gitops: argocd            # ArgoCD, manages opendesk + opendesk-edu
+  backup: k8up              # K8up backup operator, SeaweedFS
+  monitoring: prometheus    # Prometheus + Grafana
