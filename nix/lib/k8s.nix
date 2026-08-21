@@ -162,7 +162,7 @@ let
 
   headlessService = { name, port ? 80 }: service { inherit name port; clusterIP = "None"; };
 
-  ingress = { name, host, port ? 80, className ? "traefik", tls ? true, tlsSecret ? "opendesk-certificates-tls", annotations ? {}, paths ? null, certIssuer ? null, certDuration ? "8760h" }: {
+  ingress = { name, host, port ? 80, className ? "haproxy", tls ? true, tlsSecret ? "opendesk-certificates-tls", annotations ? {}, paths ? null, certIssuer ? null, certDuration ? "8760h" }: {
     apiVersion = "networking.k8s.io/v1";
     kind = "Ingress";
     metadata = { inherit name annotations; };
@@ -179,7 +179,7 @@ let
   };
 
   # Ingress with automatic certificate generation
-  ingressWithCert = { name, host, port ? 80, className ? "traefik", issuerName ? "opendesk-ca", secretName ? "${name}-tls", certDuration ? "8760h", annotations ? {}, paths ? null }:
+  ingressWithCert = { name, host, port ? 80, className ? "haproxy", issuerName ? "opendesk-ca", secretName ? "${name}-tls", certDuration ? "8760h", annotations ? {}, paths ? null }:
     [
       (certificate { inherit name issuerName secretName; hostname = host; duration = certDuration; })
       (ingress {inherit name host port className; tls = true; tlsSecret = secretName; annotations = annotations; paths = paths;})

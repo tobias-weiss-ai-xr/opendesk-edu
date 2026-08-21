@@ -8,8 +8,8 @@
 # - Attachments
 #
 # Storage classes available:
-# - ceph-rbd-ssd: Fast SSD storage (RWO) - recommended for databases
-# - ceph-cephfs-hdd-ec: Erasure-coded HDD storage (RWX) - for shared data
+# - ceph-rbd: Fast SSD storage (RWO) - recommended for databases
+# - ceph-cephfs: Erasure-coded HDD storage (RWX) - for shared data
 #
 ---
 # PVC for SOGo user data (RWO)
@@ -41,7 +41,7 @@ spec:
     requests:
       storage: 50Gi
   
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
   
   volumeMode: Filesystem
 
@@ -69,7 +69,7 @@ spec:
     requests:
       storage: 10Gi
   
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
   
   volumeMode: Filesystem
 
@@ -98,7 +98,7 @@ spec:
     requests:
       storage: 1Gi
   
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
   
   volumeMode: Filesystem
 
@@ -128,7 +128,7 @@ spec:
     requests:
       storage: 100Gi
   
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
   
   volumeMode: Filesystem
 
@@ -156,6 +156,6 @@ spec:
     requests:
       storage: 5Gi
   
-  storageClassName: ceph-rbd-ssd
+  storageClassName: ceph-rbd
   
   volumeMode: Filesystem

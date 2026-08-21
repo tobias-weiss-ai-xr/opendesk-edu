@@ -3,7 +3,7 @@ let
   name = "mariadb";
   instance = "ilias";
   storageSize = "10Gi";
-  storageClass = "ceph-rbd-ssd";
+  storageClass = "ceph-rbd";
   fullName = "${instance}-${name}";
 in [
   (lib.statefulset { 

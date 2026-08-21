@@ -16,37 +16,36 @@ and development purposes, running on SCS-K3s.
   # ── Cluster Configuration (SCS-K3s) ──
   cluster = {
     type = "k3s";
-    version = "v1.31.2+k3s1";
+    version = "v1.36.3+k3s1";
     ha = false;
     embeddedEtcd = false;
     nodes = 1;
     cni = "flannel";
     cri = "containerd";
-    loadBalancer = "servicelb";
-    ingressController = "traefik";
-    storageDriver = "local-path";
+    loadBalancer = "metallb";
+    ingressController = "haproxy";
+    storageDriver = "ceph-csi";
   };
 
   ingress = {
-    className = "traefik";
+    className = "haproxy";
     domain = "demo.opendesk-edu.org";
     annotations = {
-      "traefik.ingress.kubernetes.io/ssl-redirect" = "true";
-      "traefik.ingress.kubernetes.io/router.entrypoints" = "websecure";
-      "traefik.ingress.kubernetes.io/router.tls" = "true";
+      "haproxy-ingress.github.io/ssl-redirect" = "true";
+      "haproxy-ingress.github.io/proxy-body-size" = "50M";
     };
   };
 
   tls = {
     enabled = true;
     secretName = "opendesk-demo-tls";
-    issuer = "letsencrypt-prod";
+    issuer = "opendesk-ca";
   };
 
   storage = {
-    rwx = "local-path";
-    rwo = "local-path";
-    defaultClass = "local-path";
+    rwx = "ceph-cephfs";
+    rwo = "ceph-rbd";
+    defaultClass = "ceph-rbd";
   };
 
   networking = {

@@ -764,9 +764,9 @@ This means:
 
 | Component | StorageClass | Size | Purpose |
 |-----------|-------------|------|---------|
-| `zot-registry-storage` | ceph-rbd-ssd | 50Gi | Registry storage |
-| `zot-registry-cache` | ceph-rbd-ssd | 20Gi | Cache storage |
-| `zot-registry-backup` | ceph-rbd-ssd | 100Gi | Backup storage |
+| `zot-registry-storage` | ceph-rbd | 50Gi | Registry storage |
+| `zot-registry-cache` | ceph-rbd | 20Gi | Cache storage |
+| `zot-registry-backup` | ceph-rbd | 100Gi | Backup storage |
 
 ---
 

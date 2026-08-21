@@ -1,63 +1,18 @@
 ---
-# Ceph-CSI Storage Classes for SCS-K3s
-# Already deployed on the cluster. This file documents the actual config.
+# Ceph-CSI Storage Classes for Tenant Isolation
+# SCS-K3s Cluster — actual Ceph configuration
 #
 # Cluster ID: 74d6f792-b66e-4dff-a94a-59ef3e6f5f81
-# RBD pool: kubernetes-rbd
-# CephFS pool: cephfs
-# Secrets: csi-rbd-secret, csi-cephfs-secret (kube-system)
+# RBD pool: kubernetes-rbd (existing)
+# CephFS pool: cephfs (existing)
+# Secret: csi-rbd-secret / csi-cephfs-secret (kube-system)
 #
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-# ── Ceph-CSI RBD (Block Storage, RWO) — already exists on cluster ──
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: ceph-rbd
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "false"
-provisioner: rbd.csi.ceph.com
-parameters:
-  clusterID: 74d6f792-b66e-4dff-a94a-59ef3e6f5f81
-  pool: kubernetes-rbd
-  imageFormat: "2"
-  imageFeatures: layering
-  csi.storage.k8s.io/fstype: ext4
-  csi.storage.k8s.io/provisioner-secret-name: csi-rbd-secret
-  csi.storage.k8s.io/provisioner-secret-namespace: kube-system
-  csi.storage.k8s.io/node-stage-secret-name: csi-rbd-secret
-  csi.storage.k8s.io/node-stage-secret-namespace: kube-system
-  csi.storage.k8s.io/controller-expand-secret-name: csi-rbd-secret
-  csi.storage.k8s.io/controller-expand-secret-namespace: kube-system
-reclaimPolicy: Delete
-allowVolumeExpansion: true
-volumeBindingMode: Immediate
-mountOptions:
-  - discard
-
----
-# ── Ceph-CSI CephFS (File Storage, RWX) — already exists on cluster ──
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: ceph-cephfs
-provisioner: cephfs.csi.ceph.com
-parameters:
-  clusterID: 74d6f792-b66e-4dff-a94a-59ef3e6f5f81
-  fsName: cephfs
-  pool: cephfs-data
-  csi.storage.k8s.io/provisioner-secret-name: csi-cephfs-secret
-  csi.storage.k8s.io/provisioner-secret-namespace: kube-system
-  csi.storage.k8s.io/node-stage-secret-name: csi-cephfs-secret
-  csi.storage.k8s.io/node-stage-secret-namespace: kube-system
-  csi.storage.k8s.io/controller-expand-secret-name: csi-cephfs-secret
-  csi.storage.k8s.io/controller-expand-secret-namespace: kube-system
-reclaimPolicy: Delete
-allowVolumeExpansion: true
-
----
 # ── Ceph-CSI RBD for Staff Tenant (Retain policy — tenant data) ──
+# Uses existing kubernetes-rbd pool. Physical pool isolation can be
+# added later by creating a separate staff-rbd pool in Ceph.
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -86,6 +41,8 @@ mountOptions:
 
 ---
 # ── Ceph-CSI RBD for Students Tenant (Retain policy — tenant data) ──
+# Uses existing kubernetes-rbd pool. Physical pool isolation can be
+# added later by creating a separate students-rbd pool in Ceph.
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
