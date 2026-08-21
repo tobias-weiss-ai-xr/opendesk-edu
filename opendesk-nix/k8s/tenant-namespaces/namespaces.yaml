@@ -192,6 +192,34 @@ spec:
           port: 53      # DNS (CoreDNS)
 
 ---
+# ── NetworkPolicy: allow-same-namespace-egress (opendesk-staff) ──
+# Allow pods in staff namespace to communicate with each other (e.g. Dovecot → OpenLDAP, SOGo → Dovecot)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace-egress
+  namespace: opendesk-staff
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: staff
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector: {}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+---
 # ── NetworkPolicy: default-deny-ingress (opendesk-students) ──
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -298,3 +326,31 @@ spec:
           port: 53      # DNS (CoreDNS)
         - protocol: TCP
           port: 53      # DNS (CoreDNS)
+
+---
+# ── NetworkPolicy: allow-same-namespace-egress (opendesk-students) ──
+# Allow pods in students namespace to communicate with each other (e.g. Dovecot → OpenLDAP, SOGo → Dovecot)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace-egress
+  namespace: opendesk-students
+  labels:
+    app.kubernetes.io/part-of: opendesk-edu
+    opendesk.ai/tenant: students
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector: {}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
