@@ -7,13 +7,18 @@ This guide covers automated user lifecycle management for openDesk Edu, includin
 ## Architecture
 
 ```
-┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
-│   HISinOne   │    │  University  │    │   Keycloak   │    │  openDesk    │
-│              │    │  LDAP/AD     │    │              │    │   Edu Apps   │
-│              │    │              │    │              │    │              │
-│  SOAP API    │───►│  User        │───►│  LDAP Fed.   │───►│  ILIAS       │
-│  Events      │    │  Store       │    │  + Admin API │    │  Moodle      │
-└──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
+┌──────────────┐    ┌──────────────┐    ┌───────────────────┐    ┌──────────────┐
+│   HISinOne   │    │  University  │    │   Keycloak        │    │  openDesk    │
+│   (Marvin)   │    │  IdM        │    │                   │    │   Edu Apps   │
+│              │    │  LDAP/AD     │    │   LDAP Federation │    │  openCloud   │
+│  (IdM-Layer) │───►│  User        │───►│   + a2g-mapper    │───►│  SOGo        │
+│  Events      │    │  Store       │    │   + Admin API     │    │  XWiki, ...  │
+└──────┬───────┘    └──────────────┘    └───────────────────┘    └──────────────┘
+       │ events (webhook, HMAC)
+       ▼
+┌───────────────────┐
+│ hisinone-lifecycle│ (webhook + CronJobs)
+└───────────────────┘
 ```
 
 ## Prerequisites

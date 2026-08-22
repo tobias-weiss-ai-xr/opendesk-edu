@@ -119,12 +119,14 @@ flowchart LR
         DFN[DFN-AAI / eduGAIN]
     end
     subgraph HRZ[HRZ-Infrastruktur]
+        MARV[Marvin / HISinOne]
         IDM[IdM / LDAP]
         SHIB[Shibboleth IdP]
         MON[Monitoring]
         MAIL[Mail-Infrastruktur]
     end
 
+    MARV --> IDM
     U1 --> P
     U2 --> P
     U3 --> P
@@ -141,6 +143,7 @@ flowchart LR
 
 | System | Schnittstelle | Protokoll | Zweck |
 |--------|---------------|-----------|-------|
+| **Marvin / HISinOne** | Quelle für Identität, Rollen, Studienstatus | (über Uni-IdM) / Webhook | Nutzer-Lifecycle, Semester |
 | **IdM / LDAP** | User-Provisionierung | LDAP / REST (SCIM) | Nutzer-Lifecycle |
 | **Shibboleth IdP** | Authentifizierung | SAML 2.0 | SSO über DFN-AAI |
 | **Keycloak** | Token-Ausstellung | OIDC | SSO für alle Dienste |

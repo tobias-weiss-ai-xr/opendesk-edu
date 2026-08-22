@@ -18,7 +18,7 @@
 |:-----|:------:|
 | ILIAS LMS with SAML SSO | ✅ |
 | Moodle LMS with Shibboleth | ✅ |
-| BigBlueButton ↔ Jitsi (alternative) | ✅ |
+| BigBlueButton (extern, infra.run — kein Jitsi) | ✅ |
 | OpenCloud ↔ Nextcloud (alternative) | ✅ |
 | Unified Keycloak SSO | ✅ |
 | Portal integration (tiles, icons) | ✅ |
@@ -140,6 +140,9 @@ a module exists in the Prüfungsordnung. Students enroll in courses because HISi
 registered. Rooms are booked because HISinOne's timetable says so. **Without campus management integration,
 openDesk Edu is just a suite of disconnected apps. With it, it becomes a digital campus.**
 
+openDesk Edu is **always downstream of HISinOne**: it **reads** identity, roles, and enrollment status,
+but never writes back to campus management.
+
 ### The Data Model
 
 HISinOne manages the **complete student lifecycle**:
@@ -157,49 +160,47 @@ Key entities that flow into openDesk Edu:
 | **Student** (matrikel number, status, fees) | STU | Role-based access (student/faculty), account lifecycle |
 | **Degree Program** (BA/MA/StEx, rules, ECTS) | EXA | Study progress tracking, module requirements |
 | **Module** (credits, workload, type, description) | EXA | Course catalog, handbook data |
-| **Course** (title, semester, lecturers, room, time) | EXA-VM | Course creation in LMS, schedule, room info |
-| **Enrollment** (student ↔ course registration) | EXA-VM | LMS membership, course rosters |
-| **Parallel Groups** (course sections) | EXA-VM | LMS groups, tutorial assignments |
+| **Course** (title, semester, lecturers, room, time) | EXA-VM | Course creation, schedule, room info |
+| **Enrollment** (student ↔ course registration) | EXA-VM | Group membership, course rosters |
+| **Parallel Groups** (course sections) | EXA-VM | Course groups, tutorial assignments |
 | **Exam** (type, date, room, grade) | EXA-PM | Grade display, transcript of records |
 | **Room** (capacity, equipment, location) | EXA-VM | Room info in course context |
 | **Application** (applicant data, program choice) | APP | Pre-enrollment access, guest accounts |
 
-### Integration Architecture
+### Reference Architecture — Marburg (UMR)
 
-The proven pattern at German universities uses **three layers**:
+At the UMR, HISinOne ("Marvin") is the authoritative identity source. openDesk Edu consumes identity,
+roles, and semester/enrollment status through the **existing university IdM (LDAP/AD)**, not through direct
+SOAP/Webservice calls. This is the pattern implemented for the **Desk Test** deployment:
 
 ```
-┌──────────────┐       ┌──────────────────┐       ┌──────────────────┐
-│   HISinOne   │       │  openDesk Edu    │       │    HISinOne     │
-│   (Marvin)   │       │  Integration    │       │    Proxy         │
-│              │       │  Layer           │       │    (PHP, OSS)    │
-│  SOAP API    │◄──────│  (middleware)     │──────►│    + Queue       │
-│  Events      │       │                  │       │    + Dedup        │
-│  qisserver   │       │                  │       │    + Listener     │
-└──────────────┘       └──────┬───────────┘       └──────────────────┘
-                              │
-                ┌─────────┴──────────┐
-                │                    │
-         ┌──────▼──────┐    ┌─────▼──────┐
-         │  Keycloak   │    │  LMS       │
-         │  (SSO +     │    │  (ILIAS /   │
-         │   accounts) │    │   Moodle)   │
-         └──────┬──────┘    └─────┬──────┘
-                │                  │
-         ┌──────▼──────┐    ┌─────▼──────┐    ┌──────────────┐
-         │  BBB /      │    │  BBB /      │    │  Nextcloud /  │
-         │  Jitsi      │    │  Jitsi      │    │  OpenCloud    │
-         └─────────────┘    └─────────────┘    └──────────────┘
+┌──────────────┐     ┌──────────────────┐     ┌─────────────────────────────┐     ┌──────────────┐
+│   HISinOne   │────►│  University      │────►│   Keycloak                  │────►│   openDesk   │
+│   (Marvin)   │     │  IdM (LDAP/AD)   │     │   LDAP User Federation      │     │   Edu        │
+│              │     │                  │     │   + a2g-mapper extension    │     │   Services   │
+└──────────────┘     └──────────────────┘     └──────────────┬──────────────┘     └──────────────┘
+       │                                                     │
+       │  Events (webhook,     ┌─────────────────────────────┐│ (Keycloak Admin API)
+       │  HMAC-signed)         │  hisinone-lifecycle         │
+       └─────────────────────►│  webhook + CronJobs         │◄┘
+                             │  (semester-check,           │
+                             │   guest-cleanup)            │
+                             └─────────────────────────────┘
 ```
 
-**Key technical decisions:**
+Key technical decisions:
 
-1. **Build on the HISinOne-Proxy** ([GitHub](https://github.com/DatabayAG/his_in_one_proxy), GPL-3.0)
-   — the community-standard middleware used by FH Dortmund (3,000 courses/semester), Uni Bonn,
-   FH Aachen, HHU Düsseldorf. Don't reinvent the wheel.
-2. **HISinOne communicates via SOAP** (`qisserver/services2/`) + **TCP event listener** (push, not poll)
-3. **openDesk Integration Layer** extends the proxy with additional targets (Keycloak, BBB, OpenCloud)
-4. **HISinOne is always the source of truth** — openDesk reads, never writes back to campus management
+1. **HISinOne → University IdM (LDAP/AD) → Keycloak LDAP Federation** — the primary provisioning path.
+   openDesk Edu reuses the university's existing user directory; no direct HISinOne SOAP calls are required
+   for identity provisioning.
+2. **Event-driven account lifecycle** via the `hisinone-lifecycle` webhook (HMAC-signed) for
+   immatriculation/exmatriculation/beurlaubung, supplemented by daily CronJobs for semester re-registration
+   checks and guest lecturer cleanup (Keycloak Admin API).
+3. **Keycloak is the central IdP** for all openDesk Edu services (OIDC clients: openCloud, SOGo, XWiki,
+   Element/Matrix, portal) and federates external identities via Shibboleth/DFN-AAI.
+4. **a2g-mapper** (attribute-to-group mapper) assigns users to `managed-by-attribute-*` groups based on
+   `eduPersonAffiliation` and role attributes — service access is governed exclusively through these groups.
+5. **HISinOne is always the source of truth** — openDesk Edu reads, never writes back to campus management.
 
 ### Phase 1: Identity & Account Lifecycle
 
@@ -209,47 +210,51 @@ Automate user provisioning based on university enrollment/exmatriculation events
 
 ```
 HISinOne (immatrikulation) → LDAP/AD (existing university IdM) → Keycloak (user sync) → all services
-HISinOne (exmatrikulation) → LDAP/AD → Keycloak (user deactivation) → access revoked
+HISinOne (exmatriculation) → LDAP/AD → Keycloak (user deactivation) → access revoked
+HISinOne (event) → hisinone-lifecycle webhook → Keycloak Admin API (targeted updates)
 ```
 
-- [ ] Keycloak LDAP User Federation with the university's existing LDAP/AD
-- [ ] Group mapping: HISinOne roles → Keycloak groups → openDesk service access
-  - `student` → LMS access, course enrollment, file sharing
-  - `employee` → email, groupware, project management
-  - `lecturer` → LMS course owner, video conferencing host
-  - `faculty:PHIL` → faculty-specific portal tiles and permissions
-- [ ] Account lifecycle automation:
-  - Immatrikulation → create Keycloak user, assign base groups
+- [x] Keycloak LDAP User Federation with the university's existing LDAP/AD
+- [x] Group mapping: HISinOne roles → Keycloak groups (`managed-by-attribute-*`) → openDesk service access
+  - `student` → FileshareCloud (openCloud), Learnmanagement
+  - `faculty` / `employee` → Groupware (SOGo), Fileshare, FileshareCloud, Knowledge management (XWiki)
+  - `lecturer` → Videoconference, Live collaboration (BBB external)
+  - faculty-specific portal tiles and permissions
+- [x] Webhook receiver (`hisinone-lifecycle`) for targeted lifecycle events:
+  - Immatrikulation → create/enable Keycloak user, assign base groups
   - Beurlaubung (leave of absence) → suspend service access, keep account
-  - Exmatrikulation → deactivate account, archive data, revoke access
+  - Exmatrikulation → disable account, archive data, revoke access
   - Role change (student → staff) → update group memberships
-- [ ] Semester re-registration (Rückmeldung) verification — disable accounts for students who don't re-register
-- [ ] Guest lecturer provisioning — temporary accounts with time-limited access
+- [x] Semester re-registration (Rückmeldung) verification via daily CronJob — disable accounts for
+  students who don't re-register
+- [x] Guest lecturer provisioning — temporary accounts with time-limited access + cleanup CronJob
+- [ ] Combine with the university's official account lifecycle (LDAP/AD) where that already covers the cases above
 
-### Phase 2: Course Synchronization
+### Phase 2: Course & Group Synchronization
 
-Automate course creation, enrollment, and roster management in ILIAS and Moodle.
+Automate course-related group creation and membership based on HISinOne course/enrollment data.
+This phase uses the same identity path (LDAP/AD + Keycloak) and does **not** depend on a specific LMS.
 
 **Data flow:**
 
 ```
-HISinOne (semester start) → HISinOne-Proxy → openDesk Integration Layer
-  → ILIAS: create courses, assign categories, add lecturers, enroll students
-  → Moodle: create courses, assign cohorts, enroll students
-  → BBB: create recurring meeting rooms per course (optional)
-  → Nextcloud/OpenCloud: create course file shares (optional)
+HISinOne (semester start) → University IdM (LDAP/AD) → Keycloak (course groups) → services
 ```
 
-- [ ] Extend HISinOne-Proxy to support openDesk as additional target alongside ILIAS ECS
-- [ ] Semester-triggered bulk course creation (all courses for upcoming semester)
+- [ ] Semester group creation (`student:{semester}`, `instructor:{semester}`, `tutor:{semester}`,
+      `guest:{semester}`) in Keycloak from HISinOne semester data
 - [ ] Continuous incremental sync:
-  - New enrollments → add student to LMS course
-  - Withdrawals → remove student from LMS course
-  - Lecturer changes → update course ownership
-  - Room/time changes → update course metadata
-- [ ] Parallel group mapping (HISinOne Parallelgruppen → ILIAS course groups / Moodle groups)
+  - New enrollments → add student to course/semester group
+  - Withdrawals → remove student from group
+  - Lecturer changes → update group ownership
+  - Room/time changes → update course metadata (calendar/portal)
+- [ ] Parallel group mapping (HISinOne Parallelgruppen → Keycloak groups)
 - [ ] Course categorization based on HISinOne organizational structure (faculty → department → program)
-- [ ] Course archival at semester end (freeze enrollments, archive content)
+- [ ] Optional service automation per course:
+  - openCloud course file shares / team folders (based on roster)
+  - BBB (external) recurring meeting rooms per course
+  - Etherpad pads per course session
+  - XWiki course spaces
 
 ### Phase 3: Schedule, Rooms & Exams
 
@@ -264,7 +269,7 @@ Bring the semester calendar, room information, and exam data into the unified ca
   - Room details (capacity, equipment, accessibility) in course context
   - Building maps / room finder integration
 - [ ] Exam management integration:
-  - Exam registration (Anmeldung zur Prüfung) from openDesk → HISinOne
+  - Exam registration (Anmeldung zur Prüfung) — redirect to HISinOne (Marvin)
   - Grade display in openDesk dashboard after HISinOne grade entry
   - Transcript of records (Notenauszug) accessible from portal
   - Module completion tracking (ECTS progress toward degree)
@@ -289,15 +294,15 @@ Transform raw campus management data into actionable student-facing information.
   - Re-registration deadline approaching
   - Room change for a course
 - [ ] Course collaboration spaces:
-  - Auto-created Nextcloud/OpenCloud shares per course (based on roster)
-  - BBB/Jitsi meeting rooms auto-created per course (based on schedule)
+  - Auto-created openCloud shares per course (based on roster)
+  - BBB (external) meeting rooms auto-created per course (based on schedule)
 
 ### Phase 5: Cross-Service Intelligence
 
 Connect campus management data with collaboration and communication tools for a smarter campus.
 
-- [ ] Communication groups based on course rosters (mailing lists, chat channels)
-- [ ] Document management linked to degree programs (thesis templates, internship reports)
+- [ ] Communication groups based on course rosters (mailing lists via SOGo, Matrix chat channels)
+- [ ] Document management linked to degree programs (thesis templates, internship reports) in openCloud
 - [ ] Research project ↔ thesis/exam linking (OpenProject tasks → module completion)
 - [ ] Analytics: course engagement, attendance patterns, grade trends (GDPR-compliant, anonymized)
 
@@ -305,23 +310,25 @@ Connect campus management data with collaboration and communication tools for a 
 
 Before starting any HISinOne integration work:
 
-- [ ] API access to university's HISinOne instance (`qisserver/services2/`)
-- [ ] SOAP API credentials (API user + webservice token)
-- [ ] Event listener registration (TCP endpoint accessible from HISinOne server)
+- [x] LDAP/AD access to the university's user directory (LDAPS, service account) — Desk Test
+- [x] Keycloak LDAP User Federation + a2g-mapper — Desk Test
+- [x] Webhook endpoint (HMAC) reachable from HISinOne — Desk Test
+- [ ] Direct SOAP API access to `qisserver/services2/` (only needed if LDAP/AD does not expose all entities)
+- [ ] SOAP API credentials (API user + webservice token) — only for Phase 3–5 data (grades, modules, rooms)
 - [ ] Document the university's specific HISinOne configuration (active modules, custom fields, role names)
-- [ ] Fork/contribute to [HISinOne-Proxy](https://github.com/DatabayAG/his_in_one_proxy) for openDesk target support
 - [ ] Integration test environment with HISinOne test data
 
 ### Risks & Mitigations
 
 | Risk | Impact | Mitigation |
 |:-----|:-------|:----------|
-| No public API docs (HIS eG member-only) | Blocks development | Partner with university IT; use HISinOne-Proxy as reference |
-| SOAP API (not REST) | More complex integration | Use proven proxy pattern; SOAP is stable and well-tested |
-| TCP event listener (not webhooks) | Requires network config | Request firewall allowlist for HISinOne → proxy connection |
+| No public API docs (HIS eG member-only) | Blocks direct SOAP development | Primary path is LDAP/AD (stable); direct SOAP only where needed |
+| SOAP API (not REST) | More complex integration | Avoid direct SOAP for identity; use LDAP/AD; proxy pattern only for Phase 3–5 |
+| LDAP/AD does not expose all HISinOne entities | Missing grades/modules/rooms | Selective SOAP/webservice access to HIS eG (university IT acts as broker) |
 | Each university customizes HISinOne differently | Hard to generalize | Make integration layer fully configurable per institution |
 | HISinOne is not containerized | Can't deploy alongside openDesk | Integration layer runs in-cluster; HISinOne stays on-prem |
-| Student data is highly sensitive (DSGVO) | Legal/compliance risk | Follow data minimization; pseudonymize analytics; document data flows |
+| Student data is highly sensitive (DSGVO) | Legal/compliance risk | Follow data minimization; pseudonymize analytics; document data flows (VVT/DSFA) |
+| Webhook reliability (missed events) | Stale accounts | Daily CronJob reconciliation as fallback; audit trail |
 
 ---
 

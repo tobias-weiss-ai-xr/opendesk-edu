@@ -341,12 +341,13 @@ The University Apps integration is just the beginning. Several exciting directio
 ### 4. Student Information System (HIS/LSF) Integration
 
 - Integrate **campus management systems** (e.g., HISinOne, LSF) for course enrollment and scheduling
-- Support **automated course provisioning** in ILIAS and Moodle
+- Support **automated course provisioning** in ILIAS and Moodle (optional; reference stack: openCloud/SOGo/XWiki)
 - Enable **student lifecycle management** (enrollment, grading, graduation)
+- **Identity anchoring:** roles and enrollment flow via university IdM (LDAP/AD) → Keycloak LDAP Federation → a2g-mapper groups
 
 ### 5. Automated Course Provisioning
 
-- Develop **automated workflows** to provision courses in ILIAS and Moodle based on campus management system data
+- Develop **automated workflows** to provision courses based on campus management system data (ILIAS/Moodle optional; reference deployment targets openDesk Edu services)
 - Support **role-based access control** (e.g., instructors, students, TAs)
 - Enable **template-based course creation** for consistency
 

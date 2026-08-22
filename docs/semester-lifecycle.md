@@ -184,9 +184,9 @@ semester:
 | System | Integration Type | Purpose |
 |--------|-----------------|---------|
 | **ILIAS** | REST API | Course creation, enrollment sync |
-| **Moodle** | REST API | Course creation, enrollment sync |
+| **Moodle** (optional) | REST API | Course creation, enrollment sync |
 | **Keycloak** | Admin API | Group management, role sync |
-| **HISinOne** | Webhook (optional) | Campus management sync |
+| **HISinOne** (via Uni-IdM/LDAP) | LDAP Federation + Webhook | Campus management sync (identity/roles) |
 
 ### Troubleshooting
 
@@ -383,9 +383,9 @@ semester:
 | System | Integrationstyp | Zweck |
 |--------|----------------|-------|
 | **ILIAS** | REST API | Kurserstellung, Einschreibungssync |
-| **Moodle** | REST API | Kurserstellung, Einschreibungssync |
+| **Moodle** (optional) | REST API | Kurserstellung, Einschreibungssync |
 | **Keycloak** | Admin API | Gruppenverwaltung, Rollensync |
-| **HISinOne** | Webhook (optional) | Campus-Management-Sync |
+| **HISinOne** (über Uni-IdM/LDAP) | LDAP Federation + Webhook | Campus-Management-Sync (Identität/Rollen) |
 
 ### Fehlerbehebung
 

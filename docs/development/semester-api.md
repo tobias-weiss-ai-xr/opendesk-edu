@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Semester Course Provisioning API Specification
 
-This document defines the RESTful API for semester-based course lifecycle management in openDesk Edu. The API enables automated course provisioning, updates, and archival in coordination with university campus management systems (HISinOne, HISinOne-Proxy) and learning platforms (ILIAS, Moodle).
+This document defines the RESTful API for semester-based course lifecycle management in openDesk Edu. The API enables automated course provisioning, updates, and archival in coordination with university campus management systems (HISinOne / Marvin) and the openDesk Edu collaboration services (openCloud, SOGo, XWiki, Etherpad, Matrix).
 
 <!-- TOC -->
 * [Semester Course Provisioning API Specification](#semester-course-provisioning-api-specification)
@@ -78,7 +78,7 @@ This document defines the RESTful API for semester-based course lifecycle manage
 
 ## Overview
 
-The Semester Course Provisioning API provides a RESTful interface for managing the complete lifecycle of university courses on a semester basis. The API integrates with campus management systems (HISinOne, HISinOne-Proxy) to synchronize course data and manage resources across learning platforms.
+The Semester Course Provisioning API provides a RESTful interface for managing the complete lifecycle of university courses on a semester basis. The API integrates with campus management systems (HISinOne / Marvin) — primarily via the university IDM/LDAP identity path — to synchronize course data and manage resources across the openDesk Edu collaboration services.
 
 **Core Capabilities:**
 
@@ -136,7 +136,7 @@ The Semester Course Provisioning API is designed as a RESTful service that orche
 **Integration Points:**
 
 1. **Campus Management System:**
-   * HISinOne / HISinOne-Proxy as source of truth for course data
+   * HISinOne / Marvin as source of truth for course data (via university IDM/LDAP)
    * SAML/OIDC authentication for secure data exchange
    * Periodic synchronization or event-driven updates
 
@@ -1601,20 +1601,28 @@ POST /hisinone/sync/semester/{semesterCode}
 3. HISinOne API validates token via introspection endpoint
 4. Authorized requests proceed to provisioning API
 
-### HISinOne-Proxy Integration
+### HISinOne / Marvin Integration
 
 **Overview:**
 
-HISinOne-Proxy is a lightweight proxy layer that provides a simplified API interface to HISinOne. This proxy can be used when direct HISinOne integration is not feasible.
+The reference implementation (HRZ Marburg, "Desk Test") integrates HISinOne (Marvin) through the **university identity management (LDAP/AD)** path, not through a direct HISinOne proxy:
 
-**Proxy Benefits:**
+```
+HISinOne (Marvin) → University IDM (LDAP/AD) → Keycloak LDAP Federation → openDesk Edu services
+HISinOne (events) → hisinone-lifecycle webhook (HMAC) → Keycloak Admin API
+```
 
-* Simplified API interface (no complex SAML/OIDC flow required)
-* Caching layer reduces load on HISinOne
-* Transformation layer for data mapping
-* Authentication/authorization proxy
+**Advantages of the IDM/LDAP path:**
 
-**Proxy API Pattern:**
+* Reuses the university's existing user directory — no HISinOne SOAP credentials required for identity
+* `eduPersonAffiliation`-based group mapping via the `a2g-mapper` extension
+* Stable and well-tested; no dependency on HIS eG member-only API documentation
+* Event-driven lifecycle (immatriculation/exmatriculation/beurlaubung) via webhook + daily CronJobs
+
+**Optional direct access (Phase 3+):**
+
+For entities not exposed through the university IDM (grades, modules, rooms), direct HISinOne access
+via the HISinOne-Proxy (DatabayAG, GPL-3.0) can be added selectively:
 
 ```
 GET /proxy/hisinone/semesters/{semesterCode}/courses
@@ -1647,7 +1655,7 @@ proxy:
 2. HISinOne sends webhook event to provisioning API
 3. Provisioning API validates event and processes synchronization
 4. Provisioning API updates Keycloak groups and course data
-5. Provisioning API triggers platform-specific updates (ILIAS, Moodle)
+5. Provisioning API triggers service-specific updates (openCloud shares, SOGo lists, Matrix channels, XWiki spaces)
 6. Provisioning API sends confirmation webhook to HISinOne
 
 **Periodic Synchronization:**

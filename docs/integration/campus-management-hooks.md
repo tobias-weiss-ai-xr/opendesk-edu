@@ -101,6 +101,15 @@ Campus Management System → openDesk Edu → Learning Platforms
 > [!important]
   Data flows from campus management systems TO openDesk Edu, never back. Campus management systems remain the authoritative source for all student, course, and enrollment data.
 
+> [!note]
+  **Primary path (reference deployment, HRZ Marburg "Desk Test"):** identity, roles, and enrollment
+  status are anchored through the **university IdM (LDAP/AD)** — `HISinOne/Marvin → Uni-IdM (LDAP/AD) →
+  Keycloak LDAP Federation → a2g-mapper → services` — plus event-driven lifecycle via `hisinone-lifecycle`
+  (HMAC webhook + CronJobs). Direct HISinOne/HISinOne-Proxy (SOAP/REST) access below is **optional** and
+  only needed for entities the university IdM does not expose (grades, modules, rooms). Learning platforms
+  (ILIAS/Moodle) are optional targets; the reference stack targets openDesk Edu services (openCloud, SOGo,
+  XWiki, Etherpad, Matrix).
+
 ## Architecture
 
 The campus management integration architecture follows an event-driven pattern with fallback to periodic synchronization.
