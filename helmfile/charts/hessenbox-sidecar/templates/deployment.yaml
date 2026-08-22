@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hessenbox-sidecar.fullname" . }}
+  namespace: {{ .Release.Namespace | default "default" }}
+  labels:
+    {{- include "hessenbox-sidecar.labels" . | nindent 4 }}
+    app: {{ include "hessenbox-sidecar.name" . }}
+    component: sidecar
+    service: hessenbox
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      {{- include "hessenbox-sidecar.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+    rollingUpdate: null
+  template:
+    metadata:
+      labels:
+        {{- include "hessenbox-sidecar.selectorLabels" . | nindent 8 }}
+        app: {{ include "hessenbox-sidecar.name" . }}
+        component: sidecar
+        service: hessenbox
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "hessenbox-sidecar.serviceAccountName" . }}
+      automountServiceAccountToken: false
+      containers:
+        - name: hessenbox-sync
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          command:
+            - sh
+            - -c
+            - |
+              # Create rclone config directory
+              mkdir -p /root/.config/rclone
+              
+              # Write rclone config
+              cat > /root/.config/rclone/rclone.conf << 'EOCONF'
+{{ include "hessenbox-sidecar.rcloneConfig" . | indent 14 }}
+EOCONF
+              
+              # Set permissions
+              chmod 600 /root/.config/rclone/rclone.conf
+              
+              # Function for sync
+              sync_hessenbox() {
+                echo "[$(date)] Starting sync from hessenbox..."
+                rclone sync hessenbox:{{ .Values.hessenbox.remotePath | trimPrefix "/" }} /sync/data/ \
+                  {{ .Values.hessenbox.extraFlags }} --retries 3 --retries-sleep 10 || echo "Sync from hessenbox failed"
+                
+                {{- if .Values.hessenbox.bidirectional }}
+                echo "[$(date)] Starting sync to hessenbox..."
+                rclone sync /sync/data/ hessenbox:{{ .Values.hessenbox.remotePath | trimPrefix "/" }} \
+                  {{ .Values.hessenbox.extraFlags }} --retries 3 --retries-sleep 10 || echo "Sync to hessenbox failed"
+                {{- end }}
+              }
+              
+              # Initial sync
+              sync_hessenbox
+              
+              # Continuous sync loop
+              while true; do
+                sleep {{ .Values.hessenbox.syncInterval }}
+                sync_hessenbox
+              done
+          volumeMounts:
+            - name: sync-data
+              mountPath: /sync/data
+            - name: rclone-config
+              mountPath: /root/.config/rclone
+          env:
+            - name: TZ
+              value: {{ .Values.timezone | quote }}
+            - name: RCLONE_CONFIG_DIR
+              value: /root/.config/rclone
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: sync-data
+          emptyDir: {}
+        - name: rclone-config
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,66 @@
+# Default values for hessenbox-sidecar
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: rclone/rclone
+  tag: latest
+  pullPolicy: IfNotPresent
+
+hessenbox:
+  # WebDAV URL for next.hessenbox
+  url: "https://next.hessenbox.de/remote.php/dav"
+  
+  # Username - will be injected per-service
+  # Can be set via --set hessenbox.username=<username>
+  username: ""
+  
+  # Password or App Password
+  # For security, use --set-file hessenbox.password=<file>
+  # Or better: use Kubernetes secrets
+  password: ""
+  
+  # Remote path in next.hessenbox
+  # "/" for root of user's files
+  # "/Shared/" for shared files
+  remotePath: "/"
+  
+  # Sync interval in seconds
+  syncInterval: 60
+  
+  # Enable bidirectional sync
+  # If false, only sync FROM hessenbox TO local
+  bidirectional: true
+  
+  # Rclone additional flags
+  extraFlags: "--fast-list --verbose"
+
+# Timezone for the sidecar container
+timezone: "Europe/Berlin"
+
+# Resource requests and limits
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Pod security context
+securityContext:
+  runAsNonRoot: true
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+      - ALL
+  allowPrivilegeEscalation: false
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}

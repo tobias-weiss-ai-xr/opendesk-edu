@@ -1,0 +1,32 @@
+# next.hessenbox Portal Entry
+# Managed by: portal-entries Helm chart
+# Service: next.hessenbox (external - University of Kassel)
+# Description: 50GB Sync&Share storage for all Hessian university members
+# Icon: hessenbox.svg
+# Domain: https://next.hessenbox.de
+
+dn: cn=hessenbox,ou=services,dc=opendesk,dc=edu
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: hessenbox
+description: next.hessenbox - 50GB Cloud Storage for all university members
+displayName: next.hessenbox
+tileOrder: 15
+icon: hessenbox
+url: https://next.hessenbox.de
+color: #0082c9
+category: Storage
+target: _blank
+oidcClientId: hessenbox
+synonyms: nextcloud
+synonyms: cloud
+synonyms: storage
+synonyms: files
+synonyms: sync
+
+dn: cn=hessenbox,ou=entries,dc=opendesk,dc=edu
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: hessenbox
+userPassword: {SSHA}redacted
+roleOccupant: cn=hessenbox,ou=services,dc=opendesk,dc=edu
