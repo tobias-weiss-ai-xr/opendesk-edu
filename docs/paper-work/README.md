@@ -34,6 +34,7 @@ Dieses Verzeichnis enthält **anonymisierte Vorlagen** für den Datenschutz bei 
 | **[03-technisch-organisatorische-massnahmen.md](03-technisch-organisatorische-massnahmen.md)** | TOM-Dokumentation | Sicherheitsmaßnahmen nach Art. 32 DSGVO | Art. 32 DSGVO |
 | **[04-datenschutz-folgenabschaetzung.md](04-datenschutz-folgenabschaetzung.md)** | DSFA | Risikobewertung für Hochrisiko-Verarbeitungen | Art. 35 DSGVO |
 | **[05-betroffenrechte.md](05-betroffenrechte.md)** | Formular | Antrag auf Auskunft/Löschung (Artt. 15, 17 DSGVO) | Artt. 15, 17, 20, 21 DSGVO |
+| **[06-sicherheitskonzept.md](06-sicherheitskonzept.md)** | Modulares Sicherheitskonzept | Zugriffskontrolle, Logging & Monitoring, Incident Management, Maßnahmen-Katalog | BSI IT-Grundschutz, ISO/IEC 27001 |
 
 ---
 
