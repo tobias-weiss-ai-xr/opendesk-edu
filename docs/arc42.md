@@ -173,8 +173,9 @@ Die Lösungsstrategie von openDesk Edu basiert auf drei Säulen:
    - Externe Dienste (z. B. BigBlueButton) werden bewusst ausgelagert, wenn
      die on-premises Bereitstellung nicht möglich ist (IPv6-Problematik)
 
-**UMR-spezifisch:** Bereitstellung auf **Bare-Metal k3s** (bleeding edge) als Testumgebung
-(Desk Test) zur Validierung von Stabilität und Betriebsaufwand vor einem Produktivbetrieb.
+**UMR-spezifisch:** Bereitstellung auf **Bare-Metal k3s**, **SCS-konform (Sovereign Cloud Stack,
+SCS-compatible KaaS SCS-0502) und zertifizierbar**, als Testumgebung (Desk Test) zur Validierung
+von Stabilität und Betriebsaufwand vor einem Produktivbetrieb.
 
 ---
 
@@ -303,7 +304,7 @@ sequenceDiagram
 
 | Aspekt | Ausprägung |
 |--------|------------|
-| **Cluster** | k3s auf Bare-Metal (bleeding edge), 1+ Nodes |
+| **Cluster** | k3s auf Bare-Metal, 3 Nodes, SCS-konform (SCS-0502), zertifizierbar |
 | **Storage** | Ceph-RBD, StorageClasses: `ceph-rbd`, `ceph-rbd-staff` |
 | **Tenants** | `opendesk`, `opendesk-staff`, `opendesk-students` |
 | **Domains** | `desk-test.uni-marburg.de` (Test), `home.opendesk-edu.org` (Produktiv) |

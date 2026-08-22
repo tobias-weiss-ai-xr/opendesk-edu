@@ -9,7 +9,7 @@
 
 Dieses Handbuch beschreibt die Verwaltung und Wartung des **Desk Test**-Deployments (desk-test.uni-marburg.de) von **openDesk Edu** – dem digitalen souveränen Arbeitsplatz.
 
-Desk Test ist die UMR-Pilotinstallation auf Bare-Metal-Servern mit k3s (bleeding edge).
+Desk Test ist die UMR-Pilotinstallation auf Bare-Metal-Servern mit k3s, **SCS-konform (Sovereign Cloud Stack, SCS-compatible KaaS SCS-0502) und zertifizierbar**.
 
 Für die Gesamtarchitektur von openDesk Edu siehe die [Architekturdokumentation (arc42)](./arc42.md).
 
@@ -25,7 +25,7 @@ Für die Gesamtarchitektur von openDesk Edu siehe die [Architekturdokumentation 
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │                        Kubernetes (k3s - bleeding edge)              │    │
+│  │                        Kubernetes (k3s, SCS-konform)                 │    │
 │  │                         Bare-Metal Cluster (HRZ)                    │    │
 │  │                                                                       │    │
 │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────────┐  │    │
@@ -80,7 +80,7 @@ Für die Gesamtarchitektur von openDesk Edu siehe die [Architekturdokumentation 
 
 | Komponente | Version | Zweck | Betreiber |
 |------------|---------|-------|-----------|
-| **k3s** | bleeding edge | Kubernetes Distribution | HRZ |
+| **k3s** | aktuell (SCS-konform, SCS-0502) | Kubernetes Distribution | HRZ |
 | **Ceph-RBD** | - | Persistenter Storage | HRZ |
 | **ArgoCD** | - | GitOps Continuous Deployment | HRZ |
 | **Helmfile** | - | Helm Chart Management | HRZ |
