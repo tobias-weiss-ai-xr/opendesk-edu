@@ -28,7 +28,7 @@
 # ==============================================================================
 
 # Registry configuration
-REGISTRY ?= registry.gitlab.opencode.de/umr
+REGISTRY ?= registry.opencode.de/umr
 
 # Version tags
 SOGO5_VERSION ?= 5.8.0

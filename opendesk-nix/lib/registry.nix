@@ -29,7 +29,7 @@ let
 
   # Predefined registries
   registries = lib.genAttrs [
-    "ghcr" "gitlab" "zot" "docker-hub" "quay" "harbor" 
+    "ghcr" "gitlab" "opencode" "zot" "docker-hub" "quay" "harbor" 
     "ecr" "acr" "gcr" "local" "nix-cache"
   ] (name:
     let
@@ -37,6 +37,7 @@ let
         name = name;
         url = if name == "ghcr" then "ghcr.io"
           else if name == "gitlab" then "registry.gitlab.com"
+          else if name == "opencode" then "registry.opencode.de"
           else if name == "zot" then "172.17.209.143:5000"
           else if name == "docker-hub" then "docker.io"
           else if name == "quay" then "quay.io"

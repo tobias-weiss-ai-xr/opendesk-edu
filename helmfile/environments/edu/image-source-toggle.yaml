@@ -2,8 +2,8 @@
 # Image Source Toggle for OpenDesk EDU
 #
 # This file lets you toggle all container image sources between:
-#   1. ghcr.io (GitHub Container Registry - default, upstream)
-#   2. registry.gitlab.opencode.de/umr (opencode.de GitLab CR - mirror)
+#   1. registry.opencode.de/umr (opencode.de container registry - DEFAULT)
+#   2. ghcr.io (GitHub Container Registry - mirror, fallback)
 #   3. zot-registry.opendesk.svc:5000 (local Zot cache - pull-through)
 #
 # Usage with helmfile:
@@ -16,286 +16,290 @@
 #
 # Or override per-deployment:
 #   Set image.registry and image.repository in values
+#
+# NOTE (2026-08-22): openDesk Edu images are now built with Nix and pushed
+# to registry.opencode.de/umr (see opendesk-nix/ for the image flakes).
+# registry.opencode.de is therefore the DEFAULT source.
 # =============================================================================
 
 # =============================================================================
-# Option 1: GHCR (GitHub Container Registry) — DEFAULT
+# Option 1: registry.opencode.de (opencode.de container registry) — DEFAULT
 # =============================================================================
-# All images pulled directly from ghcr.io/opendesk-edu/*
-# Requires: DNS resolution for ghcr.io, internet access
-# Best for: development, CI/CD, when GHCR is accessible
+# All images pulled from registry.opencode.de/umr/*
+# Images are Nix-built (opendesk-nix/**) and pushed via push-to-opencode.sh
+# Requires: OPENCODE_TOKEN / registry pull secret
+# Best for: production, air-gapped, sovereign operation
 
-imageSource: ghcr
+imageSource: opencode
 
 images:
   # --- Core Services ---
   postgresql:
-    registry: ghcr.io
-    repository: opendesk-edu/postgresql
+    registry: registry.opencode.de
+    repository: umr/postgresql
     tag: latest
 
   memcached:
-    registry: ghcr.io
-    repository: opendesk-edu/memcached
+    registry: registry.opencode.de
+    repository: umr/memcached
     tag: latest
 
   keycloak:
-    registry: ghcr.io
-    repository: opendesk-edu/supplier/univention/keycloak
+    registry: registry.opencode.de
+    repository: umr/keycloak
     tag: "26.7.0"
 
   # --- OpenDesk EDU Core Apps ---
   sogo:
-    registry: ghcr.io
-    repository: opendesk-edu/sogo
+    registry: registry.opencode.de
+    repository: umr/sogo
     tag: latest
 
   stalwart:
-    registry: ghcr.io
-    repository: opendesk-edu/stalwart
+    registry: registry.opencode.de
+    repository: umr/stalwart
     tag: latest
 
   opencloud:
-    registry: ghcr.io
-    repository: opendesk-edu/opencloud
+    registry: registry.opencode.de
+    repository: umr/opencloud
     tag: "4.0.3"
 
   # --- Additional EDU Apps ---
   bookstack:
-    registry: ghcr.io
-    repository: opendesk-edu/bookstack
+    registry: registry.opencode.de
+    repository: umr/bookstack
     tag: latest
 
   drawio:
-    registry: ghcr.io
-    repository: opendesk-edu/drawio
+    registry: registry.opencode.de
+    repository: umr/drawio
     tag: latest
 
   excalidraw:
-    registry: ghcr.io
-    repository: opendesk-edu/excalidraw
+    registry: registry.opencode.de
+    repository: umr/excalidraw
     tag: latest
 
   planka:
-    registry: ghcr.io
-    repository: opendesk-edu/planka
+    registry: registry.opencode.de
+    repository: umr/planka
     tag: latest
 
   self-service-password:
-    registry: ghcr.io
-    repository: opendesk-edu/self-service-password
+    registry: registry.opencode.de
+    repository: umr/self-service-password
     tag: latest
 
   user-import:
-    registry: ghcr.io
-    repository: opendesk-edu/user-import
+    registry: registry.opencode.de
+    repository: umr/user-import
     tag: latest
 
   opendesk-dev-agent-operator:
-    registry: ghcr.io
+    registry: registry.opencode.de
     # published from github.com/tobias-weiss-ai-xr/opendesk-dev-agent-operator
-    # (CI pushes to ghcr.io/<github.repository>; the opendesk-edu org path 404s)
     # Tag convention (upstream + umr): branch tag, not latest
-    repository: tobias-weiss-ai-xr/opendesk-dev-agent-operator
+    repository: umr/opendesk-dev-agent-operator
     tag: main
 
   moodle-shib:
-    registry: ghcr.io
-    repository: opendesk-edu/moodle-shib
+    registry: registry.opencode.de
+    repository: umr/moodle-shib
     tag: latest
 
   ilias-shibboleth:
-    registry: ghcr.io
-    repository: opendesk-edu/ilias-shibboleth
+    registry: registry.opencode.de
+    repository: umr/ilias-shibboleth
     tag: latest
 
   ilias:
-    registry: ghcr.io
-    repository: opendesk-edu/ilias
+    registry: registry.opencode.de
+    repository: umr/ilias
     tag: latest
 
   moodle:
-    registry: ghcr.io
-    repository: opendesk-edu/moodle
+    registry: registry.opencode.de
+    repository: umr/moodle
     tag: latest
 
   collabora:
-    registry: ghcr.io
-    repository: opendesk-edu/collabora
+    registry: registry.opencode.de
+    repository: umr/collabora
     tag: latest
 
   clamav:
-    registry: ghcr.io
-    repository: opendesk-edu/clamav
+    registry: registry.opencode.de
+    repository: umr/clamav
     tag: latest
 
   etherpad:
-    registry: ghcr.io
-    repository: opendesk-edu/etherpad
+    registry: registry.opencode.de
+    repository: umr/etherpad
     tag: "1.9.9"
 
   element:
-    registry: ghcr.io
-    repository: opendesk-edu/element
+    registry: registry.opencode.de
+    repository: umr/element
     tag: latest
 
   mariadb:
-    registry: ghcr.io
-    repository: opendesk-edu/mariadb
+    registry: registry.opencode.de
+    repository: umr/mariadb
     tag: latest
 
   redis:
-    registry: ghcr.io
-    repository: opendesk-edu/redis
+    registry: registry.opencode.de
+    repository: umr/redis
     tag: latest
 
   snipr:
-    registry: ghcr.io
-    repository: tobias-weiss-ai-xr/snipr
+    registry: registry.opencode.de
+    repository: umr/snipr
     tag: latest
 
   # --- Infrastructure ---
   zot:
-    registry: ghcr.io
-    repository: project-zot/zot
-    tag: "v2.1.0"
+    registry: registry.opencode.de
+    repository: umr/zot-registry
+    tag: latest
 
 # =============================================================================
-# Option 2: opencode.de GitLab Container Registry — MIRROR
+# Option 2: GHCR (GitHub Container Registry) — MIRROR
 # =============================================================================
-# All images pulled from registry.gitlab.opencode.de/umr/
-# Requires: OPENCODE_TOKEN, docker login to registry.gitlab.opencode.de
-# Best for: production, air-gapped, when GHCR is not accessible
+# All images pulled directly from ghcr.io/opendesk-edu/*
+# Requires: DNS resolution for ghcr.io, internet access
+# Best for: development, CI/CD, when GHCR is accessible
 #
-# To use this option, uncomment the block below and comment out the ghcr block above:
+# To use this option, uncomment the block below and comment out the opencode block above:
 #
-# imageSource: opencode
+# imageSource: ghcr
 #
 # images:
 #   postgresql:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/postgresql
+#     registry: ghcr.io
+#     repository: opendesk-edu/postgresql
 #     tag: latest
 #
 #   memcached:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/memcached
+#     registry: ghcr.io
+#     repository: opendesk-edu/memcached
 #     tag: latest
 #
 #   keycloak:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/keycloak
+#     registry: ghcr.io
+#     repository: opendesk-edu/supplier/univention/keycloak
 #     tag: "26.7.0"
 #
 #   sogo:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/sogo
+#     registry: ghcr.io
+#     repository: opendesk-edu/sogo
 #     tag: latest
 #
 #   stalwart:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/stalwart
+#     registry: ghcr.io
+#     repository: opendesk-edu/stalwart
 #     tag: latest
 #
 #   opencloud:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/opencloud
+#     registry: ghcr.io
+#     repository: opendesk-edu/opencloud
 #     tag: "4.0.3"
 #
 #   bookstack:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/bookstack
+#     registry: ghcr.io
+#     repository: opendesk-edu/bookstack
 #     tag: latest
 #
 #   drawio:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/drawio
+#     registry: ghcr.io
+#     repository: opendesk-edu/drawio
 #     tag: latest
 #
 #   excalidraw:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/excalidraw
+#     registry: ghcr.io
+#     repository: opendesk-edu/excalidraw
 #     tag: latest
 #
 #   planka:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/planka
+#     registry: ghcr.io
+#     repository: opendesk-edu/planka
 #     tag: latest
 #
 #   self-service-password:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/self-service-password
+#     registry: ghcr.io
+#     repository: opendesk-edu/self-service-password
 #     tag: latest
 #
 #   user-import:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/user-import
+#     registry: ghcr.io
+#     repository: opendesk-edu/user-import
 #     tag: latest
 #
 #   opendesk-dev-agent-operator:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/opendesk-dev-agent-operator
+#     registry: ghcr.io
+#     repository: tobias-weiss-ai-xr/opendesk-dev-agent-operator
 #     tag: main
 #
 #   moodle-shib:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/moodle-shib
+#     registry: ghcr.io
+#     repository: opendesk-edu/moodle-shib
 #     tag: latest
 #
 #   ilias-shibboleth:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/ilias-shibboleth
+#     registry: ghcr.io
+#     repository: opendesk-edu/ilias-shibboleth
 #     tag: latest
 #
 #   ilias:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/ilias
+#     registry: ghcr.io
+#     repository: opendesk-edu/ilias
 #     tag: latest
 #
 #   moodle:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/moodle
+#     registry: ghcr.io
+#     repository: opendesk-edu/moodle
 #     tag: latest
 #
 #   collabora:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/collabora
+#     registry: ghcr.io
+#     repository: opendesk-edu/collabora
 #     tag: latest
 #
 #   clamav:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/clamav
+#     registry: ghcr.io
+#     repository: opendesk-edu/clamav
 #     tag: latest
 #
 #   etherpad:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/etherpad
+#     registry: ghcr.io
+#     repository: opendesk-edu/etherpad
 #     tag: "1.9.9"
 #
 #   element:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/element
+#     registry: ghcr.io
+#     repository: opendesk-edu/element
 #     tag: latest
 #
 #   mariadb:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/mariadb
+#     registry: ghcr.io
+#     repository: opendesk-edu/mariadb
 #     tag: latest
 #
 #   redis:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/redis
+#     registry: ghcr.io
+#     repository: opendesk-edu/redis
 #     tag: latest
 #
 #   snipr:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/snipr
+#     registry: ghcr.io
+#     repository: tobias-weiss-ai-xr/snipr
 #     tag: latest
 #
 #   zot:
-#     registry: registry.gitlab.opencode.de
-#     repository: umr/zot-registry
-#     tag: latest
+#     registry: ghcr.io
+#     repository: project-zot/zot
+#     tag: "v2.1.0"
 
 # =============================================================================
 # Option 3: Local Zot Registry — PULL-THROUGH CACHE
@@ -304,49 +308,49 @@ images:
 # Requires: Zot registry deployed with pull-through cache configured
 # Best for: air-gapped clusters, when no external registry is accessible
 #
-# To use this option, uncomment the block below and comment out the ghcr block above:
+# To use this option, uncomment the block below and comment out the opencode block above:
 #
 # imageSource: zot
 #
 # images:
 #   postgresql:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: opendesk-edu/postgresql
+#     repository: umr/postgresql
 #     tag: latest
 #
 #   memcached:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: opendesk-edu/memcached
+#     repository: umr/memcached
 #     tag: latest
 #
 #   keycloak:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: opendesk-edu/supplier/univention/keycloak
+#     repository: umr/keycloak
 #     tag: "26.7.0"
 #
 #   sogo:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: opendesk-edu/sogo
+#     repository: umr/sogo
 #     tag: latest
 #
 #   stalwart:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: opendesk-edu/stalwart
+#     repository: umr/stalwart
 #     tag: latest
 #
 #   opencloud:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: opendesk-edu/opencloud
+#     repository: umr/opencloud
 #     tag: "4.0.3"
 #
 #   snipr:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: tobias-weiss-ai-xr/snipr
+#     repository: umr/snipr
 #     tag: latest
 #
 #   zot:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: project-zot/zot
-#     tag: "v2.1.0"
+#     repository: umr/zot-registry
+#     tag: latest
 #
-#   # (Add other images as needed — Zot will pull-through from GHCR)
+#   # (Add other images as needed — Zot will pull-through from upstream)

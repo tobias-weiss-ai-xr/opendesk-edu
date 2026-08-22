@@ -4,8 +4,8 @@
 replicaCount: 2
 
 image:
-  registry: ghcr.io
-  repository: opendesk-edu/opencloud
+  registry: registry.opencode.de
+  repository: umr/opencloud
   tag: 4.0.3
   pullPolicy: IfNotPresent
 

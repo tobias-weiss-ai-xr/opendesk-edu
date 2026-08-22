@@ -7,8 +7,8 @@
 stalwart:
   # Image configuration
   image:
-    registry: ghcr.io
-    repository: opendesk-edu/stalwart
+    registry: registry.opencode.de
+    repository: umr/stalwart
     tag: "latest"
     pullPolicy: IfNotPresent
 
