@@ -75,7 +75,7 @@ See [Deployment Guide](./docs/deployment.md) for detailed instructions.
 | [DFN-AAI Federation](./docs/dfn-aai-federation.md) | SAML federation setup |
 | [Testing](./docs/testing.md) | E2E and integration tests |
 | [Course Provisioning API](./docs/course-provisioning-api.md) | REST API docs |
-| [Paper Work](./docs/paper-work/README.md) | Processing Directory + DPIA Templates (GDPR Art. 30 & 35) |
+| [Paper Work – Datenschutzvorlagen](https://github.com/opendesk-edu/opendesk-edu-spec/tree/main/templates/paper-work) | VVT (Art. 30), DSFA (Art. 35), TOM (Art. 32) — generalisierte Vorlagen; kanonischer Ort: `opendesk-edu-spec/templates/paper-work/` (lokaler Pointer: [docs/paper-work/](./docs/paper-work/README.md)) |
 
 Full documentation in [`docs/`](./docs/).
 
