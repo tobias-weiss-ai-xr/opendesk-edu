@@ -1,4 +1,4 @@
-# Desk Test - Administrationshandbuch
+# openDesk Edu – Administrationshandbuch (UMR-Deployment: Desk Test)
 
 > **Version:** 1.0  
 > **Stand:** Juni 2026  
@@ -7,9 +7,11 @@
 
 ## Einführung
 
-Dieses Handbuch beschreibt die Verwaltung und Wartung der **Desk Test**-Umgebung (desk-test.uni-marburg.de). 
+Dieses Handbuch beschreibt die Verwaltung und Wartung des **Desk Test**-Deployments (desk-test.uni-marburg.de) von **openDesk Edu** – dem digitalen souveränen Arbeitsplatz.
 
-Desk Test ist eine Pilotinstallation eines **digitalen souveränen Arbeitsplatzes** auf Bare-Metal-Servern mit k3s (bleeding edge).
+Desk Test ist die UMR-Pilotinstallation auf Bare-Metal-Servern mit k3s (bleeding edge).
+
+Für die Gesamtarchitektur von openDesk Edu siehe die [Architekturdokumentation (arc42)](./arc42.md).
 
 ---
 

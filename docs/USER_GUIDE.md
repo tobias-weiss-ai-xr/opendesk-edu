@@ -1,4 +1,4 @@
-# Desk Test - Nutzerhandbuch
+# openDesk Edu – Nutzerhandbuch (UMR-Deployment: Desk Test)
 
 > **Version:** 1.0  
 > **Stand:** Juni 2026  
@@ -7,9 +7,11 @@
 
 ## Einführung
 
-Willkommen bei **Desk Test** (desk-test.uni-marburg.de) - Ihrem digitalen souveränen Arbeitsplatz!
+Willkommen bei **Desk Test** (desk-test.uni-marburg.de) - dem UMR-Deployment von **openDesk Edu**, Ihrem digitalen souveränen Arbeitsplatz!
 
-Desk Test bietet eine integrierte Umgebung für Produktivität, Kollaboration und Kommunikation. Alle Daten bleiben on-premises im HRZ und unterliegen den Datenschutzbestimmungen der Philipps-Universität Marburg.
+openDesk Edu ist eine integrierte Umgebung für Produktivität, Kollaboration und Kommunikation. Alle Daten bleiben on-premises im HRZ und unterliegen den Datenschutzbestimmungen der Philipps-Universität Marburg.
+
+Dieses Handbuch beschreibt die Nutzung an der Philipps-Universität Marburg (Deployment **Desk Test**).
 
 ---
 
@@ -388,6 +390,11 @@ Biegenstraße 10
 
 - [IT-Nutzungsordnung der Uni Marburg](https://www.uni-marburg.de/de/hrz/ueber-uns/it-management/it-nutzungsordnung)
 - Spezifische Bedingungen für die Testumgebung siehe Anmeldung
+
+### Weitere Dokumentation
+
+- [Architekturdokumentation (arc42)](./arc42.md)
+- [Administrationshandbuch](./ADMIN_GUIDE.md)
 
 ---
 
