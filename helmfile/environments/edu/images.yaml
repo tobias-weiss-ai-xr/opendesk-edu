@@ -4,7 +4,7 @@ images:
     tag: latest
   opencloud:
     repository: registry.opencode.de/umr/opencloud
-    tag: 4.0.3
+    tag: 7.2.2
   typo3:
     repository: registry.opencode.de/umr/typo3
     tag: 13.4.0

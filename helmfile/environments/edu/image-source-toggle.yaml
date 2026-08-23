@@ -63,7 +63,7 @@ images:
   opencloud:
     registry: registry.opencode.de
     repository: umr/opencloud
-    tag: "4.0.3"
+    tag: "7.2.2"
 
   # --- Additional EDU Apps ---
   bookstack:
@@ -204,7 +204,7 @@ images:
 #   opencloud:
 #     registry: ghcr.io
 #     repository: opendesk-edu/opencloud
-#     tag: "4.0.3"
+#     tag: "7.2.2"
 #
 #   bookstack:
 #     registry: ghcr.io
@@ -341,7 +341,7 @@ images:
 #   opencloud:
 #     registry: zot-registry.opendesk.svc:5000
 #     repository: umr/opencloud
-#     tag: "4.0.3"
+#     tag: "7.2.2"
 #
 #   snipr:
 #     registry: zot-registry.opendesk.svc:5000

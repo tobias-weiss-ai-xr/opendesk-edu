@@ -40,12 +40,12 @@
         maintainer = "openDesk Edu Team <team@opendesk-edu.org>";
         source = "https://github.com/opendesk-edu/opendesk-edu/tree/main/opendesk-nix/opencloud";
 
-        version = "4.0.3";
+        version = "7.2.2";
 
         # Upstream linux binary (reproducible, pinned hash from release .sha256)
         src = pkgs.fetchurl {
           url = "https://github.com/opencloud-eu/opencloud/releases/download/v${version}/opencloud-${version}-linux-amd64";
-          sha256 = "74c736b73823748e12bbabf97fe096cf4ac38521d87c15e9c1920c797f31798c";
+          sha256 = "50b2db9e71f74e8385cb18f16124e37d4507327c2cc39141496ee9dcd828d56e";
         };
 
         opencloud = pkgs.stdenv.mkDerivation {

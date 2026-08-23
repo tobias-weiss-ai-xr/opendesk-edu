@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Use official OpenCloud image as base
-FROM opencloudeu/opencloud:4.0.3 AS upstream
+FROM opencloudeu/opencloud:7.2.2 AS upstream
 
 # Build final image based on Alpine
 FROM alpine:3.20

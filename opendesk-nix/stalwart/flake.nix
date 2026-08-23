@@ -36,8 +36,34 @@
         maintainer = "openDesk Edu Team <team@opendesk-edu.org>";
         source = "https://github.com/opendesk-edu/opendesk-edu/tree/main/opendesk-nix/stalwart";
 
-        pkg = pkgs.stalwart-mail;
-        version = pkg.version; # e.g. 0.16.15
+        version = "0.16.17";
+
+        # Upstream linux-musl binary (pinned hash, signed via Sigstore).
+        # Stalwart publishes per-arch tarballs; nixpkgs packages only 0.15.x.
+        src = pkgs.fetchurl {
+          url = "https://github.com/stalwartlabs/stalwart/releases/download/v${version}/stalwart-x86_64-unknown-linux-musl.tar.gz";
+          sha256 = "d0cda8fb3d9bad3284c2e60a069e08d6e6f9bfe646c7d8a004d04926b3f86f9d";
+        };
+
+        pkg = pkgs.stdenv.mkDerivation {
+          pname = "stalwart";
+          inherit version src;
+          dontUnpack = true;
+          dontConfigure = true;
+          dontBuild = true;
+          installPhase = ''
+            runHook preInstall
+            tar xzf $src -C .
+            install -Dm755 ./stalwart $out/bin/stalwart
+            runHook postInstall
+          '';
+          meta = with pkgs.lib; {
+            description = "Stalwart Mail Server – SMTP/IMAP/JMAP/MSA";
+            homepage = "https://stalw.art";
+            license = licenses.agpl3Only;
+            mainProgram = "stalwart";
+          };
+        };
 
         labels = {
           maintainer = maintainer;
