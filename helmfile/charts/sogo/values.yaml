@@ -3,7 +3,7 @@
 sogo:
   image:
     registry: registry.opencode.de
-    repository: umr/sogo
+    repository: umr/opendesk-edu/containers/sogo
     tag: "latest"
     pullPolicy: IfNotPresent
 

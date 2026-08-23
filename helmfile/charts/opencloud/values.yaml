@@ -5,7 +5,7 @@ replicaCount: 2
 
 image:
   registry: registry.opencode.de
-  repository: umr/opencloud
+  repository: umr/opendesk-edu/containers/opencloud
   tag: 7.2.2
   pullPolicy: IfNotPresent
 

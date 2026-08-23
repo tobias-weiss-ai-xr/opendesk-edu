@@ -1,18 +1,18 @@
 images:
   stalwart:
-    repository: registry.opencode.de/umr/stalwart
+    repository: registry.opencode.de/umr/opendesk-edu/containers/stalwart
     tag: latest
   opencloud:
-    repository: registry.opencode.de/umr/opencloud
+    repository: registry.opencode.de/umr/opendesk-edu/containers/opencloud
     tag: 7.2.2
   typo3:
-    repository: registry.opencode.de/umr/typo3
+    repository: registry.opencode.de/umr/opendesk-edu/containers/typo3
     tag: 13.4.0
   mayan:
-    repository: registry.opencode.de/umr/mayanedms
+    repository: registry.opencode.de/umr/opendesk-edu/containers/mayanedms
     tag: 4.5.0
     pullPolicy: IfNotPresent
   paperless:
-    repository: registry.opencode.de/umr/paperless-ngx
+    repository: registry.opencode.de/umr/opendesk-edu/containers/paperless-ngx
     tag: 2.12.0
     pullPolicy: IfNotPresent

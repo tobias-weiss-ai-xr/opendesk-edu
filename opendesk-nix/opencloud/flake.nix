@@ -7,19 +7,19 @@
 #   - reproducible dockerTools build (no mutable base image)
 #   - non-root user, minimal contents, OCI labels incl. ZKI IT-Grundschutz +
 #     container.gov.de metadata
-#   - registry: registry.opencode.de/umr
+#   - registry: registry.opencode.de/umr/opendesk-edu/containers/opendesk-edu/containers
 #
 # OpenCloud ships as a single static binary per release; we vendor the
 # upstream linux-amd64 binary with a pinned SRI hash and wrap it in a
 # minimal container. Future version bumps: update `version` and the sha256.
 #
 # Usage:
-#   nix build .#opencloud        # registry.opencode.de/umr/opencloud:<version>
+#   nix build .#opencloud        # registry.opencode.de/umr/opendesk-edu/containers/opencloud:<version>
 #   nix build .#default
 #
 #   docker load < result
-#   docker tag opendesk-opencloud:<version> registry.opencode.de/umr/opencloud:<version>
-#   docker push registry.opencode.de/umr/opencloud:<version>
+#   docker tag opendesk-opencloud:<version> registry.opencode.de/umr/opendesk-edu/containers/opencloud:<version>
+#   docker push registry.opencode.de/umr/opendesk-edu/containers/opencloud:<version>
 #
 # Runtime configuration (OIDC, storage, ocm, apps) is applied via the Helm
 # chart (helmfile/charts/opencloud) using ConfigMaps/Secrets.
@@ -36,7 +36,7 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        registry = "registry.opencode.de/umr";
+        registry = "registry.opencode.de/umr/opendesk-edu/containers";
         maintainer = "openDesk Edu Team <team@opendesk-edu.org>";
         source = "https://github.com/opendesk-edu/opendesk-edu/tree/main/opendesk-nix/opencloud";
 

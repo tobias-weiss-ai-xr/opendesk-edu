@@ -318,7 +318,7 @@ update_argocd_manifests() {
         sed -i "s|repository: opencloudeu/|repository: ${prefix}/|g" "$f"
         sed -i "s|repository: stalwartlabs/|repository: ${prefix}/|g" "$f"
         sed -i "s|repository: weissto/|repository: ${prefix}/|g" "$f"
-        sed -i "s|repository: umr/|repository: ${prefix}/|g" "$f"
+        sed -i "s|repository: umr/opendesk-edu/containers/|repository: ${prefix}/|g" "$f"
 
         log_success "  ${name} → ${registry}/${prefix}"
     done
@@ -335,7 +335,7 @@ update_argocd_manifests() {
         sed -i "s|repository: opencloudeu/|repository: ${prefix}/|g" "$values_file"
         sed -i "s|repository: stalwartlabs/|repository: ${prefix}/|g" "$values_file"
         sed -i "s|repository: weissto/|repository: ${prefix}/|g" "$values_file"
-        sed -i "s|repository: umr/|repository: ${prefix}/|g" "$values_file"
+        sed -i "s|repository: umr/opendesk-edu/containers/|repository: ${prefix}/|g" "$values_file"
         log_success "  values-minimal.yaml updated"
     fi
 }

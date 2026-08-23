@@ -2,7 +2,7 @@
 # Image Source Toggle for OpenDesk EDU
 #
 # This file lets you toggle all container image sources between:
-#   1. registry.opencode.de/umr (opencode.de container registry - DEFAULT)
+#   1. registry.opencode.de/umr/opendesk-edu/containers (opencode.de container registry - DEFAULT)
 #   2. ghcr.io (GitHub Container Registry - mirror, fallback)
 #   3. zot-registry.opendesk.svc:5000 (local Zot cache - pull-through)
 #
@@ -18,7 +18,7 @@
 #   Set image.registry and image.repository in values
 #
 # NOTE (2026-08-22): openDesk Edu images are now built with Nix and pushed
-# to registry.opencode.de/umr (see opendesk-nix/ for the image flakes).
+# to registry.opencode.de/umr/opendesk-edu/containers (see opendesk-nix/ for the image flakes).
 # registry.opencode.de is therefore the DEFAULT source. For public access
 # the same tags are mirrored to ghcr.io/opendesk-edu (see Option 2).
 # =============================================================================
@@ -26,7 +26,7 @@
 # =============================================================================
 # Option 1: registry.opencode.de (opencode.de container registry) — DEFAULT
 # =============================================================================
-# All images pulled from registry.opencode.de/umr/*
+# All images pulled from registry.opencode.de/umr/opendesk-edu/containers/*
 # Images are Nix-built (opendesk-nix/**) and pushed via opendesk-nix/push-images.sh
 # or .github/workflows/nix-images.yml
 # Requires: OPENCODE_TOKEN / registry pull secret
@@ -38,138 +38,138 @@ images:
   # --- Core Services ---
   postgresql:
     registry: registry.opencode.de
-    repository: umr/postgresql
+    repository: umr/opendesk-edu/containers/postgresql
     tag: latest
 
   memcached:
     registry: registry.opencode.de
-    repository: umr/memcached
+    repository: umr/opendesk-edu/containers/memcached
     tag: latest
 
   keycloak:
     registry: registry.opencode.de
-    repository: umr/keycloak
+    repository: umr/opendesk-edu/containers/keycloak
     tag: "26.7.0"
 
   # --- OpenDesk EDU Core Apps ---
   sogo:
     registry: registry.opencode.de
-    repository: umr/sogo
+    repository: umr/opendesk-edu/containers/sogo
     tag: latest
 
   stalwart:
     registry: registry.opencode.de
-    repository: umr/stalwart
+    repository: umr/opendesk-edu/containers/stalwart
     tag: latest
 
   opencloud:
     registry: registry.opencode.de
-    repository: umr/opencloud
+    repository: umr/opendesk-edu/containers/opencloud
     tag: "7.2.2"
 
   # --- Additional EDU Apps ---
   bookstack:
     registry: registry.opencode.de
-    repository: umr/bookstack
+    repository: umr/opendesk-edu/containers/bookstack
     tag: latest
 
   drawio:
     registry: registry.opencode.de
-    repository: umr/drawio
+    repository: umr/opendesk-edu/containers/drawio
     tag: latest
 
   excalidraw:
     registry: registry.opencode.de
-    repository: umr/excalidraw
+    repository: umr/opendesk-edu/containers/excalidraw
     tag: latest
 
   planka:
     registry: registry.opencode.de
-    repository: umr/planka
+    repository: umr/opendesk-edu/containers/planka
     tag: latest
 
   self-service-password:
     registry: registry.opencode.de
-    repository: umr/self-service-password
+    repository: umr/opendesk-edu/containers/self-service-password
     tag: latest
 
   user-import:
     registry: registry.opencode.de
-    repository: umr/user-import
+    repository: umr/opendesk-edu/containers/user-import
     tag: latest
 
   opendesk-dev-agent-operator:
     registry: registry.opencode.de
     # published from github.com/tobias-weiss-ai-xr/opendesk-dev-agent-operator
     # Tag convention (upstream + umr): branch tag, not latest
-    repository: umr/opendesk-dev-agent-operator
+    repository: umr/opendesk-edu/containers/opendesk-dev-agent-operator
     tag: main
 
   moodle-shib:
     registry: registry.opencode.de
-    repository: umr/moodle-shib
+    repository: umr/opendesk-edu/containers/moodle-shib
     tag: latest
 
   ilias-shibboleth:
     registry: registry.opencode.de
-    repository: umr/ilias-shibboleth
+    repository: umr/opendesk-edu/containers/ilias-shibboleth
     tag: latest
 
   ilias:
     registry: registry.opencode.de
-    repository: umr/ilias
+    repository: umr/opendesk-edu/containers/ilias
     tag: latest
 
   moodle:
     registry: registry.opencode.de
-    repository: umr/moodle
+    repository: umr/opendesk-edu/containers/moodle
     tag: latest
 
   collabora:
     registry: registry.opencode.de
-    repository: umr/collabora
+    repository: umr/opendesk-edu/containers/collabora
     tag: latest
 
   clamav:
     registry: registry.opencode.de
-    repository: umr/clamav
+    repository: umr/opendesk-edu/containers/clamav
     tag: latest
 
   etherpad:
     registry: registry.opencode.de
-    repository: umr/etherpad
+    repository: umr/opendesk-edu/containers/etherpad
     tag: "1.9.9"
 
   element:
     registry: registry.opencode.de
-    repository: umr/element
+    repository: umr/opendesk-edu/containers/element
     tag: latest
 
   mariadb:
     registry: registry.opencode.de
-    repository: umr/mariadb
+    repository: umr/opendesk-edu/containers/mariadb
     tag: latest
 
   redis:
     registry: registry.opencode.de
-    repository: umr/redis
+    repository: umr/opendesk-edu/containers/redis
     tag: latest
 
   snipr:
     registry: registry.opencode.de
-    repository: umr/snipr
+    repository: umr/opendesk-edu/containers/snipr
     tag: latest
 
   # --- Infrastructure ---
   zot:
     registry: registry.opencode.de
-    repository: umr/zot-registry
+    repository: umr/opendesk-edu/containers/zot-registry
     tag: latest
 
 # =============================================================================
 # Option 2: GHCR (GitHub Container Registry) — PUBLIC MIRROR of opencode
 # =============================================================================
-# Images mirrored 1:1 from registry.opencode.de/umr to ghcr.io/opendesk-edu
+# Images mirrored 1:1 from registry.opencode.de/umr/opendesk-edu/containers to ghcr.io/opendesk-edu
 # (same tags: version + latest) — anonymous pulls, no opencode token needed.
 # Automatically kept in sync via .github/workflows/nix-images.yml (GITHUB_TOKEN)
 # or manually via opendesk-nix/push-images.sh.
@@ -324,42 +324,42 @@ images:
 # images:
 #   postgresql:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: umr/postgresql
+#     repository: umr/opendesk-edu/containers/postgresql
 #     tag: latest
 #
 #   memcached:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: umr/memcached
+#     repository: umr/opendesk-edu/containers/memcached
 #     tag: latest
 #
 #   keycloak:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: umr/keycloak
+#     repository: umr/opendesk-edu/containers/keycloak
 #     tag: "26.7.0"
 #
 #   sogo:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: umr/sogo
+#     repository: umr/opendesk-edu/containers/sogo
 #     tag: latest
 #
 #   stalwart:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: umr/stalwart
+#     repository: umr/opendesk-edu/containers/stalwart
 #     tag: latest
 #
 #   opencloud:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: umr/opencloud
+#     repository: umr/opendesk-edu/containers/opencloud
 #     tag: "7.2.2"
 #
 #   snipr:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: umr/snipr
+#     repository: umr/opendesk-edu/containers/snipr
 #     tag: latest
 #
 #   zot:
 #     registry: zot-registry.opendesk.svc:5000
-#     repository: umr/zot-registry
+#     repository: umr/opendesk-edu/containers/zot-registry
 #     tag: latest
 #
 #   # (Add other images as needed — Zot will pull-through from upstream)

@@ -7,17 +7,17 @@
 #   - reproducible dockerTools build (no mutable base image)
 #   - non-root user, minimal contents, OCI labels incl. ZKI IT-Grundschutz +
 #     container.gov.de metadata
-#   - registry: registry.opencode.de/umr
+#   - registry: registry.opencode.de/umr/opendesk-edu/containers/opendesk-edu/containers
 #
 # Usage:
-#   nix build .#sogo5            # registry.opencode.de/umr/sogo5:<version>
+#   nix build .#sogo5            # registry.opencode.de/umr/opendesk-edu/containers/sogo5:<version>
 #   nix build .#sogo6
 #   nix build .#default          # = sogo6
 #
 #   # load + tag + push (or use scripts/push-*.sh):
 #   docker load < result
-#   docker tag opendesk-sogo6:<version> registry.opencode.de/umr/sogo6:<version>
-#   docker push registry.opencode.de/umr/sogo6:<version>
+#   docker tag opendesk-sogo6:<version> registry.opencode.de/umr/opendesk-edu/containers/sogo6:<version>
+#   docker push registry.opencode.de/umr/opendesk-edu/containers/sogo6:<version>
 #
 # Runtime configuration (SOGo.plist, db, ldap, oidc, memcached) is applied
 # via the Helm chart (helmfile/charts/sogo) using ConfigMaps/Secrets.
@@ -34,7 +34,7 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        registry = "registry.opencode.de/umr";
+        registry = "registry.opencode.de/umr/opendesk-edu/containers";
         maintainer = "openDesk Edu Team <team@opendesk-edu.org>";
         source = "https://github.com/opendesk-edu/opendesk-edu/tree/main/opendesk-nix/sogo";
 

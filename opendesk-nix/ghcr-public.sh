@@ -5,7 +5,7 @@
 # Mark ghcr.io/opendesk-edu/* packages as PUBLIC via the GitHub API.
 #
 # Public = anonymous pulls (no token needed) – required for the public mirror
-# of the registry.opencode.de/umr images.
+# of the registry.opencode.de/umr/opendesk-edu/containers images.
 #
 # Prerequisites (one of):
 #   - gh CLI authenticated with a token that has  `packages: read+write`
