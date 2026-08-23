@@ -35,7 +35,10 @@ on:
 env:
   OPENCODE_REGISTRY: registry.opencode.de/umr
   GHCR_REGISTRY: ghcr.io/opendesk-edu
+  GHCR_ORG: opendesk-edu
   OPENCODE_USER: weiss
+  # optional: if absent, opencode steps are skipped and only GHCR is used
+  OPENCODE_TOKEN: ${{ secrets.OPENCODE_TOKEN }}
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -114,11 +117,12 @@ jobs:
           docker images --format "{{.Repository}}:{{.Tag}}" | grep -E "^(sogo6|stalwart|opencloud):" | sort
 
       - name: Log in to registry.opencode.de
+        if: env.OPENCODE_TOKEN != ''
         uses: docker/login-action@v3
         with:
           registry: registry.opencode.de
           username: ${{ env.OPENCODE_USER }}
-          password: ${{ secrets.OPENCODE_TOKEN }}
+          password: ${{ env.OPENCODE_TOKEN }}
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -131,12 +135,36 @@ jobs:
         run: |
           set -euxo pipefail
           # local-image|version|repo
+          REGS="${{ env.GHCR_REGISTRY }}"
+          [ -n "${{ env.OPENCODE_TOKEN }}" ] && REGS="${{ env.OPENCODE_REGISTRY }} $REGS"
+          echo "== pushing to: $REGS"
           for entry in "sogo6|5.12.10|sogo" "sogo6|5.12.10|sogo6" "stalwart|0.16.17|stalwart" "opencloud|7.2.2|opencloud"; do
             IFS='|' read -r localimg tag repo <<< "$entry"
-            for reg in "${{ env.OPENCODE_REGISTRY }}" "${{ env.GHCR_REGISTRY }}"; do
+            for reg in $REGS; do
               for t in "$tag" latest; do
                 docker tag "$localimg:$tag" "$reg/$repo:$t"
                 docker push "$reg/$repo:$t"
               done
             done
+          done
+
+      # ---------------------------------------------------------------------
+      # Public visibility on GHCR: mark each freshly pushed package public so
+      # clusters can pull anonymously. Backstop: org default visibility should
+      # be set to "public" in GitHub (Settings -> Packages) – then this step
+      # is redundant but harmless.
+      # ---------------------------------------------------------------------
+      - name: Mark GHCR packages public
+        continue-on-error: true
+        run: |
+          set -x
+          for pkg in sogo sogo6 stalwart opencloud; do
+            code=$(curl -s -o /tmp/ghcr-public-$pkg.json -w "%{http_code}" \
+              -X POST \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/orgs/${{ env.GHCR_ORG }}/packages/container/$pkg/visibility" \
+              -d '{"visibility":"public"}')
+            echo "== ghcr.io/opendesk-edu/$pkg -> $code"
           done
