@@ -57,7 +57,19 @@
           "de.container.gov.sbom-format" = "CycloneDX-1.5, SPDX-2.3";
         };
 
-        version = pkgs.sogo.version; # e.g. 5.12.9
+        # SOGo 5.12.10 (GitHub tag SOGo-5.12.10, alinto/sogo) – version override
+        # on the nixpkgs package (nixpkgs still ships 5.12.9).
+        sogo = pkgs.sogo.overrideAttrs (old: {
+          version = "5.12.10";
+          src = pkgs.fetchFromGitHub {
+            owner = "alinto";
+            repo = "sogo";
+            rev = "SOGo-5.12.10";
+            sha256 = "1ffgmivk6gaxkar24ii3hrlxs36wyah4ns49bc11pd69kzw0s928";
+          };
+        });
+
+        version = sogo.version; # 5.12.10
 
         mkSogoImage = { name, uid }: pkgs.dockerTools.buildLayeredImage {
           inherit name;
@@ -66,7 +78,7 @@
           maxLayers = 100;
 
           contents = [
-            pkgs.sogo
+            sogo
             pkgs.openldap
             pkgs.gnutls
             pkgs.memcached
@@ -96,7 +108,7 @@
           '';
 
           config = {
-            Cmd = [ "${pkgs.sogo}/sbin/sogod" ];
+            Cmd = [ "${sogo}/sbin/sogod" ];
             Entrypoint = [ "${pkgs.tini}/bin/tini" "--" ];
             User = "${toString uid}:${toString uid}";
             WorkingDir = "/var/lib/sogo";

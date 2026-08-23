@@ -19,14 +19,16 @@
 #
 # NOTE (2026-08-22): openDesk Edu images are now built with Nix and pushed
 # to registry.opencode.de/umr (see opendesk-nix/ for the image flakes).
-# registry.opencode.de is therefore the DEFAULT source.
+# registry.opencode.de is therefore the DEFAULT source. For public access
+# the same tags are mirrored to ghcr.io/opendesk-edu (see Option 2).
 # =============================================================================
 
 # =============================================================================
 # Option 1: registry.opencode.de (opencode.de container registry) — DEFAULT
 # =============================================================================
 # All images pulled from registry.opencode.de/umr/*
-# Images are Nix-built (opendesk-nix/**) and pushed via push-to-opencode.sh
+# Images are Nix-built (opendesk-nix/**) and pushed via opendesk-nix/push-images.sh
+# or .github/workflows/nix-images.yml
 # Requires: OPENCODE_TOKEN / registry pull secret
 # Best for: production, air-gapped, sovereign operation
 
@@ -165,11 +167,13 @@ images:
     tag: latest
 
 # =============================================================================
-# Option 2: GHCR (GitHub Container Registry) — MIRROR
+# Option 2: GHCR (GitHub Container Registry) — PUBLIC MIRROR of opencode
 # =============================================================================
-# All images pulled directly from ghcr.io/opendesk-edu/*
-# Requires: DNS resolution for ghcr.io, internet access
-# Best for: development, CI/CD, when GHCR is accessible
+# Images mirrored 1:1 from registry.opencode.de/umr to ghcr.io/opendesk-edu
+# (same tags: version + latest) — anonymous pulls, no opencode token needed.
+# Automatically kept in sync via .github/workflows/nix-images.yml (GITHUB_TOKEN)
+# or manually via opendesk-nix/push-images.sh.
+# Best for: development, CI/CD, clusters without access to opencode.de
 #
 # To use this option, uncomment the block below and comment out the opencode block above:
 #
@@ -194,12 +198,17 @@ images:
 #   sogo:
 #     registry: ghcr.io
 #     repository: opendesk-edu/sogo
-#     tag: latest
+#     tag: "5.12.10"
+#
+#   sogo6:
+#     registry: ghcr.io
+#     repository: opendesk-edu/sogo6
+#     tag: "5.12.10"
 #
 #   stalwart:
 #     registry: ghcr.io
 #     repository: opendesk-edu/stalwart
-#     tag: latest
+#     tag: "0.16.17"
 #
 #   opencloud:
 #     registry: ghcr.io

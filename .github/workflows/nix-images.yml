@@ -1,0 +1,142 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+# =============================================================================
+# Nix Images – build the opendesk-nix component images and push them to
+# BOTH registries:
+#   - registry.opencode.de/umr   (primary, EU-sovereign)   [OPENCODE_TOKEN]
+#   - ghcr.io/opendesk-edu       (public mirror)           [GITHUB_TOKEN]
+#
+# Public mirror strategy: registry.opencode.de is the source of truth; every
+# tag (version + latest) is mirrored 1:1 to GHCR so clusters without access
+# to opencode.de can pull anonymously. GHCR credentials come from
+# GITHUB_TOKEN (no extra PAT) -> runs on ubuntu-latest, no self-hosted
+# runner required.
+#
+# Manual mirror (without rebuilding): workflow_dispatch -> "Mirror only".
+# =============================================================================
+
+name: Nix Images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "opendesk-nix/**"
+      - ".github/workflows/nix-images.yml"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "build = build+push (default), mirror = opencode -> ghcr only"
+        required: false
+        default: "build"
+        type: choice
+        options: [build, mirror]
+
+env:
+  OPENCODE_REGISTRY: registry.opencode.de/umr
+  GHCR_REGISTRY: ghcr.io/opendesk-edu
+  OPENCODE_USER: weiss
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Mirror only: pull existing tags from opencode.de and re-push to GHCR.
+  # ---------------------------------------------------------------------------
+  mirror:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'mirror'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Install skopeo
+        run: sudo apt-get update && sudo apt-get install -y skopeo
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Mirror tags opencode.de -> ghcr.io
+        run: |
+          set -euxo pipefail
+          for img in sogo sogo6 stalwart opencloud; do
+            for tag in 5.12.10 0.16.17 7.2.2 latest; do
+              # copy only tags that actually exist upstream
+              if skopeo inspect "docker://${{ env.OPENCODE_REGISTRY }}/$img:$tag" >/dev/null 2>&1; then
+                echo "== mirror $img:$tag"
+                skopeo copy \
+                  --dest-creds "${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}" \
+                  "docker://${{ env.OPENCODE_REGISTRY }}/$img:$tag" \
+                  "docker://${{ env.GHCR_REGISTRY }}/$img:$tag"
+              else
+                echo "== skip $img:$tag (not on opencode)"
+              fi
+            done
+          done
+
+  # ---------------------------------------------------------------------------
+  # Build the Nix images and push to BOTH registries.
+  # ---------------------------------------------------------------------------
+  build:
+    if: github.event_name == 'push' || !(github.event.inputs.mode == 'mirror')
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@v16
+      - uses: DeterminateSystems/magic-nix-cache-action@v9
+
+      - name: Build images with Nix
+        run: |
+          set -euxo pipefail
+          cd opendesk-nix
+          for d in sogo stalwart opencloud; do
+            pkg="$d"
+            [ "$d" = "sogo" ] && pkg="sogo6"
+            ( cd "$d" && nix build ".#packages.x86_64-linux.$pkg" --no-link --print-out-paths )
+          done
+
+      - name: Load images into docker and tag
+        run: |
+          set -euxo pipefail
+          cd opendesk-nix
+          for d in sogo stalwart opencloud; do
+            pkg="$d"
+            [ "$d" = "sogo" ] && pkg="sogo6"
+            ARCHIVE=$( cd "$d" && nix build ".#packages.x86_64-linux.$pkg" --no-link --print-out-paths | tail -1 )
+            docker load -i "$ARCHIVE"
+          done
+          docker images --format "{{.Repository}}:{{.Tag}}" | grep -E "^(sogo6|stalwart|opencloud):" | sort
+
+      - name: Log in to registry.opencode.de
+        uses: docker/login-action@v3
+        with:
+          registry: registry.opencode.de
+          username: ${{ env.OPENCODE_USER }}
+          password: ${{ secrets.OPENCODE_TOKEN }}
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to both registries (version + latest)
+        run: |
+          set -euxo pipefail
+          # local-image|version|repo
+          for entry in "sogo6|5.12.10|sogo" "sogo6|5.12.10|sogo6" "stalwart|0.16.17|stalwart" "opencloud|7.2.2|opencloud"; do
+            IFS='|' read -r localimg tag repo <<< "$entry"
+            for reg in "${{ env.OPENCODE_REGISTRY }}" "${{ env.GHCR_REGISTRY }}"; do
+              for t in "$tag" latest; do
+                docker tag "$localimg:$tag" "$reg/$repo:$t"
+                docker push "$reg/$repo:$t"
+              done
+            done
+          done
