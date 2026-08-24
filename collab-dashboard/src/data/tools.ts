@@ -1,112 +1,137 @@
-export interface CollabTool {
+export interface ServiceTool {
   id: string;
   name: string;
   description: string;
-  coCalcFeature: string;
-  category: 'computing' | 'editing' | 'ai' | 'visualization' | 'teaching' | 'infrastructure';
-  status: 'stable' | 'beta' | 'planned';
-  launchUrl?: string;
-  upstreamUrl: string;
+  category: 'identity' | 'communication' | 'productivity' | 'knowledge' | 'development' | 'infrastructure';
+  status: 'live' | 'beta' | 'planned';
+  launchUrl: string;
+  ssoEnabled: boolean;
+  icon: string;
 }
 
-export const tools: CollabTool[] = [
+export const services: ServiceTool[] = [
+  // ── Identity ──
   {
-    id: 'jupyterhub',
-    name: 'JupyterHub',
-    description: 'Multi-user Jupyter notebooks with kernels for Python, R, Julia, SageMath, and Octave.',
-    coCalcFeature: '↔ Jupyter Notebooks',
-    category: 'computing',
-    status: 'stable',
-    launchUrl: 'https://jupyter.opendesk.example.com',
-    upstreamUrl: 'https://jupyter.org/hub',
+    id: 'keycloak',
+    name: 'Keycloak SSO',
+    description: 'Single Sign-On identity provider. Log in once to access all openDesk Edu services with your university account.',
+    category: 'identity',
+    status: 'live',
+    launchUrl: 'https://id.home.opendesk-edu.org/realms/opendesk/account/',
+    ssoEnabled: true,
+    icon: '🔐',
+  },
+
+  // ── Communication ──
+  {
+    id: 'element',
+    name: 'Element Chat',
+    description: 'Secure messaging and collaboration powered by Matrix. Real-time chat with end-to-end encryption.',
+    category: 'communication',
+    status: 'live',
+    launchUrl: 'https://chat.home.opendesk-edu.org',
+    ssoEnabled: true,
+    icon: '💬',
+  },
+
+  // ── Productivity ──
+  {
+    id: 'opencloud',
+    name: 'OpenCloud',
+    description: 'File storage, sharing, and collaboration. Upload, sync, and share documents with your team.',
+    category: 'productivity',
+    status: 'live',
+    launchUrl: 'https://cloud.home.opendesk-edu.org',
+    ssoEnabled: true,
+    icon: '☁️',
   },
   {
-    id: 'overleaf',
-    name: 'Overleaf CE',
-    description: 'Collaborative LaTeX editor with real-time preview and version control.',
-    coCalcFeature: '↔ Collaborative LaTeX',
-    category: 'editing',
-    status: 'stable',
-    launchUrl: 'https://latex.opendesk.example.com',
-    upstreamUrl: 'https://github.com/overleaf/overleaf',
+    id: 'sogo',
+    name: 'SOGo Webmail',
+    description: 'Web-based email, calendar, and contacts. Access your mailbox from any browser.',
+    category: 'productivity',
+    status: 'live',
+    launchUrl: 'https://mail.home.opendesk-edu.org',
+    ssoEnabled: true,
+    icon: '📧',
   },
+  {
+    id: 'openproject',
+    name: 'OpenProject',
+    description: 'Project management, time tracking, and agile boards. Plan and track your projects collaboratively.',
+    category: 'productivity',
+    status: 'live',
+    launchUrl: 'https://opendesk.home.opendesk-edu.org',
+    ssoEnabled: true,
+    icon: '📊',
+  },
+
+  // ── Knowledge ──
+  {
+    id: 'xwiki',
+    name: 'XWiki',
+    description: 'Collaborative wiki for documentation, knowledge sharing, and structured content.',
+    category: 'knowledge',
+    status: 'live',
+    launchUrl: 'https://xwiki.home.opendesk-edu.org',
+    ssoEnabled: true,
+    icon: '📚',
+  },
+
+  // ── Development ──
   {
     id: 'open-webui',
     name: 'Open WebUI',
-    description: 'ChatGPT-like interface for local LLMs powered by Ollama.',
-    coCalcFeature: '↔ AI Assistant',
-    category: 'ai',
+    description: 'ChatGPT-like interface for local LLMs. Interact with Qwen3 and other models hosted on the cluster.',
+    category: 'development',
     status: 'beta',
-    launchUrl: 'https://ai.opendesk.example.com',
-    upstreamUrl: 'https://github.com/open-webui/open-webui',
+    launchUrl: 'http://home.opendesk-edu.org:30115',
+    ssoEnabled: false,
+    icon: '🤖',
   },
+
+  // ── Infrastructure ──
   {
-    id: 'code-server',
-    name: 'code-server',
-    description: 'VS Code in the browser. Full IDE experience from any device.',
-    coCalcFeature: '↔ Python Editor',
-    category: 'computing',
-    status: 'stable',
-    launchUrl: 'https://code.opendesk.example.com',
-    upstreamUrl: 'https://github.com/coder/code-server',
-  },
-  {
-    id: 'rstudio',
-    name: 'RStudio Server',
-    description: 'Integrated development environment for R with Shiny app support.',
-    coCalcFeature: '↔ R Statistics',
-    category: 'computing',
-    status: 'beta',
-    launchUrl: 'https://r.opendesk.example.com',
-    upstreamUrl: 'https://posit.co/products/open-source/rstudio-server/',
-  },
-  {
-    id: 'ttyd',
-    name: 'Web Terminal',
-    description: 'Browser-based Linux terminal for command-line access.',
-    coCalcFeature: '↔ Linux Terminal',
+    id: 'argocd',
+    name: 'Argo CD',
+    description: 'GitOps continuous delivery. Manage and monitor Kubernetes deployments from Git repositories.',
     category: 'infrastructure',
-    status: 'stable',
-    launchUrl: 'https://term.opendesk.example.com',
-    upstreamUrl: 'https://github.com/tsl0922/ttyd',
+    status: 'live',
+    launchUrl: 'https://argocd.home.opendesk-edu.org',
+    ssoEnabled: false,
+    icon: '🚀',
+  },
+];
+
+export const staffServices: ServiceTool[] = [
+  {
+    id: 'sogo-staff',
+    name: 'SOGo Staff Mail',
+    description: 'Webmail for staff accounts.',
+    category: 'productivity',
+    status: 'live',
+    launchUrl: 'https://sogo-staff.home.opendesk-edu.org',
+    ssoEnabled: true,
+    icon: '📧',
   },
   {
-    id: 'kasmvnc',
-    name: 'KasmVNC Desktop',
-    description: 'Full Linux desktop environment accessible from any browser.',
-    coCalcFeature: '↔ X11 Desktop',
-    category: 'infrastructure',
-    status: 'beta',
-    launchUrl: 'https://desktop.opendesk.example.com',
-    upstreamUrl: 'https://kasmweb.com/',
+    id: 'xwiki-staff',
+    name: 'XWiki Staff',
+    description: 'Wiki for staff collaboration.',
+    category: 'knowledge',
+    status: 'live',
+    launchUrl: 'https://xwiki-staff.home.opendesk-edu.org',
+    ssoEnabled: true,
+    icon: '📚',
   },
   {
-    id: 'dask',
-    name: 'Dask Gateway',
-    description: 'Distributed parallel computing clusters for large-scale data processing.',
-    coCalcFeature: '↔ Compute Servers',
-    category: 'computing',
-    status: 'planned',
-    launchUrl: 'https://compute.opendesk.example.com',
-    upstreamUrl: 'https://gateway.dask.org/',
-  },
-  {
-    id: 'slidev',
-    name: 'Slidev',
-    description: 'Create beautiful presentations from Markdown files.',
-    coCalcFeature: '↔ Slides',
-    category: 'editing',
-    status: 'beta',
-    launchUrl: 'https://slides.opendesk.example.com',
-    upstreamUrl: 'https://github.com/slidevjs/slidev',
-  },
-  {
-    id: 'excalidraw',
-    name: 'Excalidraw',
-    description: 'Collaborative whiteboard for diagrams and sketches.',
-    coCalcFeature: '↔ Whiteboard',
-    category: 'visualization',
-    status: 'stable',
-    upstreamUrl: 'https://github.com/excalidraw/excalidraw',
+    id: 'sogo-students',
+    name: 'SOGo Student Mail',
+    description: 'Webmail for student accounts.',
+    category: 'productivity',
+    status: 'live',
+    launchUrl: 'https://sogo-students.home.opendesk-edu.org',
+    ssoEnabled: true,
+    icon: '📧',
   },
 ];
