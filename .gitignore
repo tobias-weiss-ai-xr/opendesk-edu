@@ -151,3 +151,4 @@ helmfile/environments/edu/secrets.yaml
 nix/result
 result
 result-*
+k8s/opendesk/*-secret.yaml

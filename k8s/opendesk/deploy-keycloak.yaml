@@ -39,7 +39,10 @@ spec:
         - name: KC_BOOTSTRAP_ADMIN_USERNAME
           value: admin
         - name: KC_BOOTSTRAP_ADMIN_PASSWORD
-          value: admin
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-db
+              key: admin-password
         - name: KC_HOSTNAME
           value: id.home.opendesk-edu.org
         - name: KC_HTTP_ENABLED
@@ -57,7 +60,10 @@ spec:
         - name: KC_DB_USERNAME
           value: keycloak
         - name: KC_DB_PASSWORD
-          value: keycloak-db-password-change-me
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-db
+              key: db-password
         - name: KC_LOG_LEVEL
           value: INFO
         - name: KC_FEATURES
