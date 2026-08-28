@@ -26,8 +26,8 @@ echo "$OPENCODE_TOKEN" | docker login registry.opencode.de -u weiss --password-s
 
 # 2. Push all images
 cd /home/weissto_local/git/opendesk_git
-docker build -t registry.opencode.de/umr/opendesk-edu-website:latest -f opendesk-edu-website/Dockerfile .
-docker push registry.opencode.de/umr/opendesk-edu-website:latest
+docker build -t ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest -f opendesk-edu-website/Dockerfile .
+docker push ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest
 
 cd opendesk-dev-agent-operator
 make docker-build
@@ -45,7 +45,7 @@ docker push registry.opencode.de/umr/sbom-generator:latest
 
 | Image | Source | Registry URL | Status |
 |-------|--------|--------------|--------|
-| **opendesk-edu-website** | Next.js | `registry.opencode.de/umr/opendesk-edu-website:latest` | ✅ Ready |
+| **opendesk-edu-website** | Next.js | `ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest` | ✅ Ready |
 | **dev-agent** | Golang operator | `registry.opencode.de/umr/dev-agent:latest` | ✅ Ready |
 | **sbom-generator** | SBOM tools | `registry.opencode.de/umr/sbom-generator:latest` | ✅ Ready |
 | **sogo5** | Nix/Dockerfile | `registry.opencode.de/umr/sogo5:latest` | ⏳ Needs Dockerfile |
@@ -77,8 +77,8 @@ echo "$OPENCODE_TOKEN" | docker login registry.opencode.de -u weiss --password-s
 
 # Push Website
 cd /home/weissto_local/git/opendesk_git/opendesk-edu-website
-docker build -t registry.opencode.de/umr/opendesk-edu-website:latest .
-docker push registry.opencode.de/umr/opendesk-edu-website:latest
+docker build -t ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest .
+docker push ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest
 
 # Push Dev Agent  
 cd /home/weissto_local/git/opendesk_git/opendesk-dev-agent-operator
@@ -144,7 +144,7 @@ docker push registry.opencode.de/umr/sogo6:latest
 After running the push script, you'll have:
 
 ```
-✅ registry.opencode.de/umr/opendesk-edu-website:latest  (Docker)
+✅ ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest  (Docker)
 ✅ registry.opencode.de/umr/dev-agent:latest            (Docker)
 ✅ registry.opencode.de/umr/sbom-generator:latest       (Docker)
   (Optional - if you have Dockerfiles)

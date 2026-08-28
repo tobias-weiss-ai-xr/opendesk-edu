@@ -3,7 +3,7 @@
 # Push All Images to opencode.de Container Registry
 #
 # Pulls images from GHCR (ghcr.io/opendesk-edu/*, ghcr.io/tobias-weiss-ai-xr/*)
-# and pushes them to registry.opencode.de/umr/opendesk-edu/containers/
+# and pushes them to ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/
 #
 # Usage:
 #   OPENCODE_TOKEN="your-pat" ./push-to-opencode.sh [OPTIONS]
@@ -13,14 +13,14 @@
 #   --core         Push only core images (OpenCloud, Stalwart, SOGo, PostgreSQL, Memcached, Keycloak)
 #   --list         List images that would be pushed
 #   --dry-run      Show what would be pushed without pushing
-#   --registry     Override target registry (default: registry.opencode.de/umr/opendesk-edu/containers)
+#   --registry     Override target registry (default: ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers)
 #   --source       Override source registry (default: ghcr.io)
 #   --help         Show this help
 #
 # Environment variables:
 #   OPENCODE_TOKEN   GitLab Personal Access Token (required for push)
 #   OPENCODE_USER    GitLab username (default: weiss)
-#   OPENCODE_REGISTRY  Target registry (default: registry.opencode.de/umr/opendesk-edu/containers)
+#   OPENCODE_REGISTRY  Target registry (default: ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers)
 #
 # Examples:
 #   OPENCODE_TOKEN="glpat-xxx" ./push-to-opencode.sh --core
@@ -35,7 +35,7 @@ set -euo pipefail
 # Configuration
 # =============================================================================
 
-TARGET_REGISTRY="${OPENCODE_REGISTRY:-registry.opencode.de/umr/opendesk-edu/containers}"
+TARGET_REGISTRY="${OPENCODE_REGISTRY:-ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers}"
 SOURCE_REGISTRY="${SOURCE_REGISTRY:-ghcr.io}"
 GITLAB_USER="${OPENCODE_USER:-weiss}"
 
@@ -164,9 +164,9 @@ login_registry() {
 }
 
 # Convert a source image reference to a target image reference
-# e.g. ghcr.io/opendesk-edu/sogo:latest → registry.opencode.de/umr/opendesk-edu/containers/sogo:latest
-# e.g. ghcr.io/opendesk-edu/supplier/univention/keycloak:26.7.0 → registry.opencode.de/umr/opendesk-edu/containers/supplier/univention/keycloak:26.7.0
-# e.g. ghcr.io/tobias-weiss-ai-xr/snipr:latest → registry.opencode.de/umr/opendesk-edu/containers/snipr:latest
+# e.g. ghcr.io/opendesk-edu/sogo:latest → ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/sogo:latest
+# e.g. ghcr.io/opendesk-edu/supplier/univention/keycloak:26.7.0 → ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/supplier/univention/keycloak:26.7.0
+# e.g. ghcr.io/tobias-weiss-ai-xr/snipr:latest → ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/snipr:latest
 convert_image() {
     local source_image="$1"
     # Strip the registry prefix
@@ -252,7 +252,7 @@ main() {
             --core)    mode="core"; shift;;
             --list)    list_only=true; shift;;
             --dry-run) dry_run=true; shift;;
-            --registry) TARGET_REGISTRY="${OPENCODE_REGISTRY:-registry.opencode.de/umr/opendesk-edu/containers}"; shift 2;;
+            --registry) TARGET_REGISTRY="${OPENCODE_REGISTRY:-ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers}"; shift 2;;
             --source)  SOURCE_REGISTRY="$2"; shift 2;;
             --help|-h)
                 echo "Usage: OPENCODE_TOKEN=\"glpat-xxx\" $0 [OPTIONS]"
@@ -271,7 +271,7 @@ main() {
                 echo "Environment:"
                 echo "  OPENCODE_TOKEN    GitLab PAT (required)"
                 echo "  OPENCODE_USER     GitLab username (default: weiss)"
-                echo "  OPENCODE_REGISTRY Target registry (default: registry.opencode.de/umr/opendesk-edu/containers)"
+                echo "  OPENCODE_REGISTRY Target registry (default: ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers)"
                 echo ""
                 echo "Core images:"
                 for img in "${CORE_IMAGES[@]}"; do

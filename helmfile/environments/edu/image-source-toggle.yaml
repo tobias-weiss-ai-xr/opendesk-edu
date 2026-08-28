@@ -2,7 +2,7 @@
 # Image Source Toggle for OpenDesk EDU
 #
 # This file lets you toggle all container image sources between:
-#   1. registry.opencode.de/umr/opendesk-edu/containers (opencode.de container registry - DEFAULT)
+#   1. ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers (opencode.de container registry - DEFAULT)
 #   2. ghcr.io (GitHub Container Registry - mirror, fallback)
 #   3. zot-registry.opendesk.svc:5000 (local Zot cache - pull-through)
 #
@@ -18,7 +18,7 @@
 #   Set image.registry and image.repository in values
 #
 # NOTE (2026-08-22): openDesk Edu images are now built with Nix and pushed
-# to registry.opencode.de/umr/opendesk-edu/containers (see opendesk-nix/ for the image flakes).
+# to ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers (see opendesk-nix/ for the image flakes).
 # registry.opencode.de is therefore the DEFAULT source. For public access
 # the same tags are mirrored to ghcr.io/opendesk-edu (see Option 2).
 # =============================================================================
@@ -26,7 +26,7 @@
 # =============================================================================
 # Option 1: registry.opencode.de (opencode.de container registry) — DEFAULT
 # =============================================================================
-# All images pulled from registry.opencode.de/umr/opendesk-edu/containers/*
+# All images pulled from ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/*
 # Images are Nix-built (opendesk-nix/**) and pushed via opendesk-nix/push-images.sh
 # or .github/workflows/nix-images.yml
 # Requires: OPENCODE_TOKEN / registry pull secret
@@ -169,7 +169,7 @@ images:
 # =============================================================================
 # Option 2: GHCR (GitHub Container Registry) — PUBLIC MIRROR of opencode
 # =============================================================================
-# Images mirrored 1:1 from registry.opencode.de/umr/opendesk-edu/containers to ghcr.io/opendesk-edu
+# Images mirrored 1:1 from ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers to ghcr.io/opendesk-edu
 # (same tags: version + latest) — anonymous pulls, no opencode token needed.
 # Automatically kept in sync via .github/workflows/nix-images.yml (GITHUB_TOKEN)
 # or manually via opendesk-nix/push-images.sh.

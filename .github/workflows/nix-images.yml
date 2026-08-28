@@ -3,7 +3,7 @@
 # =============================================================================
 # Nix Images – build the opendesk-nix component images and push them to
 # BOTH registries:
-#   - registry.opencode.de/umr/opendesk-edu/containers   (primary, EU-sovereign)   [OPENCODE_TOKEN]
+#   - ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers   (primary, EU-sovereign)   [OPENCODE_TOKEN]
 #   - ghcr.io/opendesk-edu       (public mirror)           [GITHUB_TOKEN]
 #
 # Public mirror strategy: registry.opencode.de is the source of truth; every
@@ -33,7 +33,7 @@ on:
         options: [build, mirror]
 
 env:
-  OPENCODE_REGISTRY: registry.opencode.de/umr/opendesk-edu/containers/opendesk-edu/containers
+  OPENCODE_REGISTRY: ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/opendesk-edu/containers
   GHCR_REGISTRY: ghcr.io/opendesk-edu
   GHCR_ORG: opendesk-edu
   OPENCODE_USER: weiss

@@ -63,8 +63,8 @@ echo "$OPENCODE_TOKEN" | docker login registry.opencode.de -u weiss --password-s
 ### **Step 2: Push Website (Fastest Win)**
 ```bash
 cd /home/weissto_local/git/opendesk_git/opendesk-edu-website
-docker build -t registry.opencode.de/umr/opendesk-edu-website:latest .
-docker push registry.opencode.de/umr/opendesk-edu-website:latest
+docker build -t ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest .
+docker push ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest
 ```
 
 ### **Step 3: Push Dev Agent**
@@ -135,8 +135,8 @@ echo "$OPENCODE_TOKEN" | docker login registry.opencode.de -u weiss --password-s
 
 # 2. Push Website
 cd /home/weissto_local/git/opendesk_git/opendesk-edu-website && \
-docker build -t registry.opencode.de/umr/opendesk-edu-website:latest . && \
-docker push registry.opencode.de/umr/opendesk-edu-website:latest
+docker build -t ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest . && \
+docker push ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest
 
 # 3. Push Dev Agent
 cd /home/weissto_local/git/opendesk_git/opendesk-dev-agent-operator && \
@@ -157,7 +157,7 @@ docker push registry.opencode.de/umr/sbom-generator:latest
 After running the commands, you'll have:
 
 ```
-✅ registry.opencode.de/umr/opendesk-edu-website:latest
+✅ ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest
 ✅ registry.opencode.de/umr/dev-agent:latest
 ✅ registry.opencode.de/umr/sbom-generator:latest
 ⏳ registry.opencode.de/umr/sogo5:latest (if you provide Dockerfile)
@@ -240,7 +240,7 @@ docker inspect registry.opencode.de/umr/website:latest
 ### **Test Deployment**
 ```bash
 # Run locally
-docker run -d -p 3000:3000 registry.opencode.de/umr/opendesk-edu-website:latest
+docker run -d -p 3000:3000 ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest
 
 # Check logs
 docker logs <container-id>
@@ -265,7 +265,7 @@ kubectl create secret docker-registry opencode-de-registry \
 image: ghcr.io/opendesk-edu/website:latest
 
 # To:
-image: registry.opencode.de/umr/opendesk-edu-website:latest
+image: ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest
 imagePullSecrets:
   - name: opencode-de-registry
 ```
@@ -434,8 +434,8 @@ echo "$OPENCODE_TOKEN" | docker login registry.opencode.de -u weiss --password-s
 
 # 2. Push
 cd /home/weissto_local/git/opendesk_git/opendesk-edu-website
-docker build -t registry.opencode.de/umr/opendesk-edu-website:latest .
-docker push registry.opencode.de/umr/opendesk-edu-website:latest
+docker build -t ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest .
+docker push ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu-website:latest
 
 # 3. Done! ✅
 ```

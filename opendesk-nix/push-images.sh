@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # =============================================================================
 # Push Nix-built openDesk Edu images to BOTH registries:
-#   - registry.opencode.de/umr/opendesk-edu/containers    (primary, sovereign)   [needs OPENCODE_TOKEN]
+#   - ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers    (primary, sovereign)   [needs OPENCODE_TOKEN]
 #   - ghcr.io/opendesk-edu        (public mirror)        [needs GHCR token]
 #
 # Public availability strategy:
@@ -27,7 +27,7 @@
 
 set -euo pipefail
 
-OPENCODE_REG="${OPENCODE_REGISTRY:-registry.opencode.de/umr/opendesk-edu/containers}"
+OPENCODE_REG="${OPENCODE_REGISTRY:-ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers}"
 GHCR_REG="${GHCR_REGISTRY:-ghcr.io/opendesk-edu}"
 
 DRY_RUN=0

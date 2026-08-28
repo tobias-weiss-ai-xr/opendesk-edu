@@ -7,15 +7,15 @@
 #   - reproducible dockerTools build (no mutable base image)
 #   - non-root user, minimal contents, OCI labels incl. ZKI IT-Grundschutz +
 #     container.gov.de metadata
-#   - registry: registry.opencode.de/umr/opendesk-edu/containers/opendesk-edu/containers
+#   - registry: ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/opendesk-edu/containers
 #
 # Usage:
-#   nix build .#stalwart         # registry.opencode.de/umr/opendesk-edu/containers/stalwart:<version>
+#   nix build .#stalwart         # ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/stalwart:<version>
 #   nix build .#default
 #
 #   docker load < result
-#   docker tag opendesk-stalwart:<version> registry.opencode.de/umr/opendesk-edu/containers/stalwart:<version>
-#   docker push registry.opencode.de/umr/opendesk-edu/containers/stalwart:<version>
+#   docker tag opendesk-stalwart:<version> ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/stalwart:<version>
+#   docker push ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/stalwart:<version>
 #
 # Runtime configuration (OIDC, LDAP directory, listeners, TLS) is applied
 # via the Helm chart (helmfile/charts/stalwart) using ConfigMaps/Secrets.
@@ -32,7 +32,7 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        registry = "registry.opencode.de/umr/opendesk-edu/containers";
+        registry = "ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers";
         maintainer = "openDesk Edu Team <team@opendesk-edu.org>";
         source = "https://github.com/opendesk-edu/opendesk-edu/tree/main/opendesk-nix/stalwart";
 

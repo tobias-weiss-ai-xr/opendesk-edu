@@ -28,7 +28,7 @@
 # ==============================================================================
 
 # Registry configuration
-REGISTRY ?= registry.opencode.de/umr/opendesk-edu/containers/opendesk-edu/containers
+REGISTRY ?= ghcr.io/tobias-weiss-ai-xr/umr/opendesk-edu/containers/opendesk-edu/containers
 
 # Version tags
 SOGO5_VERSION ?= 5.8.0
