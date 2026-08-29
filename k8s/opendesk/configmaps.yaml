@@ -2,7 +2,7 @@ apiVersion: v1
 data:
   config.json: "{\n  \"default_server_config\": {\n    \"m.homeserver\": {\n     \
     \ \"base_url\": \"https://matrix.home.opendesk-edu.org\",\n      \"server_name\"\
-    : \"matrix.home.opendesk-edu.org\"\n    }\n  },\n  \"brand\": \"openDesk Edu Chat\"\
+    : \"matrix.home.opendesk-edu.org\"\n    }\n  },\n  \"banner\": {\n    \"ics_navigation_json_url\": \"https://intercom.home.opendesk-edu.org/navigation.json\",\n    \"ics_silent_url\": \"https://intercom.home.opendesk-edu.org/silent\"\n  },\n  \"brand\": \"openDesk Edu Chat\"\
     ,\n  \"disable_guests\": false,\n  \"disable_3pid_login\": false,\n  \"default_country_code\"\
     : \"DE\",\n  \"show_labs_settings\": true,\n  \"integrations_ui_url\": \"\",\n\
     \  \"integrations_rest_url\": \"\",\n  \"integrations_widgets_urls\": []\n}\n"
@@ -62,7 +62,7 @@ data:
 
     wsrep_sst_method=rsync
 
-    wsrep_sst_auth=root:ChangeMeGalera123!
+    wsrep_sst_auth=root:__GALERA_ROOT_PW__
 
 
     # Binlog
@@ -130,44 +130,44 @@ metadata:
 ---
 apiVersion: v1
 data:
-  01-init-databases.sql: '-- Galera cluster initialization
-
-    -- Databases for all openDesk services
-
+  01-init-databases.sh: |
+    #!/bin/bash
+    set -e
+    ROOT_PW="$(cat /mnt/secrets/mysql-root-password)"
+    KC_PW="$(cat /mnt/secrets/keycloak)"
+    SY_PW="$(cat /mnt/secrets/synapse)"
+    SO_PW="$(cat /mnt/secrets/sogo)"
+    OC_PW="$(cat /mnt/secrets/opencloud)"
+    S6_PW="$(cat /mnt/secrets/sogo6)"
+    mysql -u root -p"$ROOT_PW" <<SQL
     CREATE DATABASE IF NOT EXISTS keycloak CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
     CREATE DATABASE IF NOT EXISTS synapse CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
     CREATE DATABASE IF NOT EXISTS sogo CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
     CREATE DATABASE IF NOT EXISTS opencloud CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CREATE DATABASE IF NOT EXISTS sogo6 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CREATE DATABASE IF NOT EXISTS sogo6_staff CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CREATE DATABASE IF NOT EXISTS sogo6_students CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+    CREATE USER IF NOT EXISTS 'keycloak'@'%' IDENTIFIED BY '$KC_PW';
+    GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'%';
 
-    -- Service users
+    CREATE USER IF NOT EXISTS 'synapse'@'%' IDENTIFIED BY '$SY_PW';
+    GRANT ALL PRIVILEGES ON synapse.* TO 'synapse'@'%';
 
-    CREATE USER IF NOT EXISTS ''keycloak''@''%'' IDENTIFIED BY ''keycloak-db-password-change-me'';
+    CREATE USER IF NOT EXISTS 'sogo'@'%' IDENTIFIED BY '$SO_PW';
+    GRANT ALL PRIVILEGES ON sogo.* TO 'sogo'@'%';
 
-    GRANT ALL PRIVILEGES ON keycloak.* TO ''keycloak''@''%'';
+    CREATE USER IF NOT EXISTS 'opencloud'@'%' IDENTIFIED BY '$OC_PW';
+    GRANT ALL PRIVILEGES ON opencloud.* TO 'opencloud'@'%';
 
-
-    CREATE USER IF NOT EXISTS ''synapse''@''%'' IDENTIFIED BY ''synapse-db-password-change-me'';
-
-    GRANT ALL PRIVILEGES ON synapse.* TO ''synapse''@''%'';
-
-
-    CREATE USER IF NOT EXISTS ''sogo''@''%'' IDENTIFIED BY ''sogo-db-password-change-me'';
-
-    GRANT ALL PRIVILEGES ON sogo.* TO ''sogo''@''%'';
-
-
-    CREATE USER IF NOT EXISTS ''opencloud''@''%'' IDENTIFIED BY ''opencloud-db-password-change-me'';
-
-    GRANT ALL PRIVILEGES ON opencloud.* TO ''opencloud''@''%'';
-
+    DROP USER IF EXISTS 'sogo6'@'%';
+    CREATE USER 'sogo6'@'%' IDENTIFIED BY '$S6_PW';
+    GRANT ALL PRIVILEGES ON sogo6.* TO 'sogo6'@'%';
+    GRANT ALL PRIVILEGES ON sogo6_staff.* TO 'sogo6'@'%';
+    GRANT ALL PRIVILEGES ON sogo6_students.* TO 'sogo6'@'%';
 
     FLUSH PRIVILEGES;
-
-    '
+    SQL
 immutable: false
 kind: ConfigMap
 metadata:
@@ -186,11 +186,12 @@ data:
     listeners:\n  - port: 8008\n    tls: false\n    type: http\n    x_forwarded: true\n\
     \    bind_addresses: ['0.0.0.0']\n    resources:\n      - names: [client, federation]\n\
     \        compress: false\ndatabase:\n  name: sqlite3\n  args:\n    database: /data/homeserver.db\n\
-    macaroon_secret_key: \"opendesk-synapse-macaroon-secret-change-me\"\nlog_config:\
+    macaroon_secret_key: \"__SYNAPSE_MACAROON_SECRET__\"\noidc_config:\n  enabled: true\n  discovery_method: \"oidc\"\n  issuer: \"https://id.home.opendesk-edu.org/realms/opendesk\"\n  client_id: \"opendesk-matrix\"\n  client_secret: \"__SYNAPSE_OIDC_CLIENT_SECRET__\"\n  scopes: [\"openid\", \"profile\", \"email\"]\n  user_mapping_provider:\n    config:\n      localpart_template: \"{{ user.opendesk_useruuid }}\"\n      display_name_template: \"{{ user.preferred_username }}\"\napp_service_config_files:\n  - /config/appservice/intercom.yaml\nlog_config:\
     \ \"/data/log.config\"\nmedia_store_path: \"/data/media\"\nuploads_path: \"/data/uploads\"\
     \nsigning_key_path: \"/data/signing.key\"\ntrusted_key_servers:\n  - server_name:\
     \ \"matrix.org\"\nurl_preview_enabled: false\nenable_registration: false\nmax_upload_size:\
     \ 50M\nreport_stats: false\n"
+  appservice-intercom.yaml: "id: intercom\nhs_token: \"__MATRIX_HS_TOKEN__\"\nas_token: \"__MATRIX_AS_TOKEN__\"\nsender_localpart: intercom\n# Synapse requires the url key (string or explicit null) even for\n# login-only appservices — explicit null: the ICS never receives pushes.\nurl:\nnamespaces:\n  users:\n    - exclusive: false\n      regex: \"@.*\"\n"
   log.config: "version: 1\nformatters:\n  precise:\n    format: '%(asctime)s - %(name)s\
     \ - %(levelname)s - %(request)s - %(message)s'\nhandlers:\n  console:\n    class:\
     \ logging.StreamHandler\n    formatter: precise\nloggers:\n  synapse:\n    level:\
