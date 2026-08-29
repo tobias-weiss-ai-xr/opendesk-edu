@@ -139,6 +139,7 @@ data:
     SO_PW="$(cat /mnt/secrets/sogo)"
     OC_PW="$(cat /mnt/secrets/opencloud)"
     S6_PW="$(cat /mnt/secrets/sogo6)"
+    XW_PW="$(cat /mnt/secrets/xwiki)"
     mysql -u root -p"$ROOT_PW" <<SQL
     CREATE DATABASE IF NOT EXISTS keycloak CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     CREATE DATABASE IF NOT EXISTS synapse CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -147,6 +148,8 @@ data:
     CREATE DATABASE IF NOT EXISTS sogo6 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     CREATE DATABASE IF NOT EXISTS sogo6_staff CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     CREATE DATABASE IF NOT EXISTS sogo6_students CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CREATE DATABASE IF NOT EXISTS xwiki CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CREATE DATABASE IF NOT EXISTS xwiki_staff CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
     CREATE USER IF NOT EXISTS 'keycloak'@'%' IDENTIFIED BY '$KC_PW';
     GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'%';
@@ -165,6 +168,11 @@ data:
     GRANT ALL PRIVILEGES ON sogo6.* TO 'sogo6'@'%';
     GRANT ALL PRIVILEGES ON sogo6_staff.* TO 'sogo6'@'%';
     GRANT ALL PRIVILEGES ON sogo6_students.* TO 'sogo6'@'%';
+
+    CREATE USER IF NOT EXISTS 'xwiki'@'%' IDENTIFIED BY '$XW_PW';
+    GRANT ALL PRIVILEGES ON xwiki.* TO 'xwiki'@'%';
+    GRANT ALL PRIVILEGES ON xwiki_staff.* TO 'xwiki'@'%';
+    GRANT PROCESS ON *.* TO 'xwiki'@'%';
 
     FLUSH PRIVILEGES;
     SQL
